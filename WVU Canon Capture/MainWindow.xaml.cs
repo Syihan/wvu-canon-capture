@@ -75,7 +75,7 @@ namespace WVU_Canon_Capture
         #region Camera and Live View
         // ================================================================== CAMERA AND LIVE VIEW ================================================================== //
 
-
+        
         public CanonAPI API;                                    // the class that mainly handles the SDK lifetime, the connected Cameras and the SDK events
         public Camera MainCamera;                               // the main camera
         private List<Camera> CameraList;                        // the list of cameras available for connection
@@ -270,7 +270,7 @@ namespace WVU_Canon_Capture
 
 
         const String CAMERACONFIGFILE = @"camera_profiles.json";    // the filename of the camera configuration file
-        List<CameraProfile> CameraProfileList;                      // a list of CollectionProfiles
+        List<CameraProfile> CameraProfileList;                      // a list of CameraProfiles
 
 
         /// <summary>
@@ -285,8 +285,39 @@ namespace WVU_Canon_Capture
 
                 // add each camera profile to the camera profiles combobox
                 foreach (CameraProfile profile in CameraProfileList)
-                    CameraProfilesListView.Items.Add(profile.name);
-                    //Console.WriteLine(profile.name);
+                {
+                    // Adds the profile to the CameraProfilesListView
+                    // the profile name
+                    Label proName = new Label()
+                    {
+                        Content = profile.name,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
+                        FontSize = 12,
+                    };
+
+                    // the profile descriptors
+                    TextBlock proDesc = new TextBlock()
+                    {
+                        Text = "F-Stop: " + profile.fstop + ", Exposure: " + profile.exposure + ", ISO: " + profile.iso + ", WhiteBalance: " + profile.whiteBalance,
+                        FontStyle = FontStyles.Italic,
+                        TextWrapping = TextWrapping.WrapWithOverflow,
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
+                        FontSize = 10,
+                    };
+
+                    // creates the StackPanel to hold all the content
+                    StackPanel item = new StackPanel()
+                    {
+                        Height = 50,
+                    };
+                    item.Children.Add(proName);
+                    item.Children.Add(proDesc);
+
+                    // adds the collection StackPanel to the CollectionListView
+                    CameraProfilesListView.Items.Add(item);
+
+                }
             }
         }
 
@@ -344,24 +375,67 @@ namespace WVU_Canon_Capture
         #region Collection Profiles
         // ================================================================== COLLECTION PROFILES ================================================================== //
 
-
-        const String COLLECTIONCONFIGFILE = @"collection_profiles.json";    // the filename of the collection configuration file
-        List<CollectionProfile> CollectionList;                             // a list of CollectionProfiles
+        
+        const String COLLECTIONCONFIGFILE = @"collection_profiles.json";    // the filename of the camera configuration file
+        List<CollectionProfile> CollectionProfileList;                          // a list of CollectionProfiles
 
 
         /// <summary>
-        /// Retrieves the list of collection profiles
+        /// Retrieves the list of camera profiles
         /// </summary>
         private void InitializeCollectionProfiles()
         {
             using (StreamReader r = new StreamReader(COLLECTIONCONFIGFILE))
             {
                 string json = r.ReadToEnd();
-                CollectionList = JsonConvert.DeserializeObject<List<CollectionProfile>>(json);
+                CollectionProfileList = JsonConvert.DeserializeObject<List<CollectionProfile>>(json);
 
-                // adds collections to the CollectionComboBox
-                foreach (CollectionProfile collection in CollectionList)
+                // add each camera profile to the camera profiles combobox
+                foreach (CollectionProfile collection in CollectionProfileList)
+                {
                     CollectionComboBox.Items.Add(collection.name);
+
+                    // Adds the collection to the CollectionListView
+                    // the collection name
+                    Label colName = new Label()
+                    {
+                        Content = collection.name,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
+                        FontSize = 12,
+                    };
+
+                    // the collection descriptors
+                    Label colDesc = new Label()
+                    {
+                        Content = "Col #: " + collection.collectionNumber + ", Poses: " + collection.numberOfPoses,
+                        FontStyle = FontStyles.Italic,
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
+                        FontSize = 10,
+                    };
+
+                    // the collection savepath
+                    Label colSavePath = new Label()
+                    {
+                        Content = "Save path: " + collection.savingDirectory,
+                        FontStyle = FontStyles.Italic,
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
+                        FontSize = 10,
+                    };
+
+                    // creates the StackPanel to hold all the content
+                    StackPanel item = new StackPanel()
+                    {
+                        Height = 70,
+                    };
+                    item.Children.Add(colName);
+                    item.Children.Add(colDesc);
+                    item.Children.Add(colSavePath);
+
+                    // adds the collection StackPanel to the CollectionListView
+                    CollectionListView.Items.Add(item);
+
+                }
             }
         }
 
@@ -474,7 +548,7 @@ namespace WVU_Canon_Capture
         #region UI Functions
         // ================================================================== UI FUNCTIONS ================================================================== //
 
-
+        
         /// <summary>
         /// Switches between window screens
         /// </summary>

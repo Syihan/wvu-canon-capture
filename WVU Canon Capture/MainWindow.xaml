@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WVU_Canon_Capture"
         mc:Ignorable="d"
         Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen"
         Title="WVU Canon Capture" Height="835" MinHeight="500" Width="1200" MinWidth="900"
         Icon="Resources/canon_capture_icon.ico">
 
@@ -58,7 +59,7 @@
 
 
             <!--home screen-->
-            <Grid x:Name="HomeScreenGrid" Visibility="Visible" Height="740" DockPanel.Dock="Top" Background="#FF161616">
+            <Grid x:Name="HomeScreenGrid" Visibility="Collapsed" Height="740" DockPanel.Dock="Top" Background="#FF161616">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350"/>
@@ -74,7 +75,18 @@
 
                     <!--live view-->
                     <Grid Grid.Row="0" Background="#000000" />
-                    <Grid x:Name="HomeLiveViewCanvas" Grid.Row="0"/>
+                    <Viewbox Stretch="Fill">
+                        <Grid x:Name="HomeLiveViewCanvas" Height="350" Width="350" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Viewbox>
 
                     <!--control panel-->
                     <Grid Grid.Row="1" Background="#002855">
@@ -279,27 +291,8 @@
                         Foreground="#FFFFFF" 
                         FontWeight="Bold" 
                         FontSize="15"/>
-                    
-                    <ListView x:Name="CameraProfilesListView" Background="Transparent" Foreground="#FFFFFF" BorderThickness="0" Margin="0, 50, 0, 0">
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                    </ListView>
+
+                    <ListView x:Name="CameraProfilesListView" Background="Transparent" Foreground="#FFFFFF" BorderThickness="0" Margin="0, 50, 0, 0"/>
                 </Grid>
 
                 <!--create camera profile-->
@@ -308,14 +301,25 @@
 
                 <!--live view-->
                 <Grid Grid.Column="2">
-                    <Grid Height="525" Width="350" Background="#000000"/>
+                    <Viewbox Height="525" Width="350" Stretch="Fill">
+                        <Grid x:Name="CameraLiveViewCanvas" Height="350" Width="350" RenderTransformOrigin="0.5,0.5" Background="Black">
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Viewbox>
                 </Grid>
 
             </Grid>
 
 
             <!--collections screen-->
-            <Grid x:Name="CollectionsScreenGrid" Visibility="Collapsed" Height="740" Background="#9BD3DD">
+            <Grid x:Name="CollectionsScreenGrid" Visibility="Visible" Height="740" Background="#9BD3DD">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350*" MaxWidth="350"/>
@@ -332,27 +336,8 @@
                         Foreground="#FFFFFF" 
                         FontWeight="Bold" 
                         FontSize="15"/>
-                    
-                    <ListView Background="Transparent" BorderThickness="0" Margin="0, 50, 0, 0">
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                        <ListViewItem Height="100" />
-                    </ListView>
+
+                    <ListView x:Name="CollectionListView" Background="Transparent" Foreground="#FFFFFF" BorderThickness="0" Margin="0, 50, 0, 0"/>
                 </Grid>
             </Grid>
 
