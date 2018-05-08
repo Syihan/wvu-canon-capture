@@ -1,0 +1,23 @@
+[
+	{
+		"name": "Default",
+		"fstop": "F32",
+		"exposure": "1/60",
+		"iso": "ISO 800",
+		"whiteBalance": "Tungsten"
+	},
+	{
+		"name": "CameraProfile2",
+		"fstop": "F22",
+		"exposure": "1/125",
+		"iso": "ISO 400",
+		"whiteBalance": "Tungsten"
+	},
+	{
+		"name": "CameraProfile3",
+		"fstop": "F16",
+		"exposure": "1/250",
+		"iso": "ISO 1600",
+		"whiteBalance": "Tungsten"
+	}
+]
