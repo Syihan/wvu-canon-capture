@@ -131,7 +131,12 @@
 
 
             <!--home screen-->
-            <Grid x:Name="HomeScreenGrid" Visibility="Collapsed" Height="740" DockPanel.Dock="Top" Background="#FF161616">
+            <Grid 
+                x:Name="HomeScreenGrid" 
+                Visibility="Collapsed" 
+                Height="740" 
+                DockPanel.Dock="Top" 
+                Background="#FF161616">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350"/>
@@ -172,8 +177,15 @@
                                 <!--camera selection-->
                                 <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" Margin="0, 0, 0, 5">
                                     <Label Content="Camera " Foreground="#FFFFFF" HorizontalContentAlignment="Right" Width="100" FontWeight="Bold"/>
-                                    <ComboBox x:Name="CameraComboBox" SelectionChanged="CameraComboBox_SelectionChanged" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="160" BorderThickness="0" SelectedIndex="0">
-                                        <ComboBoxItem Content="" />
+                                    <ComboBox 
+                                        x:Name="CameraComboBox" 
+                                        SelectionChanged="CameraComboBox_SelectionChanged"
+                                        SelectedIndex="0"
+                                        VerticalContentAlignment="Center" 
+                                        HorizontalContentAlignment="Left" 
+                                        Width="160" 
+                                        BorderThickness="0">
+                                        <ComboBoxItem Content=""/>
                                     </ComboBox>
                                 </StackPanel>
 
@@ -332,7 +344,7 @@
             <!--camera screen-->
             <Grid 
                 x:Name="CameraScreenGrid" 
-                Visibility="Collapsed" 
+                Visibility="Visible" 
                 Height="740" 
                 Background="#FF161616">
 
@@ -352,7 +364,8 @@
                         Foreground="#FFFFFF" 
                         FontWeight="Bold" 
                         FontSize="15"/>
-
+                    
+                    <!--listview of camera profiles-->
                     <ListView 
                         x:Name="CameraProfilesListView" 
                         SelectionChanged="CameraProfilesListView_SelectionChanged"
@@ -367,6 +380,7 @@
                         VerticalAlignment="Bottom">
                         <Button
                             x:Name="DeleteCameraProfileButton"
+                            Click="DeleteCameraProfileButton_Click"
                             IsEnabled="False"
                             Content="Delete Profile"
                             FontWeight="Bold"
@@ -380,147 +394,182 @@
 
                 <!--middle column-->
                 <Grid Grid.Column="1" Background="#330600">
+                    <StackPanel>
 
-                    <StackPanel Margin="10, 0, 10, 0">
-
-                        <!--live view settings-->
+                        <!--camera settings-->
                         <Label 
-                            Content="Live View Settings" 
+                            Content="Camera Settings" 
                             Height="50" VerticalAlignment="Top" 
                             VerticalContentAlignment="Center" 
                             HorizontalAlignment="Center" 
                             Foreground="#FFFFFF" 
                             FontWeight="Bold" 
                             FontSize="15"/>
-                        
-                        <Label 
-                            Content="Reference Frames"
-                            FontWeight="Bold" 
-                            Foreground="#FFFFFF" />
 
-                        <StackPanel Margin="15, 0, 15, 0">
-                            <CheckBox Foreground="#FFFFFF">Closeup Frame</CheckBox>
-                            <CheckBox Foreground="#FFFFFF">Enable feature XYZ</CheckBox>
-                            <CheckBox Foreground="#FFFFFF">Enable feature WWW</CheckBox>
+                        <!--current settings-->
+                        <Label 
+                            Content="Current Settings"
+                            FontWeight="Bold" 
+                            HorizontalAlignment="Center"
+                            Foreground="#FFFFFF"/>
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                            <StackPanel>
+                                <Label 
+                                    Content="Aperture: " 
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"/>
+                                <Label 
+                                    Content="Exposure: " 
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"/>
+                                <Label 
+                                    Content="ISO: " 
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"/>
+                            </StackPanel>
+                            <StackPanel Width="80">
+                                <Label 
+                                    x:Name="FStopLabel"
+                                    Content="N/A"
+                                    Foreground="#FFFFFF"
+                                    BorderThickness="0"/>
+                                <Label  
+                                    x:Name="ExposureLabel"
+                                    Content="N/A"
+                                    Foreground="#FFFFFF"/>
+                                <Label  
+                                    x:Name="ISOLabel"
+                                    Content="N/A"
+                                    Foreground="#FFFFFF"/>
+                            </StackPanel>
                         </StackPanel>
 
-                        <!--create new camera profile-->
+                        <!--adjust settings-->
                         <Label 
-                            Content="Create New Camera Profile" 
-                            Height="50"
-                            VerticalAlignment="Top" 
-                            VerticalContentAlignment="Center" 
-                            HorizontalAlignment="Center" 
-                            Foreground="#FFFFFF" 
+                            Content="Adjust Settings"
                             FontWeight="Bold" 
-                            FontSize="15"
-                            Margin="0, 20, 0, 0"/>
+                            HorizontalAlignment="Center"
+                            Foreground="#FFFFFF"
+                            Margin="0, 30, 0, 0"/>
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
 
-                        <StackPanel Margin="30, 0, 30, 0">
-
-                            <!--f-stop/aperture-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 5, 0, 0">
-
+                            <!--camera profile settings labels-->
+                            <StackPanel>
                                 <Label 
-                                    Content="Aperture" 
+                                    Content="Aperture/F-Stop" 
+                                    Height="25"
+                                    HorizontalContentAlignment="Right"
                                     Foreground="#FFFFFF"/>
-
-                                <ComboBox 
-                                    x:Name="FStopComboBox" 
-                                    SelectionChanged="FStopComboBox_SelectionChanged"
-                                    Width="150"
-                                    BorderThickness="0"/>
+                                <Label 
+                                    Content="Exposure/Shutter Speed" 
+                                    Height="25"
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"
+                                    Margin="0, 5, 0, 0"/>
+                                <Label 
+                                    Content="ISO" 
+                                    Height="25"
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"
+                                    Margin="0, 5, 0, 0"/>
+                                <Label 
+                                    Content="White Balance*" 
+                                    Height="25"
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"
+                                    Margin="0, 5, 0, 0"/>
+                                <Label
+                                    Content="Save profile"
+                                    HorizontalContentAlignment="Right"
+                                    Foreground="#FFFFFF"
+                                    Margin="0, 65, 0, 0"/>
                             </StackPanel>
 
-                            <!--exposure-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 5, 0, 0">
 
-                                <Label 
-                                    Content="Exposure"
-                                    Foreground="#FFFFFF"/>
+                            <!--camera profile setting comboboxes-->
+                            <StackPanel Width="150">
 
+                                <!--f-stop/aperture-->
+                                <ComboBox 
+                                    x:Name="FStopComboBox"
+                                    PreviewMouseLeftButtonDown="FStopComboBox_PreviewMouseLeftButtonDown"
+                                    IsEnabled="False"
+                                    Height="25"
+                                    BorderThickness="0"/>
+
+                                <!--exposure-->
                                 <ComboBox  
                                     x:Name="ExposureComboBox"
-                                    SelectionChanged="ExposureComboBox_SelectionChanged"
-                                    Width="150"
-                                    BorderThickness="0"/>
-                            </StackPanel>
+                                    PreviewMouseLeftButtonDown="ExposureComboBox_PreviewMouseLeftButtonDown"
+                                    IsEnabled="False"
+                                    Height="25"
+                                    BorderThickness="0"
+                                    Margin="0, 5, 0, 0"/>
 
-                            <!--ISO-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 5, 0, 0">
-
-                                <Label 
-                                    Content="ISO"
-                                    Foreground="#FFFFFF"/>
-
+                                <!--iso-->
                                 <ComboBox  
                                     x:Name="ISOComboBox"
-                                    SelectionChanged="ISOComboBox_SelectionChanged"
-                                    Width="150"
-                                    BorderThickness="0"/>
-                            </StackPanel>
+                                    PreviewMouseLeftButtonDown="ISOComboBox_PreviewMouseLeftButtonDown"
+                                    IsEnabled="False"
+                                    Height="25"
+                                    BorderThickness="0"
+                                    Margin="0, 5, 0, 0"/>
 
-                            <!--white balance-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 5, 0, 0">
-
-                                <Label 
-                                    Content="White Balance" 
-                                    Foreground="#FFFFFF"/>
-
+                                <!--white balance-->
                                 <ComboBox  
                                     x:Name="WhiteBalanceComboBox"
-                                    SelectionChanged="WhiteBalanceComboBox_SelectionChanged"
-                                    Width="150"
-                                    BorderThickness="0"/>
-                            </StackPanel>
+                                    PreviewMouseLeftButtonDown="WhiteBalanceComboBox_PreviewMouseLeftButtonDown"
+                                    IsEnabled="False"
+                                    Height="25"
+                                    BorderThickness="0"
+                                    Margin="0, 5, 0, 0"/>
 
-                            <Button
-                                x:Name="CameraSettings_ApplyChanges"
-                                Click="CameraSettings_ApplyChanges_Click"
-                                Content="Apply Changes"
-                                Height="25"
-                                Width="100"
-                                HorizontalAlignment="Right"
-                                Margin="0, 5, 0, 0"
-                                BorderThickness="0"/>
-
-                            <!--save profile-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 20, 0, 0">
-
-                                <Label
-                                    Content="Profile name"
+                                <Label 
+                                    Content="*May cause minor errors."
+                                    Height="25"
+                                    FontSize="9"
+                                    HorizontalAlignment="Center"
                                     Foreground="#FFFFFF"/>
 
-                                <TextBox 
-                                    x:Name="CameraProfileNameTextBox"
-                                    Width="125"
-                                    VerticalContentAlignment="Center"
+                                <!--apply changes button-->
+                                <Button
+                                    x:Name="CameraSettings_ApplyChanges"
+                                    Click="CameraSettings_ApplyChanges_Click"
+                                    Content="Apply Changes"
+                                    IsEnabled="False"
+                                    Height="25"
+                                    Width="100"
+                                    Margin="0, 5, 0, 0"
                                     BorderThickness="0"/>
 
-                                <Button
-                                    x:Name="SaveCameraProfileButton"
-                                    Content="&#128190;"
-                                    Width="25"
-                                    BorderThickness="0"/>
+                                <!--save profile-->
+                                <StackPanel
+                                    Orientation="Horizontal" 
+                                    HorizontalAlignment="Right"
+                                    Margin="0, 10, 0, 0">
+                                    <TextBox 
+                                        x:Name="CameraProfileNameTextBox"
+                                        IsEnabled="False"
+                                        Height="25"
+                                        Width="125"
+                                        VerticalContentAlignment="Center"
+                                        BorderThickness="0"/>
+
+                                    <Button
+                                        x:Name="SaveCameraProfileButton"
+                                        Content="&#128190;"
+                                        IsEnabled="False"
+                                        Width="25"
+                                        BorderThickness="0"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                    </StackPanel>
 
+                    </StackPanel>
                 </Grid>
 
                 <!--live view-->
@@ -529,7 +578,12 @@
                         Width="350"
                         VerticalAlignment="Center">
                         <Viewbox Height="525" Width="350" Stretch="Fill">
-                            <Grid x:Name="CameraLiveViewCanvas" Height="350" Width="350" RenderTransformOrigin="0.5,0.5" Background="Black">
+                            <Grid 
+                                x:Name="CameraLiveViewCanvas" 
+                                Height="350" 
+                                Width="350" 
+                                RenderTransformOrigin="0.5,0.5" 
+                                Background="#000000">
                                 <Grid.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -541,36 +595,58 @@
                             </Grid>
                         </Viewbox>
 
-                        <StackPanel Orientation="Horizontal">
-                            <!--toggle live view button-->
-                            <Button 
-                                x:Name="ToggleLiveViewCameraButton" 
-                                Click="ToggleLiveViewHomeButton_Click"
-                                Content="&#xE102;" 
-                                ToolTip="Toggle camera on/off." 
-                                Height="30" Width="30" 
-                                VerticalAlignment="Top" 
-                                HorizontalAlignment="Left" 
-                                Background="Transparent" 
-                                Foreground="#FFFFFF" 
-                                BorderThickness="0" 
-                                FontFamily="Segoe UI Symbol"/>
+                        <!--autofocus button-->
+                        <Button 
+                            Height="30" 
+                            Width="30" 
+                            Background="#005EB8" 
+                            ToolTip="Press and hold to focus camera." 
+                            HorizontalAlignment="Left"
+                            BorderThickness="0" 
+                            FontFamily="Segoe UI Sybol">
+                            <Grid>
+                                <Label 
+                                    Content="&#9974;" 
+                                    FontSize="15" 
+                                    FontFamily="Segoe UI Symbol" 
+                                    VerticalAlignment="Center" 
+                                    Foreground="#FFFFFF" 
+                                    Margin="0, -4, 0, 0"/>
+                                <Label 
+                                    Content="&#xE109;" 
+                                    FontSize="6" 
+                                    FontFamily="Segoe UI Symbol" 
+                                    HorizontalAlignment="Center" 
+                                    Foreground="#FFFFFF" 
+                                    Margin="0, 3, 0, 0"/>
+                            </Grid>
+                        </Button>
 
-                            <!--autofocus button-->
-                            <Button 
-                                x:Name="AutofocusCameraScreen" 
-                                Content="&#8982;" 
-                                ToolTip="Press and hold to autofocus." 
-                                Height="30"
-                                Width="30" 
-                                VerticalAlignment="Top" 
-                                HorizontalAlignment="Left" 
-                                Background="Transparent" 
+                        <StackPanel>
+                            <!--live view settings-->
+                            <Label 
+                                Content="Live View Settings" 
+                                Height="30" VerticalAlignment="Top" 
+                                VerticalContentAlignment="Center" 
+                                HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" 
-                                BorderThickness="0" 
-                                FontFamily="Segoe UI Symbol"/>
+                                FontWeight="Bold" 
+                                FontSize="15"/>
+                            <Label 
+                            Content="Reference Frames"
+                            FontWeight="Bold" 
+                            HorizontalAlignment="Center"
+                            Foreground="#FFFFFF" />
+
+                            <StackPanel 
+                            HorizontalAlignment="Center"
+                            Margin="15, 0, 15, 0">
+                                <CheckBox Foreground="#FFFFFF">Closeup Frame</CheckBox>
+                                <CheckBox Foreground="#FFFFFF">Enable feature XYZ</CheckBox>
+                                <CheckBox Foreground="#FFFFFF">Enable feature WWW</CheckBox>
+                            </StackPanel>
                         </StackPanel>
-                        
+
                     </StackPanel>
                 </Grid>
 
@@ -580,7 +656,7 @@
             <!--collections screen-->
             <Grid 
                 x:Name="CollectionsScreenGrid" 
-                Visibility="Visible" 
+                Visibility="Collapsed" 
                 Height="740" 
                 Background="#9BD3DD">
 
@@ -753,6 +829,7 @@
                                             BorderThickness="0"
                                             Margin="0, 0, 0, 5"/>
                                         <Button
+                                            IsEnabled="False"
                                             Content="&#128190;"
                                             Height="30"
                                             Width="30"
@@ -770,7 +847,7 @@
                             Orientation="Horizontal" 
                             Background="#2C2A29">
                             <Label 
-                                Content="Profile"
+                                Content="Camera Profile"
                                 HorizontalContentAlignment="Center"
                                 Width="150"
                                 Foreground="#FFFFFF" />
@@ -929,7 +1006,7 @@
 
     <!--style resources-->
     <Window.Resources>
-        
+
         <!--scrollbar styling-->
 
         <!--post listview resources-->

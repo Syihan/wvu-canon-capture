@@ -1,6 +1,7 @@
 [
 	{
 		"name": "Default",
+		"camera": "Canon EOS 5D Mark III",
 		"fstop": "F32",
 		"exposure": "1/60",
 		"iso": "ISO 800",
@@ -8,6 +9,7 @@
 	},
 	{
 		"name": "CameraProfile2",
+		"camera": "Canon EOS 5D Mark III",
 		"fstop": "F22",
 		"exposure": "1/125",
 		"iso": "ISO 400",
@@ -15,6 +17,7 @@
 	},
 	{
 		"name": "CameraProfile3",
+		"camera": "Canon EOS 5D Mark III",
 		"fstop": "F16",
 		"exposure": "1/250",
 		"iso": "ISO 1600",

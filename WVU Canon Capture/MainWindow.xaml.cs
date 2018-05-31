@@ -44,14 +44,13 @@ namespace WVU_Canon_Capture
 
             // initializes the API and retrieves the list of connected cameras
             API = new CanonAPI();
-            InitializeCameraList();
+            LoadCameraList();
             LoadCameraProfiles();
             LoadCollectionProfiles();
 
             // registers error event handlers
             ErrorHandler.SevereErrorHappened += ErrorHandler_SevereErrorHappened;
             ErrorHandler.NonSevereErrorHappened += ErrorHandler_NonSevereErrorHappened;
-
         }
 
 
@@ -86,8 +85,16 @@ namespace WVU_Canon_Capture
         /// <summary>
         /// Initializes the camera list
         /// </summary>
-        private void InitializeCameraList()
+        private void LoadCameraList()
         {
+            // clears list of cameras
+            this.Dispatcher.Invoke(() =>
+            {
+                for(int i=CameraComboBox.Items.Count-1; i>0; i--)
+                {
+                    CameraComboBox.Items.RemoveAt(i);
+                }
+            });
 
             // retrieves all Canon cameras connected to the computer
             API.CameraAdded += API_CameraAdded;
@@ -95,7 +102,18 @@ namespace WVU_Canon_Capture
 
             // populates the Camera ComboBox with the list
             foreach (Camera cameraOption in CameraList)
-                CameraComboBox.Items.Add(cameraOption.DeviceName);
+                this.Dispatcher.Invoke(() => { CameraComboBox.Items.Add(cameraOption.DeviceName); });
+
+            // TODO: Analyze whether this is the right thing to do
+            // honestly not sure what this does
+            //if (MainCamera?.SessionOpen == true)
+            //    this.Dispatcher.Invoke(() => { CameraComboBox.SelectedIndex = CameraList.FindIndex(t => t.ID == MainCamera.ID); });
+            //else if (CameraList.Count > 0) CameraComboBox.SelectedIndex = 0;
+            //else
+            //{
+            //    MessageBox.Show("Fix this.");
+            //    //LockUINoCamera();
+            //}
 
         }
 
@@ -123,8 +141,14 @@ namespace WVU_Canon_Capture
 
                 // paints the LiveViewCanvas
                 HomeLiveViewCanvas.Background = LiveViewBrush;
+                CameraLiveViewCanvas.Background = LiveViewBrush;
                 MainCamera.StartLiveView();
                 ToggleLiveViewHomeButton.Content = "\u23f8";
+
+                // displays the current camera settings
+                FStopLabel.Content = AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue;
+                ExposureLabel.Content = TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue;
+                ISOLabel.Content = ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue;
 
                 // TODO: DETERMINE IF THE BELOW THREE LINES ARE ACTUALLY NECESSARY
                 // sets up camera event handlers
@@ -138,6 +162,7 @@ namespace WVU_Canon_Capture
                 {
                     // paints the LiveView black
                     HomeLiveViewCanvas.Background = System.Windows.Media.Brushes.Transparent;
+                    CameraLiveViewCanvas.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
                     if (ToggleLiveViewHomeButton != null)
                         ToggleLiveViewHomeButton.Content = "\u25b6";
 
@@ -146,6 +171,14 @@ namespace WVU_Canon_Capture
                     MainCamera?.CloseSession();
                 }
                 catch (Exception ex) { }
+
+                // displays N/A for the current camera settings
+                if(FStopLabel != null)
+                    FStopLabel.Content = "N/A";
+                if (ExposureLabel != null)
+                    ExposureLabel.Content = "N/A";
+                if (ISOLabel != null)
+                    ISOLabel.Content = "N/A";
             }
         }
 
@@ -201,13 +234,66 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
+        /// Initializes the list of camera settings within the Canon API
+        /// </summary>
+        private void InitializeCameraSettings()
+        {
+            CameraValue[] AvList;   // the list of f-stop/aperture values
+            CameraValue[] TvList;   // the list of shutter speed/exposure values
+            CameraValue[] ISOList;  // the list of iso values
+            WhiteBalance[] WBList;  // the list of white balance values
+
+            // clears the values in the comboboxes
+            FStopComboBox.Items.Clear();
+            ExposureComboBox.Items.Clear();
+            ISOComboBox.Items.Clear();
+            WhiteBalanceComboBox.Items.Clear();
+
+            // retrieves list of possible fstop, exposure, and iso settings
+            AvList = MainCamera.GetSettingsList(PropertyID.Av);
+            TvList = MainCamera.GetSettingsList(PropertyID.Tv);
+            ISOList = MainCamera.GetSettingsList(PropertyID.ISO);
+            
+            // retrieves list of all possible white balance settings (other presets cannot be set, for some reason)
+            WBList = new WhiteBalance[20]
+            {
+                WhiteBalance.Pasted,
+                WhiteBalance.Click,
+                WhiteBalance.Auto,
+                WhiteBalance.Daylight,
+                WhiteBalance.Cloudy,
+                WhiteBalance.Tungsten,
+                WhiteBalance.Fluorescent,
+                WhiteBalance.Strobe,
+                WhiteBalance.WhitePaper,
+                WhiteBalance.Shade,
+                WhiteBalance.ColorTemperature,
+                WhiteBalance.PCSet1,
+                WhiteBalance.PCSet2,
+                WhiteBalance.PCSet3,
+                WhiteBalance.WhitePaper2,
+                WhiteBalance.WhitePaper3,
+                WhiteBalance.WhitePaper4,
+                WhiteBalance.WhitePaper5,
+                WhiteBalance.PCSet4,
+                WhiteBalance.PCSet5
+            };
+
+            // inserts all options into the comboboxes
+            foreach (var Av in AvList) FStopComboBox.Items.Add(Av.StringValue);
+            foreach (var Tv in TvList) ExposureComboBox.Items.Add(Tv.StringValue);
+            foreach (var ISO in ISOList) ISOComboBox.Items.Add(ISO.StringValue);
+            foreach (var WB in WBList) WhiteBalanceComboBox.Items.Add(WB);
+        }
+
+
+        /// <summary>
         /// Event handler that detects when a new camera has been connected
         /// </summary>
         /// <param name="sender"></param>
         private void API_CameraAdded(CanonAPI sender)
         {
-            if (CameraComboBox.SelectedIndex != 0)
-                SetLiveViewOn(true);
+            LoadCameraList();
         }
 
 
@@ -261,6 +347,587 @@ namespace WVU_Canon_Capture
         }
 
 
+        /// <summary>
+        /// Sets f-stop/aperture (Av) settings
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetFStop(string setting)
+        {
+            switch (setting)
+            {
+                case "1":
+                    MainCamera.SetSetting(PropertyID.Av, 0x08);
+                    break;
+                case "1.1":
+                    MainCamera.SetSetting(PropertyID.Av, 0x0B);
+                    break;
+                case "1.2":
+                    MainCamera.SetSetting(PropertyID.Av, 0x0C);
+                    break;
+                case "1.2 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x0D);
+                    break;
+                case "1.4":
+                    MainCamera.SetSetting(PropertyID.Av, 0x10);
+                    break;
+                case "1.6":
+                    MainCamera.SetSetting(PropertyID.Av, 0x13);
+                    break;
+                case "1.8":
+                    MainCamera.SetSetting(PropertyID.Av, 0x14);
+                    break;
+                case "1.8 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x15);
+                    break;
+                case "2":
+                    MainCamera.SetSetting(PropertyID.Av, 0x18);
+                    break;
+                case "22.2":
+                    MainCamera.SetSetting(PropertyID.Av, 0x1B);
+                    break;
+                case "2.5":
+                    MainCamera.SetSetting(PropertyID.Av, 0x1C);
+                    break;
+                case "2.5 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x1D);
+                    break;
+                case "2.8":
+                    MainCamera.SetSetting(PropertyID.Av, 0x20);
+                    break;
+                case "3.2":
+                    MainCamera.SetSetting(PropertyID.Av, 0x23);
+                    break;
+                case "3.5":
+                    MainCamera.SetSetting(PropertyID.Av, 0x24);
+                    break;
+                case "3.5 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x25);
+                    break;
+                case "4":
+                    MainCamera.SetSetting(PropertyID.Av, 0x28);
+                    break;
+                case "4.5":
+                    MainCamera.SetSetting(PropertyID.Av, 0x2B);
+                    break;
+                case "4.5 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x2C);
+                    break;
+                case "5.0":
+                    MainCamera.SetSetting(PropertyID.Av, 0x2D);
+                    break;
+                case "5.6":
+                    MainCamera.SetSetting(PropertyID.Av, 0x30);
+                    break;
+                case "6.3":
+                    MainCamera.SetSetting(PropertyID.Av, 0x33);
+                    break;
+                case "6.7":
+                    MainCamera.SetSetting(PropertyID.Av, 0x34);
+                    break;
+                case "7.1":
+                    MainCamera.SetSetting(PropertyID.Av, 0x35);
+                    break;
+                case "8":
+                    MainCamera.SetSetting(PropertyID.Av, 0x38);
+                    break;
+                case "9":
+                    MainCamera.SetSetting(PropertyID.Av, 0x3B);
+                    break;
+                case "9.5":
+                    MainCamera.SetSetting(PropertyID.Av, 0x3C);
+                    break;
+                case "10":
+                    MainCamera.SetSetting(PropertyID.Av, 0x3D);
+                    break;
+                case "11":
+                    MainCamera.SetSetting(PropertyID.Av, 0x40);
+                    break;
+                case "13 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Av, 0x43);
+                    break;
+                case "13":
+                    MainCamera.SetSetting(PropertyID.Av, 0x44);
+                    break;
+                case "14":
+                    MainCamera.SetSetting(PropertyID.Av, 0x45);
+                    break;
+                case "16":
+                    MainCamera.SetSetting(PropertyID.Av, 0x48);
+                    break;
+                case "18":
+                    MainCamera.SetSetting(PropertyID.Av, 0x4B);
+                    break;
+                case "19":
+                    MainCamera.SetSetting(PropertyID.Av, 0x4C);
+                    break;
+                case "20":
+                    MainCamera.SetSetting(PropertyID.Av, 0x4D);
+                    break;
+                case "22":
+                    MainCamera.SetSetting(PropertyID.Av, 0x50);
+                    break;
+                case "25":
+                    MainCamera.SetSetting(PropertyID.Av, 0x53);
+                    break;
+                case "27":
+                    MainCamera.SetSetting(PropertyID.Av, 0x54);
+                    break;
+                case "29":
+                    MainCamera.SetSetting(PropertyID.Av, 0x55);
+                    break;
+                case "32":
+                    MainCamera.SetSetting(PropertyID.Av, 0x58);
+                    break;
+                case "36":
+                    MainCamera.SetSetting(PropertyID.Av, 0x5B);
+                    break;
+                case "38":
+                    MainCamera.SetSetting(PropertyID.Av, 0x5C);
+                    break;
+                case "40":
+                    MainCamera.SetSetting(PropertyID.Av, 0x5D);
+                    break;
+                case "45":
+                    MainCamera.SetSetting(PropertyID.Av, 0x60);
+                    break;
+                case "51":
+                    MainCamera.SetSetting(PropertyID.Av, 0x63);
+                    break;
+                case "54":
+                    MainCamera.SetSetting(PropertyID.Av, 0x64);
+                    break;
+                case "57":
+                    MainCamera.SetSetting(PropertyID.Av, 0x65);
+                    break;
+                case "64":
+                    MainCamera.SetSetting(PropertyID.Av, 0x68);
+                    break;
+                case "72":
+                    MainCamera.SetSetting(PropertyID.Av, 0x6B);
+                    break;
+                case "76":
+                    MainCamera.SetSetting(PropertyID.Av, 0x6C);
+                    break;
+                case "80":
+                    MainCamera.SetSetting(PropertyID.Av, 0x6D);
+                    break;
+                case "91":
+                    MainCamera.SetSetting(PropertyID.Av, 0x70);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Sets exposure/shutter speed (tv) settings
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetExposure(string setting)
+        {
+            switch (setting)
+            {
+                case "30\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x10);
+                    break;
+                case "25\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x13);
+                    break;
+                case "20\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x14);
+                    break;
+                case "20\" (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x15);
+                    break;
+                case "15\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x18);
+                    break;
+                case "13\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x1B);
+                    break;
+                case "10\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x1C);
+                    break;
+                case "10\" (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x1D);
+                    break;
+                case "8\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x20);
+                    break;
+                case "6\" (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x23);
+                    break;
+                case "6\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x24);
+                    break;
+                case "5\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x25);
+                    break;
+                case "4\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x28);
+                    break;
+                case "3\"2":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x2B);
+                    break;
+                case "3\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x2C);
+                    break;
+                case "2\"5":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x2D);
+                    break;
+                case "2\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x30);
+                    break;
+                case "1\"6":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x33);
+                    break;
+                case "1\"5":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x34);
+                    break;
+                case "1\"3":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x35);
+                    break;
+                case "1\"":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x38);
+                    break;
+                case "0\"8":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x3B);
+                    break;
+                case "0\"7":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x3C);
+                    break;
+                case "0\"6":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x3D);
+                    break;
+                case "0\"5":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x40);
+                    break;
+                case "0\"4":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x43);
+                    break;
+                case "0\"3":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x44);
+                    break;
+                case "0\"3 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x45);
+                    break;
+                case "1/4":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x48);
+                    break;
+                case "1/5":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x4B);
+                    break;
+                case "1/6":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x4C);
+                    break;
+                case "1/6 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x4D);
+                    break;
+                case "1/8":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x50);
+                    break;
+                case "1/10 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x53);
+                    break;
+                case "1/10":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x54);
+                    break;
+                case "1/13":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x55);
+                    break;
+                case "1/15":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x58);
+                    break;
+                case "1/20 (1/3)":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x5B);
+                    break;
+                case "1/20":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x5C);
+                    break;
+                case "1/25":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x5D);
+                    break;
+                case "1/30":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x60);
+                    break;
+                case "1/40":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x63);
+                    break;
+                case "1/45":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x64);
+                    break;
+                case "1/50":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x65);
+                    break;
+                case "1/60":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x68);
+                    break;
+                case "1/80":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x6B);
+                    break;
+                case "1/90":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x6C);
+                    break;
+                case "1/100":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x6D);
+                    break;
+                case "1/125":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x70);
+                    break;
+                case "1/160":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x73);
+                    break;
+                case "1/180":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x74);
+                    break;
+                case "1/200":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x75);
+                    break;
+                case "1/250":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x78);
+                    break;
+                case "1/320":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x7B);
+                    break;
+                case "1/350":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x7C);
+                    break;
+                case "1/400":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x7D);
+                    break;
+                case "1/500":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x80);
+                    break;
+                case "1/640":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x83);
+                    break;
+                case "1/750":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x84);
+                    break;
+                case "1/800":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x85);
+                    break;
+                case "1/1000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x88);
+                    break;
+                case "1/1250":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x8B);
+                    break;
+                case "1/1500":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x8C);
+                    break;
+                case "1/1600":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x8D);
+                    break;
+                case "1/2000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x90);
+                    break;
+                case "1/2500":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x93);
+                    break;
+                case "1/3000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x94);
+                    break;
+                case "1/3200":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x95);
+                    break;
+                case "1/4000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x98);
+                    break;
+                case "1/5000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x9B);
+                    break;
+                case "1/6000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x9C);
+                    break;
+                case "1/6400":
+                    MainCamera.SetSetting(PropertyID.Tv, 0x9D);
+                    break;
+                case "1/8000":
+                    MainCamera.SetSetting(PropertyID.Tv, 0xA0);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Sets iso settings
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetISO(string setting)
+        {
+            switch (setting)
+            {
+                case "ISO Auto":
+                    MainCamera.SetSetting(PropertyID.ISO, 0);
+                    break;
+                case "ISO 50":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000040);
+                    break;
+                case "ISO 100":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000048);
+                    break;
+                case "ISO 125":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000004b);
+                    break;
+                case "ISO 160":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000004d);
+                    break;
+                case "ISO 200":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000050);
+                    break;
+                case "ISO 250":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000053);
+                    break;
+                case "ISO 320":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000055);
+                    break;
+                case "ISO 400":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000058);
+                    break;
+                case "ISO 500":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000005b);
+                    break;
+                case "ISO 640":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000005d);
+                    break;
+                case "ISO 800":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000060);
+                    break;
+                case "ISO 1000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000063);
+                    break;
+                case "ISO 1250":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000065);
+                    break;
+                case "ISO 1600":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000068);
+                    break;
+                case "ISO 2000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000006b);
+                    break;
+                case "ISO 2500":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000006d);
+                    break;
+                case "ISO 3200":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000070);
+                    break;
+                case "ISO 4000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000073);
+                    break;
+                case "ISO 5000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000075);
+                    break;
+                case "ISO 6400":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000078);
+                    break;
+                case "ISO 8000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000007b);
+                    break;
+                case "ISO 10000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x0000007d);
+                    break;
+                case "ISO 12800":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000080);
+                    break;
+                case "ISO 16000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000083);
+                    break;
+                case "ISO 20000":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000085);
+                    break;
+                case "ISO 25600":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000088);
+                    break;
+                case "ISO 51200":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000090);
+                    break;
+                case "ISO 102400":
+                    MainCamera.SetSetting(PropertyID.ISO, 0x00000098);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Sets white balance settings
+        /// </summary>
+        /// <param name="value"></param>
+        private void SetWhiteBalance(string setting)
+        {
+            switch (setting)
+            {
+                case "Pasted":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, -2);
+                    break;
+                case "Click":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, -1);
+                    break;
+                case "Auto":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 0);
+                    break;
+                case "Daylight":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 1);
+                    break;
+                case "Cloudy":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 2);
+                    break;
+                case "Tungsten":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 3);
+                    break;
+                case "Fluorescent":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 4);
+                    break;
+                case "Strobe":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 5);
+                    break;
+                case "WhitePaper":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 6);
+                    break;
+                case "Shade":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 8);
+                    break;
+                case "ColorTemperature":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 9);
+                    break;
+                case "PCSet1":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 10);
+                    break;
+                case "PCSet2":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 11);
+                    break;
+                case "PCSet3":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 12);
+                    break;
+                case "WhitePaper2":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 15);
+                    break;
+                case "WhitePaper3":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 16);
+                    break;
+                case "WhitePaper4":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 18);
+                    break;
+                case "WhitePaper5":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 19);
+                    break;
+                case "PCSet4":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 20);
+                    break;
+                case "PCSet5":
+                    MainCamera.SetSetting(PropertyID.WhiteBalance, 21);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         #endregion
 
 
@@ -290,7 +957,7 @@ namespace WVU_Canon_Capture
                     // the profile name
                     Label proName = new Label()
                     {
-                        Content = profile.name,
+                        Content = "[" + profile.camera + "] " + profile.name,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 10,
@@ -326,13 +993,13 @@ namespace WVU_Canon_Capture
         /// an object to store the camera profile details
         /// </summary>
         class CameraProfile
-        {
-
-            public string name { get; set; }           // the camera profile name
-            public string fstop { get; set; }          // the F-stop setting
-            public string exposure { get; set; }       // the exposure (shutter-speed) setting
-            public string iso { get; set; }            // the ISO setting
-            public string whiteBalance { get; set; }   // the white balance setting
+        { 
+            public string name { get; set; }            // the camera profile name
+            public string camera { get; set; }          // the camera used to make this profile
+            public string fstop { get; set; }           // the F-stop setting
+            public string exposure { get; set; }        // the exposure (shutter-speed) setting
+            public string iso { get; set; }             // the ISO setting
+            public string whiteBalance { get; set; }    // the white balance setting
 
 
             /// <summary>
@@ -341,24 +1008,27 @@ namespace WVU_Canon_Capture
             public CameraProfile()
             {
                 name = null;
+                camera = null;
                 fstop = null;
                 exposure = null;
                 iso = null;
                 whiteBalance = null;
             }
 
-            
+
             /// <summary>
             /// Constructor for a camera profile
             /// </summary>
             /// <param name="nameVal">the camera profile name</param>
+            /// <param name="camVal">the camera name</param>
             /// <param name="fstopVal">the F-stop setting</param>
             /// <param name="expoVal">the exposure (shutter-speed) setting</param>
             /// <param name="isoVal">the ISO setting</param>
             /// <param name="wbVal">the white balance setting</param>
-            public CameraProfile(string nameVal, string fstopVal, string expoVal, string isoVal, string wbVal)
+            public CameraProfile(string nameVal, string camVal, string fstopVal, string expoVal, string isoVal, string wbVal)
             {
                 name = nameVal;
+                camera = camVal;
                 fstop = fstopVal;
                 exposure = expoVal;
                 iso = isoVal;
@@ -746,7 +1416,6 @@ namespace WVU_Canon_Capture
 
             foreach (Pose pose in poses)
             {
-                //PostListView.Items.Add(pose.title);
 
                 // Adds the pose to the PoseListView
                 // the pose name
@@ -929,12 +1598,44 @@ namespace WVU_Canon_Capture
             {
                 ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
                 SetLiveViewOn(true);
+                InitializeCameraSettings();
+
+                // selects the current settings
+                FStopComboBox.SelectedIndex = FStopComboBox.Items.IndexOf(AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue);
+                ExposureComboBox.SelectedIndex = ExposureComboBox.Items.IndexOf(TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue);
+                ISOComboBox.SelectedIndex = ISOComboBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
+                WhiteBalanceComboBox.SelectedIndex = WhiteBalanceComboBox.Items.IndexOf(MainCamera.GetStringSetting(PropertyID.WhiteBalance));
+
+                // enables all of the camera settings comboboxes on the camera screen
+                FStopComboBox.IsEnabled = true;
+                ExposureComboBox.IsEnabled = true;
+                ISOComboBox.IsEnabled = true;
+                WhiteBalanceComboBox.IsEnabled = true;
+                CameraSettings_ApplyChanges.IsEnabled = true;
+                CameraProfileNameTextBox.IsEnabled = true;
+                SaveCameraProfileButton.IsEnabled = true;
             }
             else
             {
                 if(ToggleLiveViewHomeButton != null)
                     ToggleLiveViewHomeButton.Visibility = Visibility.Collapsed;
                 SetLiveViewOn(false);
+
+                // disables all of the camera settings comboboxes on the camera screen
+                if (FStopComboBox != null)
+                    FStopComboBox.IsEnabled = false;
+                if (ExposureComboBox != null)
+                    ExposureComboBox.IsEnabled = false;
+                if (ISOComboBox != null)
+                    ISOComboBox.IsEnabled = false;
+                if (WhiteBalanceComboBox != null)
+                    WhiteBalanceComboBox.IsEnabled = false;
+                if (CameraSettings_ApplyChanges != null)
+                    CameraSettings_ApplyChanges.IsEnabled = false;
+                if (CameraProfileNameTextBox != null)
+                    CameraProfileNameTextBox.IsEnabled = false;
+                if (SaveCameraProfileButton != null)
+                    SaveCameraProfileButton.IsEnabled = false;
             }
         }
 
@@ -1014,46 +1715,45 @@ namespace WVU_Canon_Capture
         #region Camera Screen Event Handlers
         // ================================================================== CAMERA SCREEN EVENT HANDLERS ================================================================== //
 
-
         /// <summary>
-        /// Deselects selected profile when a selection is changed in FStopComboBox
+        /// Deselects selected profile when pressing the FStopComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FStopComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FStopComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             CameraProfilesListView.SelectedItem = null;
         }
 
 
         /// <summary>
-        /// Deselects selected profile when a selection is changed in ExposureComboBox
+        /// Deselects selected profile when pressing the ExposureComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ExposureComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ExposureComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             CameraProfilesListView.SelectedItem = null;
         }
 
 
         /// <summary>
-        /// Deselects selected profile when a selection is changed in ISOComboBox
+        /// Deselects selected profile when pressing the ISOComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ISOComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ISOComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             CameraProfilesListView.SelectedItem = null;
         }
 
 
         /// <summary>
-        /// Deselects selected profile when a selection is changed in WhiteBalanceComboBox
+        /// Deselects selected profile when pressing the WhiteBalanceComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void WhiteBalanceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void WhiteBalanceComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             CameraProfilesListView.SelectedItem = null;
         }
@@ -1067,6 +1767,29 @@ namespace WVU_Canon_Capture
         private void CameraSettings_ApplyChanges_Click(object sender, RoutedEventArgs e)
         {
             CameraProfilesListView.SelectedItem = null;
+
+            // if all required fields are filled (f-stop, exposure, iso), changes are applied
+            if(FStopComboBox.SelectedItem != null &&
+                ExposureComboBox.SelectedItem != null &&
+                ISOComboBox.SelectedItem != null )
+            {
+                // applies changes
+                SetFStop(FStopComboBox.SelectedItem.ToString());
+                SetExposure(ExposureComboBox.SelectedItem.ToString());
+                SetISO(ISOComboBox.SelectedItem.ToString());
+                if (WhiteBalanceComboBox.SelectedItem != null)
+                    SetWhiteBalance(WhiteBalanceComboBox.SelectedItem.ToString());
+
+                // turns off live view and then turns it back on
+                SetLiveViewOn(false);
+                System.Threading.Thread.Sleep(250);
+                SetLiveViewOn(true);
+            }
+            // if required fields are not filled, throws an error
+            else
+            {
+                ShowMessage("red", "Unfilled fields", "F-Stop/Aperture, Exposure/Shutter Speed, and ISO must be filled before applying changes.");
+            }
         }
 
 
@@ -1077,15 +1800,51 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CameraProfilesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CameraProfilesListView.SelectedItem == null)
+            // if a camera is connected, load settings
+            if (CameraComboBox.SelectedIndex != 0 && CameraProfilesListView.SelectedItem != null)
             {
-                DeleteCameraProfileButton.IsEnabled = false;
+                // if the profile camera matches the connected device name, load settings
+                if (CameraProfileList.ElementAt(CameraProfilesListView.SelectedIndex).camera == MainCamera.DeviceName)
+                {
+                    DeleteCameraProfileButton.IsEnabled = true;
+
+                    // retrieves the information from the camera profile config file
+                    CameraProfile profile = CameraProfileList.ElementAt(CameraProfilesListView.SelectedIndex);
+
+                    // inserts camera profile information
+                    FStopComboBox.SelectedItem = profile.fstop;
+                    ExposureComboBox.SelectedItem = profile.exposure;
+                    ISOComboBox.SelectedItem = profile.iso;
+                    WhiteBalanceComboBox.SelectedItem = profile.whiteBalance;
+                }
+                // if the camera connected does not match the device name, throw an error
+                else
+                {
+                    ShowMessage("red", "Specified camera not connected.", "Only camera profiles registered with the connected camera can be loaded.");
+                    // TODO: Find a way to deselect the index without throwing off an OutOfBounds error in the CameraProfilesListView
+                    //CameraProfilesListView.SelectedItem = null;
+                }
             }
+            // if a camera is not connected, throw an error
+            else if (CameraProfilesListView.SelectedItem != null)
+            {
+                ShowMessage("red", "No camera selected", "Camera must be connected to load camera settings.");
+                CameraProfilesListView.SelectedItem = null;
+            }
+            // disables the delete button if a profile is not selected
             else
-            {
-                DeleteCameraProfileButton.IsEnabled = true;
-                // else populate collection settings
-            }
+                DeleteCameraProfileButton.IsEnabled = false;
+        }
+
+
+        /// <summary>
+        /// Deletes the selected camera profile
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeleteCameraProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
 
@@ -1217,6 +1976,7 @@ namespace WVU_Canon_Capture
                 return;
             }
         }
+
 
 
         #endregion
