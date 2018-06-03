@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Default",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "5.6",
+    "exposure": "1/250",
+    "iso": "ISO 12800",
+    "whiteBalance": null
+  },
+  {
+    "name": "Outside",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "9",
+    "exposure": "1/40",
+    "iso": "ISO 2500",
+    "whiteBalance": null
+  },
+  {
+    "name": "Dark",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "13 (1/3)",
+    "exposure": "1/80",
+    "iso": "ISO 10000",
+    "whiteBalance": "WhitePaper"
+  },
+  {
+    "name": "Bright",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "3.2",
+    "exposure": "1/80",
+    "iso": "ISO 5000",
+    "whiteBalance": null
+  },
+  {
+    "name": "RAW",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/60",
+    "iso": "ISO 1000",
+    "whiteBalance": "Tungsten"
+  },
+  {
+    "name": "550nm10",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "6.3",
+    "exposure": "1/60",
+    "iso": "ISO 3200",
+    "whiteBalance": "Tungsten"
+  },
+  {
+    "name": "550nm20",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/60",
+    "iso": "ISO 3200",
+    "whiteBalance": "Tungsten"
+  },
+  {
+    "name": "CloudyDay",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/60",
+    "iso": "ISO 1000",
+    "whiteBalance": "Cloudy"
+  },
+  {
+    "name": "Example",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/160",
+    "iso": "ISO 12800",
+    "whiteBalance": null
+  }
+]

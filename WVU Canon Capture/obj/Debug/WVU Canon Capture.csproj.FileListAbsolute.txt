@@ -1,17 +1,3 @@
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.exe.config
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.exe
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.pdb
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.csprojResolveAssemblyReference.cache
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\MainWindow.g.cs
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\App.g.cs
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture_MarkupCompile.cache
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture_MarkupCompile.lref
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\MainWindow.baml
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.g.resources
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU_Canon_Capture.Properties.Resources.resources
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.csproj.GenerateResource.Cache
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.exe
-C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.pdb
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\bin\Debug\WVU Canon Capture.exe.config
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\obj\Debug\WVU Canon Capture.exe
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\obj\Debug\WVU Canon Capture.pdb
@@ -26,5 +12,19 @@ C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Othe
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\obj\Debug\WVU Canon Capture.g.resources
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\obj\Debug\WVU_Canon_Capture.Properties.Resources.resources
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture 2\WVU Canon Capture\obj\Debug\WVU Canon Capture.csproj.GenerateResource.Cache
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\WVU Canon Capture.exe.config
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.exe.config
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.exe
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\WVU Canon Capture.pdb
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\MainWindow.g.cs
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\App.g.cs
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture_MarkupCompile.cache
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture_MarkupCompile.lref
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\MainWindow.baml
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.g.resources
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU_Canon_Capture.Properties.Resources.resources
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.csproj.GenerateResource.Cache
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.exe
+C:\Users\Syihan\Google Drive\West Virginia University\'17 - '18 Senior Year\Other\Jobs\Biometrics Lab\Canon Capture\WVU Canon Capture\WVU Canon Capture\obj\Debug\WVU Canon Capture.pdb

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Closing="Window_Closing"
         WindowStartupLocation="CenterScreen"
-        Title="WVU Canon Capture" Height="835" MinHeight="500" Width="1200" MinWidth="900"
+        Title="WVU Canon Capture" Height="835" MinHeight="500" Width="1200" MinWidth="1080"
         Icon="Resources/canon_capture_icon.ico">
 
     <!--main UI-->
@@ -25,12 +25,13 @@
                     <Button 
                         x:Name="HomeNavigationButton" 
                         Click="HomeNavigationButton_Click" 
-                        Cursor="Hand" Height="30" 
+                        Height="30" 
                         Width="120" 
                         HorizontalAlignment="Left" 
                         Background="#FF3F4A52" 
                         FontWeight="Bold" 
-                        BorderThickness="0">
+                        BorderThickness="0"
+                        Cursor="Hand">
                         
                         <StackPanel Orientation="Horizontal">
                             <Label 
@@ -49,11 +50,13 @@
                     <!--camera navigation button-->
                     <Button x:Name="CameraNavigationButton" 
                             Click="CameraNavigationButton_Click" 
-                            Cursor="Hand" Height="30" Width="120" 
+                            Height="30" 
+                            Width="120" 
                             HorizontalAlignment="Left" 
                             Background="Transparent" 
                             FontWeight="Bold" 
-                            BorderThickness="0">
+                            BorderThickness="0"
+                            Cursor="Hand">
                         
                         <StackPanel Orientation="Horizontal">
                             <Label 
@@ -74,13 +77,13 @@
                     <Button 
                         x:Name="CollectionsNavigationButton" 
                         Click="CollectionsNavigationButton_Click" 
-                        Cursor="Hand" 
                         Height="30" 
                         Width="120" 
                         HorizontalAlignment="Left" 
                         Background="Transparent" 
                         FontWeight="Bold" 
-                        BorderThickness="0">
+                        BorderThickness="0"
+                        Cursor="Hand">
                         
                         <StackPanel Orientation="Horizontal">
                             <Label 
@@ -100,28 +103,44 @@
                 </StackPanel>
 
                 <!--settings menu-->
-                <Menu x:Name="SettingsMenu" 
-                      Background="Transparent" 
-                      Foreground="#FFFFFF" 
-                      FontFamily="Segoe UI Symbol" 
-                      Cursor="Hand" 
-                      Height="22" 
-                      Width="22" 
-                      HorizontalAlignment="Right" 
-                      Margin="4">
+                <Menu 
+                    x:Name="SettingsMenu"
+                    Height="22"  
+                    Background="Transparent" 
+                    Foreground="#FFFFFF" 
+                    FontFamily="Segoe UI Symbol" 
+                    Cursor="Hand" 
+                    HorizontalAlignment="Right">
                     
+                    <!--help button-->
                     <MenuItem 
-                        Header="&#x2699;" 
+                        Header="&#10067;" 
                         Height="22">
-                        
+
+                        <!--tutorials button-->
+                        <MenuItem 
+                            x:Name="TutorialsMenuItem"   
+                            Header="Tutorials"
+                            Foreground="#000000">
+                            <MenuItem.Icon>
+                                <Label 
+                                    Content="&#128214;"
+                                    FontSize="15"
+                                    Margin="-3, -8, -5, -4"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <!--about program button-->
                         <MenuItem 
                             x:Name="AboutProgramMenuItem" 
                             Click="AboutProgramMenuItem_Click"  
-                            Header="About program" 
+                            Header="About program"
                             Foreground="#000000">
-                            
                             <MenuItem.Icon>
-                                <Image Source="Resources\canon_capture_icon.ico"/>
+                                <Label 
+                                    Content="&#128712;"
+                                    FontSize="18"
+                                    Margin="-3, -10, -5, -4"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
@@ -133,7 +152,7 @@
             <!--home screen-->
             <Grid 
                 x:Name="HomeScreenGrid" 
-                Visibility="Collapsed" 
+                Visibility="Visible" 
                 Height="740" 
                 DockPanel.Dock="Top" 
                 Background="#FF161616">
@@ -190,16 +209,50 @@
                                 </StackPanel>
 
                                 <!--collection selection-->
-                                <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                                    <Label Content="Collection " Foreground="#FFFFFF" HorizontalContentAlignment="Right" Width="100" FontWeight="Bold"/>
-                                    <ComboBox x:Name="CollectionComboBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="160" BorderThickness="0" SelectionChanged="Collection_SelectionChanged"/>
+                                <StackPanel 
+                                    Height="30" 
+                                    DockPanel.Dock="Top" 
+                                    Orientation="Horizontal" 
+                                    Margin="0, 0, 0, 5">
+                                    <Label 
+                                        Content="Collection " 
+                                        Foreground="#FFFFFF" 
+                                        HorizontalContentAlignment="Right" 
+                                        Width="100" 
+                                        FontWeight="Bold"/>
+                                    <ComboBox 
+                                        x:Name="CollectionComboBox" 
+                                        VerticalContentAlignment="Center" 
+                                        HorizontalContentAlignment="Left" 
+                                        Width="160" 
+                                        BorderThickness="0" 
+                                        SelectionChanged="Collection_SelectionChanged"/>
                                 </StackPanel>
 
                                 <!--RID input-->
                                 <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal">
-                                    <Label Content="RID__DATE__COLL " Foreground="#FFFFFF" HorizontalContentAlignment="Right" Width="100" FontWeight="Bold"/>
-                                    <TextBox x:Name="RIDTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="130" BorderThickness="0"/>
-                                    <Button x:Name="EnterRIDButton" Click="EnterRIDButton_Click"  Content="&#xE09B;" Width="30" BorderThickness="0" ToolTip="Enter" Background="#9ABEAA" FontFamily="Segoe UI Symbol"/>
+                                    <Label 
+                                        Content="RID__DATE__COLL " 
+                                        Foreground="#FFFFFF" 
+                                        HorizontalContentAlignment="Right" 
+                                        Width="100" 
+                                        FontWeight="Bold"/>
+                                    <TextBox 
+                                        x:Name="RIDTextBox" 
+                                        VerticalContentAlignment="Center" 
+                                        HorizontalContentAlignment="Left" 
+                                        Width="130" 
+                                        BorderThickness="0"/>
+                                    <Button 
+                                        x:Name="EnterRIDButton" 
+                                        Click="EnterRIDButton_Click"  
+                                        Content="&#xE09B;" 
+                                        Width="30" 
+                                        BorderThickness="0" 
+                                        ToolTip="Enter" 
+                                        Background="#9ABEAA" 
+                                        FontFamily="Segoe UI Symbol"
+                                        Cursor="Hand"/>
                                 </StackPanel>
 
                             </StackPanel>
@@ -208,19 +261,69 @@
                         <!--camera controls-->
                         <Grid Visibility="Collapsed">
 
-                            <Label Content="Camera Controls" Height="30" VerticalAlignment="Top" Foreground="#EAAA00" FontWeight="Bold" FontSize="18" HorizontalContentAlignment="Center"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Label 
+                                Content="Camera Controls" 
+                                Height="30" 
+                                VerticalAlignment="Top" 
+                                Foreground="#EAAA00" 
+                                FontWeight="Bold" 
+                                FontSize="18" 
+                                HorizontalContentAlignment="Center"/>
+                            <StackPanel 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center">
 
                                 <!--capture button-->
-                                <Button Content="&#xE114;" ToolTip="Capture photo. Right click and hold to focus camera." FontSize="50" FontFamily="Segoe UI Symbol" Height="90" Width="90" Background="#0D5257" Foreground="#FFFFFF" BorderThickness="0"/>
+                                <Button 
+                                    Content="&#xE114;" 
+                                    ToolTip="Capture photo. Right click and hold to focus camera." 
+                                    FontSize="50" 
+                                    FontFamily="Segoe UI Symbol" 
+                                    Height="90" 
+                                    Width="90" 
+                                    Background="#0D5257" 
+                                    Foreground="#FFFFFF" 
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
 
                                 <!--toggle camera and autofocus buttons-->
-                                <StackPanel Height="30" Orientation="Horizontal" Margin="0, 5, 0, 0">
-                                    <Button Content="&#xE187;" Height="30" Width="30" ToolTip="Open containing folder." Background="#657A68" Foreground="#FFFFFF" BorderThickness="0" FontFamily="Segoe UI Symbol"/>
-                                    <Button Height="30" Width="55" ToolTip="Press and hold to focus camera" Background="#005EB8" BorderThickness="0" Margin="5, 0, 0, 0">
+                                <StackPanel 
+                                    Height="30" 
+                                    Orientation="Horizontal" 
+                                    Margin="0, 5, 0, 0">
+                                    <Button 
+                                        Content="&#xE187;" 
+                                        Height="30" 
+                                        Width="30" 
+                                        ToolTip="Open containing folder." 
+                                        Background="#657A68" 
+                                        Foreground="#FFFFFF" 
+                                        BorderThickness="0" 
+                                        FontFamily="Segoe UI Symbol"
+                                        Cursor="Hand"/>
+                                    <Button 
+                                        Height="30" 
+                                        Width="55" 
+                                        ToolTip="Press and hold to focus camera" 
+                                        Background="#005EB8" 
+                                        BorderThickness="0" 
+                                        Margin="5, 0, 0, 0"
+                                        Cursor="Hand">
                                         <Grid>
-                                            <Label Content="⛶" FontSize="15" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" Foreground="#FFFFFF" Margin="0, -4, 0, 0"/>
-                                            <Label Content="&#xE109;" FontSize="6" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" Foreground="#FFFFFF" Margin="0, 3, 0, 0"/>
+                                            <Label 
+                                                Content="⛶" 
+                                                FontSize="15" 
+                                                FontFamily="Segoe UI Symbol" 
+                                                VerticalAlignment="Center" 
+                                                Foreground="#FFFFFF" 
+                                                Margin="0, -4, 0, 0"/>
+                                            <Label 
+                                                Content="&#xE109;" 
+                                                FontSize="6" 
+                                                FontFamily="Segoe UI Symbol" 
+                                                HorizontalAlignment="Center" 
+                                                Foreground="#FFFFFF" 
+                                                Margin="0, 3, 0, 0"/>
                                         </Grid>
                                     </Button>
                                 </StackPanel>
@@ -250,7 +353,21 @@
                         </Grid>
 
                         <!--toggle camera button-->
-                        <Button x:Name="ToggleLiveViewHomeButton" Click="ToggleLiveViewHomeButton_Click" Visibility="Collapsed" Content="&#xE102;" ToolTip="Toggle camera on/off." Height="30" Width="30" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Transparent" Foreground="#FFFFFF" BorderThickness="0" FontFamily="Segoe UI Symbol"/>
+                        <Button 
+                            x:Name="ToggleLiveViewHomeButton" 
+                            Click="ToggleLiveViewHomeButton_Click" 
+                            Visibility="Collapsed" 
+                            Content="&#xE102;" 
+                            ToolTip="Toggle camera on/off." 
+                            Height="30" 
+                            Width="30" 
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left" 
+                            Background="Transparent" 
+                            Foreground="#FFFFFF" 
+                            BorderThickness="0" 
+                            FontFamily="Segoe UI Symbol"
+                            Cursor="Hand"/>
 
                     </Grid>
 
@@ -285,11 +402,40 @@
 
                                 <!--recapture and open buttons-->
                                 <StackPanel Height="30" Width="100" Orientation="Horizontal" Margin="0, 5, 0, 0">
-                                    <Button Content="&#8630; &#x1f4f7;" Height="30" Width="65" Background="#0D5257" ToolTip="Recapture photo. Right click and hold to focus camera." Foreground="#FFFFFF" BorderThickness="0" FontFamily="Segoe UI Symbol" />
-                                    <Button Height="30" Width="30" Background="#005EB8" ToolTip="Press and hold to focus camera." Margin="5, 0" BorderThickness="0" FontFamily="Segoe UI Sybol">
+                                    <Button 
+                                        Content="&#8630; &#x1f4f7;" 
+                                        Height="30" 
+                                        Width="65" 
+                                        Background="#0D5257" 
+                                        ToolTip="Recapture photo. Right click and hold to focus camera." 
+                                        Foreground="#FFFFFF" 
+                                        BorderThickness="0" 
+                                        FontFamily="Segoe UI Symbol" 
+                                        Cursor="Hand"/>
+                                    <Button 
+                                        Height="30" 
+                                        Width="30" 
+                                        Background="#005EB8" 
+                                        ToolTip="Press and hold to focus camera." 
+                                        Margin="5, 0" 
+                                        BorderThickness="0" 
+                                        FontFamily="Segoe UI Sybol"
+                                        Cursor="Hand">
                                         <Grid>
-                                            <Label Content="⛶" FontSize="15" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" Foreground="#FFFFFF" Margin="0, -4, 0, 0"/>
-                                            <Label Content="&#xE109;" FontSize="6" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" Foreground="#FFFFFF" Margin="0, 3, 0, 0"/>
+                                            <Label 
+                                                Content="⛶" 
+                                                FontSize="15" 
+                                                FontFamily="Segoe UI Symbol" 
+                                                VerticalAlignment="Center" 
+                                                Foreground="#FFFFFF" 
+                                                Margin="0, -4, 0, 0"/>
+                                            <Label 
+                                                Content="&#xE109;" 
+                                                FontSize="6" 
+                                                FontFamily="Segoe UI Symbol" 
+                                                HorizontalAlignment="Center" 
+                                                Foreground="#FFFFFF" 
+                                                Margin="0, 3, 0, 0"/>
                                         </Grid>
                                     </Button>
                                 </StackPanel>
@@ -322,7 +468,7 @@
 
                             <!--listview-->
                             <Label Content="Poses" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" Foreground="#FFFFFF" FontWeight="Bold" FontSize="18"/>
-                            <ListView x:Name="PoseListView" Height="185" BorderThickness="0" Background="Transparent" Style="{DynamicResource PostListView}">
+                            <ListView x:Name="PoseListView" Height="185" BorderThickness="0" Background="Transparent">
 
                                 <!--orients the listview horizontally-->
                                 <ListView.ItemsPanel>
@@ -344,14 +490,14 @@
             <!--camera screen-->
             <Grid 
                 x:Name="CameraScreenGrid" 
-                Visibility="Visible" 
+                Visibility="Collapsed" 
                 Height="740" 
-                Background="#FF161616">
+                Background="#161616">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350*" MaxWidth="350"/>
-                    <ColumnDefinition Width="350*"/>
-                    <ColumnDefinition Width="492*"/>
+                    <ColumnDefinition Width="350*" MinWidth="290"/>
+                    <ColumnDefinition Width="492*" MinWidth="360"/>
                 </Grid.ColumnDefinitions>
 
                 <!--load camera profile-->
@@ -367,8 +513,8 @@
                     
                     <!--listview of camera profiles-->
                     <ListView 
-                        x:Name="CameraProfilesListView" 
-                        SelectionChanged="CameraProfilesListView_SelectionChanged"
+                        x:Name="CameraProfileListView" 
+                        SelectionChanged="CameraProfileListView_SelectionChanged"
                         Background="Transparent" 
                         Foreground="#FFFFFF" 
                         BorderThickness="0" 
@@ -381,14 +527,14 @@
                         <Button
                             x:Name="DeleteCameraProfileButton"
                             Click="DeleteCameraProfileButton_Click"
-                            IsEnabled="False"
                             Content="Delete Profile"
                             FontWeight="Bold"
                             Height="40"
                             Width="125"
                             Background="#BE3A34"
                             Foreground="#FFFFFF"
-                            BorderThickness="0"/>
+                            BorderThickness="0"
+                            Cursor="Hand"/>
                     </Grid>
                 </Grid>
 
@@ -405,7 +551,7 @@
                             Foreground="#FFFFFF" 
                             FontWeight="Bold" 
                             FontSize="15"/>
-
+                        
                         <!--current settings-->
                         <Label 
                             Content="Current Settings"
@@ -489,7 +635,6 @@
                                     Margin="0, 65, 0, 0"/>
                             </StackPanel>
 
-
                             <!--camera profile setting comboboxes-->
                             <StackPanel Width="150">
 
@@ -544,7 +689,8 @@
                                     Height="25"
                                     Width="100"
                                     Margin="0, 5, 0, 0"
-                                    BorderThickness="0"/>
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
 
                                 <!--save profile-->
                                 <StackPanel
@@ -553,22 +699,23 @@
                                     Margin="0, 10, 0, 0">
                                     <TextBox 
                                         x:Name="CameraProfileNameTextBox"
+                                        PreviewMouseLeftButtonDown="CameraProfileNameTextBox_PreviewMouseLeftButtonDown"
                                         IsEnabled="False"
                                         Height="25"
                                         Width="125"
                                         VerticalContentAlignment="Center"
                                         BorderThickness="0"/>
-
                                     <Button
                                         x:Name="SaveCameraProfileButton"
+                                        Click="SaveCameraProfileButton_Click"
                                         Content="&#128190;"
                                         IsEnabled="False"
                                         Width="25"
-                                        BorderThickness="0"/>
+                                        BorderThickness="0"
+                                        Cursor="Hand"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
-
                     </StackPanel>
                 </Grid>
 
@@ -603,7 +750,8 @@
                             ToolTip="Press and hold to focus camera." 
                             HorizontalAlignment="Left"
                             BorderThickness="0" 
-                            FontFamily="Segoe UI Sybol">
+                            FontFamily="Segoe UI Sybol"
+                            Cursor="Hand">
                             <Grid>
                                 <Label 
                                     Content="&#9974;" 
@@ -633,23 +781,21 @@
                                 FontWeight="Bold" 
                                 FontSize="15"/>
                             <Label 
-                            Content="Reference Frames"
-                            FontWeight="Bold" 
-                            HorizontalAlignment="Center"
-                            Foreground="#FFFFFF" />
+                                Content="Reference Frames"
+                                FontWeight="Bold" 
+                                HorizontalAlignment="Center"
+                                Foreground="#FFFFFF" />
 
                             <StackPanel 
-                            HorizontalAlignment="Center"
-                            Margin="15, 0, 15, 0">
+                                HorizontalAlignment="Center"
+                                Margin="15, 0, 15, 0">
                                 <CheckBox Foreground="#FFFFFF">Closeup Frame</CheckBox>
                                 <CheckBox Foreground="#FFFFFF">Enable feature XYZ</CheckBox>
                                 <CheckBox Foreground="#FFFFFF">Enable feature WWW</CheckBox>
                             </StackPanel>
                         </StackPanel>
-
                     </StackPanel>
                 </Grid>
-
             </Grid>
 
 
@@ -683,21 +829,22 @@
                         Foreground="#FFFFFF" 
                         BorderThickness="0" 
                         Margin="0, 50, 0, 75"/>
-
+                    
                     <!--delete collection button-->
                     <Grid
                         Height="75"
                         VerticalAlignment="Bottom">
                         <Button
                             x:Name="DeleteCollectionButton"
-                            IsEnabled="False"
+                            Click="DeleteCollectionButton_Click"
                             Content="Delete Collection"
                             FontWeight="Bold"
                             Height="40"
                             Width="125"
                             Background="#BE3A34"
                             Foreground="#FFFFFF"
-                            BorderThickness="0"/>
+                            BorderThickness="0"
+                            Cursor="Hand"/>
                     </Grid>
 
                 </Grid>
@@ -711,189 +858,514 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-                        <StackPanel Margin="10, 0, 0, 0">
-                            
+                        <StackPanel>
+
                             <!--create new collection-->
                             <Label 
                                 Content="Create New Collection" 
                                 Height="50"
                                 VerticalAlignment="Top" 
                                 VerticalContentAlignment="Center" 
-                                HorizontalAlignment="Left" 
+                                HorizontalAlignment="Center" 
                                 Foreground="#333F48" 
                                 FontWeight="Bold" 
                                 FontSize="15"/>
-                            <StackPanel Orientation="Horizontal">
-                                
-                                <!--labels-->
-                                <StackPanel 
-                                    HorizontalAlignment="Right" 
-                                    Width="100"
-                                    Margin="0, 0, 5, 0">
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                                <StackPanel Width="280">
+                                    <Label 
+                                        Content="Collection Settings"
+                                        FontWeight="Bold" 
+                                        HorizontalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label 
-                                        Content="Save Directory"
-                                        HorizontalAlignment="Right"
-                                        VerticalContentAlignment="Center"
-                                        Height="30"
-                                        Margin="0, 0, 0, 5"/>
-                                    <Label 
-                                        Content="# of Poses"
-                                        HorizontalAlignment="Right"
-                                        VerticalContentAlignment="Center"
-                                        Height="30"
-                                        Margin="0, 0, 0, 5"/>
-                                    <Label 
-                                        Content="Collection #"
-                                        HorizontalAlignment="Right"
-                                        VerticalContentAlignment="Center"
-                                        Height="30"
-                                        Margin="0, 0, 0, 5"/>
-                                    <Label 
-                                        Content="Profile name"
-                                        HorizontalAlignment="Right"
-                                        VerticalContentAlignment="Center"
-                                        Height="30"
-                                        Margin="0, 35, 0, 5"/>
+                                        <!--labels-->
+                                        <StackPanel 
+                                            HorizontalAlignment="Right" 
+                                            Width="100">
+
+                                            <Label 
+                                                Content="Save Directory:"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Height="30"
+                                                Margin="0, 0, 0, 5"/>
+                                            <Label 
+                                                Content="Collection #:"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Height="30"
+                                                Margin="0, 0, 0, 5"/>
+                                            <Label 
+                                                Content="# of Poses:"
+                                                HorizontalAlignment="Right"
+                                                VerticalContentAlignment="Center"
+                                                Height="30"
+                                                Margin="17, 0, 0, 5"/>
+                                        </StackPanel>
+
+                                        <!--settings-->
+                                        <StackPanel Width="180">
+
+                                            <!--saving directory-->
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox
+                                                    x:Name="SaveDirectoryTextBox"
+                                                    FontStyle="Italic"
+                                                    IsEnabled="False"
+                                                    Height="30"
+                                                    Width="150"
+                                                    VerticalContentAlignment="Center"
+                                                    BorderThickness="0"
+                                                    Margin="0, 0, 0, 5"/>
+                                                <Button
+                                                    x:Name="BrowseSaveDirectoryButton"
+                                                    Click="BrowseSaveDirectoryButton_Click"
+                                                    Content="&#128193;"
+                                                    Height="30"
+                                                    Width="30"
+                                                    BorderThickness="0"
+                                                    Margin="0, 0, 0, 5"
+                                                    Cursor="Hand"/>
+                                            </StackPanel>
+
+                                            <!--collection number-->
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox
+                                                    x:Name="CollectionNrTextBox"
+                                                    PreviewKeyDown="CollectionNrTextBox_PreviewKeyDown"
+                                                    Height="30"
+                                                    Width="30"
+                                                    VerticalContentAlignment="Center"
+                                                    BorderThickness="0"
+                                                    Margin="0, 0, 0, 5" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <Button
+                                                    x:Name="RemovePoseButton"
+                                                    Click="RemovePoseButton_Click"
+                                                    Background="#005EB8"
+                                                    Height="30"
+                                                    Width="30"
+                                                    BorderThickness="0"
+                                                    Margin="0, 0, 0, 5"
+                                                    Cursor="Hand">
+                                                    <Label
+                                                        Content="&#727;"
+                                                        Foreground="#FFFFFF"
+                                                        FontSize="25"
+                                                        FontWeight="Bold"
+                                                        Margin="0, -11, 0, 0"/>
+                                                </Button>
+
+                                                <Button
+                                                    x:Name="AddPoseButton"
+                                                    Click="AddPoseButton_Click"
+                                                    Background="#005EB8"
+                                                    Height="30"
+                                                    Width="30"
+                                                    BorderThickness="0"
+                                                    Margin="5, 0, 0, 5"
+                                                    Cursor="Hand">
+                                                    <Label
+                                                        Content="&#65291;"
+                                                        Foreground="#FFFFFF"
+                                                        FontSize="25"
+                                                        FontWeight="Bold"
+                                                        Margin="-4, -10, 0, 0"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </StackPanel>
-
-                                <!--settings-->
-                                <StackPanel>
-
-                                    <!--saving directory-->
+                                
+                                <!--save collection-->
+                                <StackPanel Margin="30, 0, 0, 0">
+                                    <Label 
+                                        Content="Save Collection"
+                                        FontWeight="Bold" 
+                                        HorizontalAlignment="Center"/>
                                     <StackPanel Orientation="Horizontal">
+                                        <Label 
+                                            Content="Collection name:"
+                                            HorizontalAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Height="30"
+                                            />
+                                        <!--profile name-->
                                         <TextBox
-                                            x:Name="SaveDirectoryTextBox"
-                                            TextChanged="SaveDirectoryTextBox_TextChanged"
-                                            FontStyle="Italic"
-                                            IsEnabled="False"
+                                            x:Name="CollectionNameTextBox"
+                                            PreviewMouseLeftButtonDown="CollectionNameTextBox_PreviewMouseLeftButtonDown"
                                             Height="30"
                                             Width="150"
                                             VerticalContentAlignment="Center"
-                                            BorderThickness="0"
-                                            Margin="0, 0, 0, 5"/>
+                                            BorderThickness="0"/>
                                         <Button
-                                            x:Name="BrowseSaveDirectoryButton"
-                                            Click="BrowseSaveDirectoryButton_Click"
-                                            Content="&#128193;"
-                                            Height="30"
-                                            Width="30"
-                                            VerticalAlignment="Top"
-                                            BorderThickness="0"
-                                            Margin="0, 0, 0, 5"/>
-                                    </StackPanel>
-
-                                    <!--number of poses-->
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox
-                                            x:Name="NrPosesTextBox"
-                                            KeyDown="NrPosesTextBox_KeyDown"
-                                            PreviewKeyDown="NrPosesTextBox_PreviewKeyDown"
-                                            Height="30"
-                                            Width="30"
-                                            VerticalContentAlignment="Center"
-                                            BorderThickness="0"
-                                            Margin="0, 0, 0, 5"/>
-                                    </StackPanel>
-
-                                    <!--collection number-->
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox
-                                            x:Name="CollectionNrTextBox"
-                                            KeyDown="CollectionNrTextBox_KeyDown"
-                                            PreviewKeyDown="CollectionNrTextBox_PreviewKeyDown"
-                                            Height="30"
-                                            Width="30"
-                                            VerticalContentAlignment="Center"
-                                            BorderThickness="0"
-                                            Margin="0, 0, 0, 5" />
-                                    </StackPanel>
-                                    
-                                    <!--apply button-->
-                                    <Button
-                                        x:Name="CollectionSettings_ApplyChanges"
-                                        Click="CollectionSettings_ApplyChanges_Click"
-                                        Content="&#10004; Apply"
-                                        Height="30"
-                                        Width="100"
-                                        HorizontalAlignment="Left"
-                                        BorderThickness="0"
-                                        Margin="0, 0, 0, 5"/>
-                                    
-                                    <!--profile name-->
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox
-                                            Height="30"
-                                            Width="150"
-                                            VerticalContentAlignment="Center"
-                                            BorderThickness="0"
-                                            Margin="0, 0, 0, 5"/>
-                                        <Button
+                                            x:Name="SaveCollectionButton"
+                                            Click="SaveCollectionButton_Click"
                                             IsEnabled="False"
                                             Content="&#128190;"
                                             Height="30"
                                             Width="30"
-                                            VerticalAlignment="Top"
                                             BorderThickness="0"
-                                            Margin="0, 0, 0, 5"/>
-                                    </StackPanel>
+                                            Cursor="Hand"/>
+                                        </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
+                    
+                    <!--collection screen post listview-->
+                    <Grid Grid.Row="1" Background="#f2f2f2">
+                        <Grid 
+                            Height="30" 
+                              Background="#2C2A29" 
+                              VerticalAlignment="Top"/>
+                        
+                        <Grid HorizontalAlignment="Center">
+                            
+                            <!--header row-->
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                Height="30"
+                                VerticalAlignment="Top"
+                                Background="#2C2A29">
+                                <Label 
+                                    Content="#"
+                                    HorizontalContentAlignment="Center"
+                                    Width="30"
+                                    Foreground="#FFFFFF"
+                                    Margin="6, 0, 0, 0"/>
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="&#128444;"
+                                    HorizontalContentAlignment="Center"
+                                    Width="30"
+                                    Foreground="#FFFFFF" />
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="Title"
+                                    HorizontalContentAlignment="Center"
+                                    Width="100"
+                                    Foreground="#FFFFFF" />
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="Description"
+                                    HorizontalContentAlignment="Center"
+                                    Width="100"
+                                    Foreground="#FFFFFF" />
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="Camera Profile"
+                                    HorizontalContentAlignment="Center"
+                                    Width="100"
+                                    Foreground="#FFFFFF"/>
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="Device"
+                                    HorizontalContentAlignment="Center"
+                                    Width="100"
+                                    Foreground="#FFFFFF"/>
+                                <Line 
+                                    Stroke="#FFFFFF" 
+                                    Width="15"
+                                    X1="7"
+                                    X2="7"
+                                    Y1="0"
+                                    Y2="30"/>
+                                <Label 
+                                    Content="Filename"
+                                    HorizontalContentAlignment="Center"
+                                    Width="150"
+                                    Foreground="#FFFFFF" />
 
-                    <Grid Grid.Row="1">
-                        <StackPanel 
-                            Orientation="Horizontal" 
-                            Background="#2C2A29">
-                            <Label 
-                                Content="Camera Profile"
-                                HorizontalContentAlignment="Center"
-                                Width="150"
-                                Foreground="#FFFFFF" />
-                            <Label 
-                                Content="|"
-                                Foreground="#FFFFFF" 
-                                Width="15"
-                                HorizontalContentAlignment="Center"/>
-                            <Label 
-                                Content="Thumbnail"
-                                HorizontalContentAlignment="Center"
-                                Width="75"
-                                Foreground="#FFFFFF" />
-                            <Label 
-                                Content="|"
-                                Foreground="#FFFFFF" 
-                                Width="15"
-                                HorizontalContentAlignment="Center"/>
-                            <Label 
-                                Content="Title"
-                                HorizontalContentAlignment="Center"
-                                Width="100"
-                                Foreground="#FFFFFF" />
-                            <Label 
-                                Content="|"
-                                Foreground="#FFFFFF" 
-                                Width="15"
-                                HorizontalContentAlignment="Center"/>
-                            <Label 
-                                Content="Description"
-                                HorizontalContentAlignment="Center"
-                                Width="150"
-                                Foreground="#FFFFFF" />
-                            <Label 
-                                Content="|"
-                                Foreground="#FFFFFF" 
-                                Width="15"
-                                HorizontalContentAlignment="Center"/>
-                            <Label 
-                                Content="Filename"
-                                HorizontalContentAlignment="Center"
-                                Width="150"
-                                Foreground="#FFFFFF" />
-                        </StackPanel>
-                        <ListView Margin="0, 30, 0, 0">
-                        </ListView>
+                            </StackPanel>
+
+                            <!--background grid-->
+                            <Grid 
+                                Margin="0, 30, 0, 0" 
+                                Background="#FFFFFF">
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="43"
+                                    X2="43"
+                                    Y1="0"
+                                    Y2="500"/>
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="88"
+                                    X2="88"
+                                    Y1="0"
+                                    Y2="500"/>
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="203"
+                                    X2="203"
+                                    Y1="0"
+                                    Y2="500"/>
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="318"
+                                    X2="318"
+                                    Y1="0"
+                                    Y2="500"/>
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="433"
+                                    X2="433"
+                                    Y1="0"
+                                    Y2="500"/>
+                                <Line 
+                                    Stroke="#a6a6a6" 
+                                    X1="548"
+                                    X2="548"
+                                    Y1="0"
+                                    Y2="500"/>
+                            </Grid>
+                            
+                            <!--poses listview-->
+                            <ListView 
+                                x:Name="CollectionScreenPoseListView"
+                                SelectionChanged="CollectionScreenPoseListView_SelectionChanged"
+                                PreviewKeyUp="CollectionScreenPoseListView_PreviewKeyUp"
+                                PreviewKeyDown="CollectionScreenPoseListView_PreviewKeyDown"
+                                PreviewMouseLeftButtonDown="CollectionScreenPoseListView_PreviewMouseLeftButtonDown"
+                                Background="Transparent"
+                                Width="730"
+                                Margin="0, 30, 0, 0"
+                                BorderThickness="0">
+                            </ListView>
+                        </Grid>
+
+                        <!--background for pose settings-->
+                        <Grid
+                            x:Name="PoseSettingsGridBackground"
+                            Visibility="Collapsed"
+                            Background="#2C2A29"
+                            Opacity="0.75">
+                        </Grid>
+
+                        <!--pose settings-->
+                        <Grid 
+                            x:Name="PoseSettingsGrid"
+                            Visibility="Collapsed"
+                            Height="475"
+                            Width="400"
+                            Background="#002855">
+
+                            <!--exit pose settings button-->
+                            <Button
+                                x:Name="HidePoseSettingsButton"
+                                Content="&#9587;"
+                                ToolTip="Exit pose settings."
+                                Click="HidePoseSettingsButton_Click"
+                                Height="30"
+                                Width="30"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
+                                Foreground="#FFFFFF"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+
+                            <StackPanel Margin="50, 0, 50, 0">
+                                <Label 
+                                    Content="Pose Settings" 
+                                    Height="30" VerticalAlignment="Top" 
+                                    VerticalContentAlignment="Center" 
+                                    HorizontalAlignment="Center" 
+                                    Foreground="#FFFFFF" 
+                                    FontWeight="Bold" 
+                                    FontSize="15"/>
+                                <StackPanel Orientation="Horizontal">
+
+                                    <!--setting labels-->
+                                    <StackPanel>
+                                        <Label
+                                            Content="No: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Label
+                                            Content="Title: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Label
+                                            Content="Description: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 15"/>
+                                        <Label
+                                            Content="Thumbnail: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 190"/>
+                                        <Label
+                                            Content="Camera Profile: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Label
+                                            Content="Device Name: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Label
+                                            Content="Filename: "
+                                            Height="25"
+                                            HorizontalContentAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                    </StackPanel>
+
+                                    <!--setting comboboxes and textboxes-->
+                                    <StackPanel>
+
+                                        <!--pose number-->
+                                        <Label
+                                            x:Name="PoseNoLabel"
+                                            Height="25"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+
+                                        <!--pose title-->
+                                        <TextBox
+                                            x:Name="PoseTitleTextBox"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5"/>
+
+                                        <!--pose description-->
+                                        <TextBox
+                                            x:Name="PoseDescTextBox"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 15"/>
+
+                                        <!--pose thumbnail-->
+                                        <Label
+                                            x:Name="PoseThumbnailLabel"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            Foreground="#FFFFFF"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Grid
+                                            Height="150"
+                                            Width="100"
+                                            HorizontalAlignment="Left"
+                                            Background="#000000"
+                                            Margin="0, 0, 0, 5">
+                                            <Image 
+                                                x:Name="PoseThumbnailImage"
+                                                Height="150"
+                                                Width="100"
+                                                HorizontalAlignment="Left"
+                                                Margin="0, 0, 0, 5"/>
+                                        </Grid>
+                                        <Button
+                                            x:Name="LoadThumbnailButton"
+                                            Content="Load Thumbnails"
+                                            Click="LoadThumbnailButton_Click"
+                                            Height="25"
+                                            Width="100"
+                                            HorizontalAlignment="Left"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5"
+                                            Cursor="Hand"/>
+
+                                        <!--pose camera profile-->
+                                        <ComboBox
+                                            x:Name="PoseCameraProfileComboBox"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5"/>
+
+                                        <!--pose device-->
+                                        <TextBox
+                                            x:Name="PoseDeviceTextbox"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5"/>
+
+                                        <!--pose filename-->
+                                        <TextBox
+                                            x:Name="PoseFilenameTextbox"
+                                            Height="25"
+                                            Width="150"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5"/>
+
+                                        <!--apply changes button-->
+                                        <Button
+                                            x:Name="PoseSettings_ApplyChanges"
+                                            Content="Apply Changes"
+                                            Click="PoseSettings_ApplyChanges_Click"
+                                            Height="25"
+                                            Width="100"
+                                            BorderThickness="0"
+                                            Cursor="Hand"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
@@ -908,14 +1380,16 @@
                 VerticalAlignment="Bottom">
 
                 <!--progress bar-->
-                <StatusBarItem HorizontalAlignment="Right">
+                <StatusBarItem 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
                     <ProgressBar 
                         x:Name="MainProgressBar"  
                         Height="20" 
                         Width="150" 
                         Value="0" 
                         Minimum="0" 
-                        Maximum="100" 
+                        Maximum="100"
                         BorderThickness="0">
 
                         <!--TODO: FIGURE OUT HOW TO ACCOMPLISH THIS WITHOUT THE GRADIENT-->
@@ -975,7 +1449,18 @@
                 </StackPanel>
 
                 <!--button-->
-                <Button x:Name="HideMessageButton" Content="Okay" Click="HideMessageButton_Click" Height="40" Width="60" Background="#005EB8" Foreground="#FFFFFF" BorderThickness="0" FontWeight="Bold" Margin="0, 30, 0, 0"/>
+                <Button 
+                    x:Name="HideMessageButton" 
+                    Content="Okay" 
+                    Click="HideMessageButton_Click" 
+                    Height="40" 
+                    Width="60" 
+                    Background="#005EB8" 
+                    Foreground="#FFFFFF" 
+                    BorderThickness="0" 
+                    FontWeight="Bold" 
+                    Margin="0, 30, 0, 0"
+                    Cursor="Hand"/>
 
             </StackPanel>
             
@@ -998,7 +1483,8 @@
                     Foreground="#FFFFFF" 
                     BorderThickness="0" 
                     FontWeight="Bold" 
-                    Margin="0, 30, 0, 0"/>
+                    Margin="0, 30, 0, 0"
+                    Cursor="Hand"/>
             </StackPanel>
 
         </Grid>
@@ -1024,10 +1510,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        
+                        <!--CornerRadius="5"-->
                         <Border 
                             Name="Border" 
-                            CornerRadius="5" 
+                            CornerRadius="0" 
                             Margin="2"
                             Background="{StaticResource ScrollBarColor}">
                             <Path
@@ -1043,7 +1529,6 @@
                                 <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
-                        
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -1073,8 +1558,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
+                        <!--CornerRadius="5"-->
                         <Border 
-                          CornerRadius="5" 
+                          CornerRadius="0" 
                           Background="{TemplateBinding Background}"
                           BorderBrush="{TemplateBinding BorderBrush}"
                           BorderThickness="0" />
@@ -1105,13 +1591,15 @@
                     Style="{StaticResource ScrollBarLineButton}"
                     Height="18"
                     Command="ScrollBar.LineUpCommand"
-                    Content="M 0 4 L 8 4 L 4 0 Z" />
+                    Content="M 0 4 L 8 4 L 4 0 Z" 
+                    Cursor="Hand"/>
                 
                 <!--bar track-->
                 <Track 
                     Name="PART_Track"
                     Grid.Row="1"
-                    IsDirectionReversed="True">
+                    IsDirectionReversed="True"
+                    Cursor="Hand">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton 
                             Style="{StaticResource ScrollBarPageButton}"
@@ -1138,7 +1626,8 @@
                     Style="{StaticResource ScrollBarLineButton}"
                     Height="18"
                     Command="ScrollBar.LineDownCommand"
-                    Content="M 0 0 L 4 4 L 8 0 Z"/>
+                    Content="M 0 0 L 4 4 L 8 0 Z"
+                    Cursor="Hand"/>
             </Grid>
         </ControlTemplate>
 
@@ -1163,13 +1652,15 @@
                     Style="{StaticResource ScrollBarLineButton}"
                     Width="18"
                     Command="ScrollBar.LineLeftCommand"
-                    Content="M 4 0 L 4 8 L 0 4 Z" />
+                    Content="M 4 0 L 4 8 L 0 4 Z" 
+                    Cursor="Hand"/>
                 
                 <!--bar track-->
                 <Track 
                     Name="PART_Track"
                     Grid.Column="1"
-                    IsDirectionReversed="False">
+                    IsDirectionReversed="False"
+                    Cursor="Hand">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton
                             Style="{StaticResource ScrollBarPageButton}"
@@ -1196,7 +1687,8 @@
                     Style="{StaticResource ScrollBarLineButton}"
                     Width="18"
                     Command="ScrollBar.LineRightCommand"
-                    Content="M 0 0 L 4 4 L 0 8 Z"/>
+                    Content="M 0 0 L 4 4 L 0 8 Z"
+                    Cursor="Hand"/>
             </Grid>
         </ControlTemplate>
 

@@ -34,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -43,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -123,8 +125,145 @@
   <ItemGroup>
     <Resource Include="Resources\canon_capture_icon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Thumbnails\550nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\-45.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\-90.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\0.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\22.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\45.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\67.5.png" />
+    <Resource Include="Resources\Thumbnails\550nm20\90.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\570nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\590nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\610nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\630nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\-45.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\-90.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\0.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\22.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\45.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\67.5.png" />
+    <Resource Include="Resources\Thumbnails\650nm20\90.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\-45.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\-90.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\0.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\22.5.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\45.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\67.5.png" />
+    <Resource Include="Resources\Thumbnails\670nm10\90.png" />
+    <Resource Include="Resources\Thumbnails\RAW\-22.5.png" />
+    <Resource Include="Resources\Thumbnails\RAW\-45.png" />
+    <Resource Include="Resources\Thumbnails\RAW\-67.5.png" />
+    <Resource Include="Resources\Thumbnails\RAW\-90.png" />
+    <Resource Include="Resources\Thumbnails\RAW\0.png" />
+    <Resource Include="Resources\Thumbnails\RAW\0_L_DOWN.png" />
+    <Resource Include="Resources\Thumbnails\RAW\0_L_LEFT.png" />
+    <Resource Include="Resources\Thumbnails\RAW\0_L_RIGHT.png" />
+    <Resource Include="Resources\Thumbnails\RAW\0_L_TOP.png" />
+    <Resource Include="Resources\Thumbnails\RAW\22.5.png" />
+    <Resource Include="Resources\Thumbnails\RAW\45.png" />
+    <Resource Include="Resources\Thumbnails\RAW\67.5.png" />
+    <Resource Include="Resources\Thumbnails\RAW\90.png" />
+    <Resource Include="Resources\Thumbnails\RAW\CC.png" />
+    <Resource Include="Resources\Thumbnails\RAW\NC.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
