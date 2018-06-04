@@ -1073,7 +1073,6 @@ namespace WVU_Canon_Capture
                 iso = isoVal;
                 whiteBalance = wbVal;
             }
-
         }
 
 
@@ -1941,7 +1940,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Event handler that begins a new session
+        /// Event handler that checks for session conditions, and then begins a session if the conditions are met
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1971,18 +1970,49 @@ namespace WVU_Canon_Capture
                 date = ridDateCol[1];
                 col = ridDateCol[2];
 
-                if (rid.Length != 7 && date.Length != 8 && (col.Length != 1 || col.Length != 2))
-                    ShowMessage("red", "Invalid input", "RID_Date_Col must be in the following format: <7 DIGITS>_<8 DIGITS>_<1-2 DIGITS>");
-
-                // TODO: verify if collection is compatible with camera
-                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex);
-                if (collection.camera != CameraComboBox.Text)
+                // verifies that RID, Date, and Collection Number are the correct number of digits
+                if (rid.Length != 7 || date.Length != 8 || (col.Length < 1 || col.Length > 2))
                 {
-                    ShowMessage("red", "Invalid camera", "The connected camera is associated with this collection.");
+                    ShowMessage("red", "Invalid input", "RID_Date_Col must be in the following format: <7 DIGITS>_<8 DIGITS>_<1-2 DIGITS>");
                     return;
                 }
 
-                // TODO: verify if camera profiles in collection exist
+                // verifies that the collection is compatible with camera
+                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex);
+                if (collection.camera != CameraComboBox.Text)
+                {
+                    ShowMessage("red", "Invalid camera", "The connected camera is not associated with this collection.");
+                    return;
+                }
+
+                // verifies if camera profiles in the collection exist
+                List<CameraProfile> profiles = new List<CameraProfile>();
+                foreach (Pose pose in collection.poses)
+                {
+                    CameraProfile item = CameraProfileList.FirstOrDefault(profile => pose.cameraProfile == profile.name);
+                    if (item != null)
+                        profiles.Add(item);
+                    else
+                    {
+                        ShowMessage("red", "Invalid camera profile",
+                            "The pose \"" + pose.title + "\" in \"" + CollectionComboBox.Text + "\" lists \"" + pose.cameraProfile + "\" as a camera profile, which is not available. " +
+                            "Please edit the pose and its camera profile under the Collections Menu.");
+                        return;
+                    }
+                }
+
+                // verifies if camera profiles are compatible with the connected camera
+                foreach (CameraProfile profile in profiles)
+                {
+                    if(profile.camera != CameraComboBox.Text)
+                    {
+                        ShowMessage("red", "Camera profile and camera are incompatible", 
+                            "\"" + CollectionComboBox.Text + "\"uses the camera profile \"" + profile.name + "\", which is incompatible with " + CameraComboBox.Text + 
+                            ". Please edit \"" + CollectionComboBox.Text + "\" under the Collections Menu.");
+                        return;
+                    }
+                }
+
                 // TODO: begin session
             }
             else
@@ -2467,7 +2497,7 @@ namespace WVU_Canon_Capture
             string defaultThumb = System.IO.Path.GetFullPath(@"Resources\Thumbnails\RAW\0.png");
 
             // adds default pose
-            Pose defaultPose = new Pose("Sample Title", "Sample Description", defaultThumb,  "sample_filename", "Sample Profile");
+            Pose defaultPose = new Pose("Sample Title", "Sample Description", defaultThumb,  "sample_filename", null);
             PoseList.Add(defaultPose);
 
             // display the new list of poses
@@ -2573,7 +2603,7 @@ namespace WVU_Canon_Capture
         private void HidePoseSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             // verifies that a camera profile has been chosen before exiting
-            if (PoseList.ElementAt(CollectionScreenPoseListView.SelectedIndex).cameraProfile == "Sample Profile")
+            if (PoseList.ElementAt(CollectionScreenPoseListView.SelectedIndex).cameraProfile == null)
             {
                 MessageBoxResult result = MessageBox.Show(
                     "There is no selected camera profile for this pose. This may cause problems during a session. Are you sure you want to exit pose settings?", "Warning!",

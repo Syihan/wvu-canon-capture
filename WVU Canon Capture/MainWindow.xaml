@@ -1490,7 +1490,7 @@
                 <TextBlock
                     x:Name="MessageTextBlock"
                     HorizontalAlignment="Center"
-                    Height="50"
+                    Height="80"
                     Width="300"
                     FontWeight="Bold"
                     TextWrapping="Wrap"
@@ -1508,7 +1508,7 @@
                     Foreground="#FFFFFF" 
                     BorderThickness="0" 
                     FontWeight="Bold" 
-                    Margin="0, 30, 0, 0"
+                    Margin="0, 10, 0, 0"
                     Cursor="Hand"/>
 
             </StackPanel>

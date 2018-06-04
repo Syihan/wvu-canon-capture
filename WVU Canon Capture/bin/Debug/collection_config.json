@@ -64,5 +64,71 @@
         "cameraProfile": "RAW"
       }
     ]
+  },
+  {
+    "name": "TwinsDay2018",
+    "collectionNumber": "28",
+    "numberOfPoses": 8,
+    "savingDirectory": "C:\\Users\\Syihan\\Downloads",
+    "deviceName": "5DSR",
+    "camera": "Canon EOS 5DS R",
+    "poses": [
+      {
+        "title": "Number Card",
+        "description": "Blue - Middle",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\NC.png",
+        "filename": "NC",
+        "cameraProfile": "Boobs"
+      },
+      {
+        "title": "Color Card",
+        "description": "Blue - Middle",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\CC.png",
+        "filename": "CC",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "-90 Degrees",
+        "description": "Red - Right",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\-90.png",
+        "filename": "-90",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "-45 Degrees",
+        "description": "Black - Right",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\-45.png",
+        "filename": "-45",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "0 Degrees",
+        "description": "Blue - Middle",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\0.png",
+        "filename": "0",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "45 Degrees",
+        "description": "Black - Left",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\0.png",
+        "filename": "45",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "90 Degrees",
+        "description": "Red - Left",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\90.png",
+        "filename": "90",
+        "cameraProfile": "RAW"
+      },
+      {
+        "title": "Goofy",
+        "description": "Blue - Middle",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\RAW\\0.png",
+        "filename": "goofy",
+        "cameraProfile": "RAW"
+      }
+    ]
   }
 ]
