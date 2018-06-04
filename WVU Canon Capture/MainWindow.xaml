@@ -177,7 +177,7 @@
                     <Grid Grid.Column="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="525"/>
-                            <RowDefinition Height="215*"/>
+                            <RowDefinition Height="215"/>
                         </Grid.RowDefinitions>
 
                         <!--live view-->
