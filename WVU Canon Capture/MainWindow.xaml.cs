@@ -982,7 +982,7 @@ namespace WVU_Canon_Capture
                     string name = profile.name.Replace("_", "__");
                     Label proName = new Label()
                     {
-                        Content = "[" + profile.camera + "] " + name,
+                        Content = "(" + profile.camera + ") " + name,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1115,7 +1115,7 @@ namespace WVU_Canon_Capture
                     string colName = collection.name.Replace("_", "__");
                     Label colNameAndNo = new Label()
                     {
-                        Content = colName + " [Col #" + collection.collectionNumber + "]",
+                        Content = "(#" + collection.collectionNumber + ") " + colName,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1971,15 +1971,34 @@ namespace WVU_Canon_Capture
                 date = ridDateCol[1];
                 col = ridDateCol[2];
 
-                // TODO: GET RID OF THIS TEST BIT OF CODE
-                ShowMessage("green", "Values attributed", "RID: " + rid + ", Date: " + date + ", Collection Number: " + col);
-
                 if (rid.Length != 7 && date.Length != 8 && (col.Length != 1 || col.Length != 2))
                     ShowMessage("red", "Invalid input", "RID_Date_Col must be in the following format: <7 DIGITS>_<8 DIGITS>_<1-2 DIGITS>");
+
+                // TODO: verify if collection is compatible with camera
+                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex);
+                if (collection.camera != CameraComboBox.Text)
+                {
+                    ShowMessage("red", "Invalid camera", "The connected camera is associated with this collection.");
+                    return;
+                }
+
+                // TODO: verify if camera profiles in collection exist
+                // TODO: begin session
             }
             else
                 ShowMessage("red", "Invalid input", "Input must be in the following form: <RID>_<DATE>_<COLLECTION NUMBER>");
+        }
 
+
+        /// <summary>
+        /// Event handler that begins a new session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RIDTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                EnterRIDButton_Click(sender, e);
         }
 
 
@@ -2005,7 +2024,7 @@ namespace WVU_Canon_Capture
 
         
         /// <summary>
-        /// Deselects selected profile when pressing the FStopComboBox
+        /// Event handler that deselects selected profile when pressing the FStopComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2016,7 +2035,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected profile when pressing the ExposureComboBox
+        /// Event handler that deselects selected profile when pressing the ExposureComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2027,7 +2046,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected profile when pressing the ISOComboBox
+        /// Event handler that deselects selected profile when pressing the ISOComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2038,7 +2057,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected profile when pressing the WhiteBalanceComboBox
+        /// Event handler that deselects selected profile when pressing the WhiteBalanceComboBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2049,7 +2068,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected profile when pressing the CameraProfileNameTextBox
+        /// Event handler that deselects selected profile when pressing the CameraProfileNameTextBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2060,7 +2079,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Applies the changes to the live view
+        /// Event handler that applies the changes to the live view
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2098,7 +2117,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Saves the camera settings into a new camera profile
+        /// Event handler that saves the camera settings into a new camera profile
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2169,7 +2188,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Updates camera profile settings
+        /// Event handler that updates camera profile settings
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2201,7 +2220,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deletes the selected camera profile
+        /// Event handler that deletes the selected camera profile
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2253,7 +2272,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Updates collection settings
+        /// Event handler that updates collection settings
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2302,7 +2321,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deletes the selected collection
+        /// Event handler that deletes the selected collection
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2343,7 +2362,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Opens folder browser selection
+        /// Event handler that opens folder browser selection
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2374,7 +2393,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected collection when user types in CollectionNrTextBox
+        /// Event handler that deselects selected collection when user types in CollectionNrTextBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2385,7 +2404,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected collection when user types in CollectionDeviceTextBox
+        /// Event handler that deselects selected collection when user types in CollectionDeviceTextBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2396,7 +2415,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Removes a pose from the CollectionScreenPoseListView
+        /// Event handler that removes a pose from the CollectionScreenPoseListView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2427,7 +2446,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Adds a pose from the CollectionScreenPoseListView
+        /// Event handler that adds a pose from the CollectionScreenPoseListView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2462,7 +2481,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected collection when CollectionNameTextBox is pressed
+        /// Event handler that deselects selected collection when CollectionNameTextBox is pressed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2473,7 +2492,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected collection when CollectionScreenPoseListView is pressed
+        /// Event handler that deselects selected collection when CollectionScreenPoseListView is pressed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2484,7 +2503,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Opens the PoseSettings grid when a pose is selected
+        /// Event handler that opens the PoseSettings grid when a pose is selected
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2525,7 +2544,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Disables ListView navigation through keyboard up key
+        /// Event handler that disables ListView navigation through keyboard up key
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2536,7 +2555,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Disables ListView navigation through keyboard up key
+        /// Event handler that disables ListView navigation through keyboard up key
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2547,7 +2566,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Hides the PoseSettings grid and deselects any selected pose
+        /// Event handler that hides the PoseSettings grid and deselects any selected pose
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2571,7 +2590,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Opens dialog box to choose thumbnail
+        /// Event handler that opens dialog box to choose thumbnail
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2610,7 +2629,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Applies changes to the selected pose
+        /// Event handler that applies changes to the selected pose
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2658,7 +2677,7 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Saves the collection settings into a new collection
+        /// Event handler that saves the collection settings into a new collection
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
