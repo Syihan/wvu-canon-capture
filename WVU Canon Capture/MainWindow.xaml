@@ -18,8 +18,10 @@
     <ScrollViewer 
         VerticalScrollBarVisibility="Auto"
         Background="#595959">
-        <Grid>
-            <StackPanel Background="#2C2A29">
+        <Grid Background="#2C2A29">
+            <StackPanel 
+                VerticalAlignment="Center"
+                Grid.Row="0">
 
                 <!--top toolbar-->
                 <Grid x:Name="TopToolBar" 
@@ -128,7 +130,8 @@
                             <MenuItem 
                                 x:Name="TutorialsMenuItem"   
                                 Header="Tutorials"
-                                Foreground="#000000">
+                                Foreground="#000000"
+                                Cursor="Hand">
                                 <MenuItem.Icon>
                                     <Label 
                                         Content="&#128214;"
@@ -142,7 +145,7 @@
                                 x:Name="AboutProgramMenuItem" 
                                 Click="AboutProgramMenuItem_Click"  
                                 Header="About program"
-                                Foreground="#000000">
+                                Cursor="Hand">
                                 <MenuItem.Icon>
                                     <Label 
                                         Content="&#128712;"
@@ -154,13 +157,14 @@
                     </Menu>
 
                 </Grid>
-
-
+                
+                
+                
                 <!--home screen-->
                 <Grid 
                     x:Name="HomeScreenGrid" 
                     Visibility="Visible" 
-                    Height="740" 
+                    Height="740"
                     DockPanel.Dock="Top" 
                     Background="#FF161616">
 
@@ -173,7 +177,7 @@
                     <Grid Grid.Column="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="525"/>
-                            <RowDefinition Height="215"/>
+                            <RowDefinition Height="215*"/>
                         </Grid.RowDefinitions>
 
                         <!--live view-->
@@ -205,13 +209,16 @@
                                         <Label Content="Camera " Foreground="#FFFFFF" HorizontalContentAlignment="Right" Width="100" FontWeight="Bold"/>
                                         <ComboBox 
                                             x:Name="CameraComboBox" 
+                                            Text="TestCamera"
                                             SelectionChanged="CameraComboBox_SelectionChanged"
                                             SelectedIndex="0"
                                             VerticalContentAlignment="Center" 
                                             HorizontalContentAlignment="Left" 
                                             Width="160" 
-                                            BorderThickness="0">
-                                            <ComboBoxItem Content=""/>
+                                            BorderThickness="0"
+                                            Cursor="Hand">
+                                            <!--<ComboBoxItem Content=""/>-->
+                                            <ComboBoxItem Content="swag"/>
                                         </ComboBox>
                                     </StackPanel>
 
@@ -229,11 +236,12 @@
                                             FontWeight="Bold"/>
                                         <ComboBox 
                                             x:Name="CollectionComboBox" 
+                                            SelectionChanged="CollectionComboBox_SelectionChanged"
                                             VerticalContentAlignment="Center" 
                                             HorizontalContentAlignment="Left" 
                                             Width="160" 
                                             BorderThickness="0" 
-                                            SelectionChanged="Collection_SelectionChanged"/>
+                                            Cursor="Hand"/>
                                     </StackPanel>
 
                                     <!--RID input-->
@@ -495,13 +503,9 @@
                                         </ItemsPanelTemplate>
                                     </ListView.ItemsPanel>
                                 </ListView>
-
                             </StackPanel>
-
                         </Grid>
-
                     </Grid>
-
                 </Grid>
 
 
@@ -533,6 +537,7 @@
                         <ListView 
                             x:Name="CameraProfileListView" 
                             SelectionChanged="CameraProfileListView_SelectionChanged"
+                            Height="615"
                             Background="Transparent" 
                             Foreground="#FFFFFF" 
                             BorderThickness="0" 
@@ -592,8 +597,12 @@
                                         Content="ISO: " 
                                         HorizontalContentAlignment="Right"
                                         Foreground="#FFFFFF"/>
+                                    <Label 
+                                        Content="White Balance: " 
+                                        HorizontalContentAlignment="Right"
+                                        Foreground="#FFFFFF"/>
                                 </StackPanel>
-                                <StackPanel Width="80">
+                                <StackPanel Width="90">
                                     <Label 
                                         x:Name="FStopLabel"
                                         Content="N/A"
@@ -605,6 +614,10 @@
                                         Foreground="#FFFFFF"/>
                                     <Label  
                                         x:Name="ISOLabel"
+                                        Content="N/A"
+                                        Foreground="#FFFFFF"/>
+                                    <Label  
+                                        x:Name="WhiteBalanceLabel"
                                         Content="N/A"
                                         Foreground="#FFFFFF"/>
                                 </StackPanel>
@@ -662,7 +675,8 @@
                                         PreviewMouseLeftButtonDown="FStopComboBox_PreviewMouseLeftButtonDown"
                                         IsEnabled="False"
                                         Height="25"
-                                        BorderThickness="0"/>
+                                        BorderThickness="0"
+                                        Cursor="Hand"/>
 
                                     <!--exposure-->
                                     <ComboBox  
@@ -671,7 +685,8 @@
                                         IsEnabled="False"
                                         Height="25"
                                         BorderThickness="0"
-                                        Margin="0, 5, 0, 0"/>
+                                        Margin="0, 5, 0, 0"
+                                        Cursor="Hand"/>
 
                                     <!--iso-->
                                     <ComboBox  
@@ -680,7 +695,8 @@
                                         IsEnabled="False"
                                         Height="25"
                                         BorderThickness="0"
-                                        Margin="0, 5, 0, 0"/>
+                                        Margin="0, 5, 0, 0"
+                                        Cursor="Hand"/>
 
                                     <!--white balance-->
                                     <ComboBox  
@@ -689,7 +705,8 @@
                                         IsEnabled="False"
                                         Height="25"
                                         BorderThickness="0"
-                                        Margin="0, 5, 0, 0"/>
+                                        Margin="0, 5, 0, 0"
+                                        Cursor="Hand"/>
 
                                     <Label 
                                         Content="*May cause minor errors."
@@ -700,13 +717,14 @@
 
                                     <!--apply changes button-->
                                     <Button
-                                        x:Name="CameraSettings_ApplyChanges"
-                                        Click="CameraSettings_ApplyChanges_Click"
+                                        x:Name="CameraSettings_ApplyChangesButton"
+                                        Click="CameraSettings_ApplyChangesButton_Click"
                                         Content="Apply Changes"
                                         IsEnabled="False"
+                                        Background="#66D6D6"
                                         Height="25"
                                         Width="100"
-                                        Margin="0, 5, 0, 0"
+                                        Margin="0, 5, 0, 10"
                                         BorderThickness="0"
                                         Cursor="Hand"/>
 
@@ -714,11 +732,10 @@
                                     <StackPanel
                                         Orientation="Horizontal" 
                                         HorizontalAlignment="Right"
-                                        Margin="0, 10, 0, 0">
+                                        Margin="0, 0, 0, 0">
                                         <TextBox 
                                             x:Name="CameraProfileNameTextBox"
                                             PreviewMouseLeftButtonDown="CameraProfileNameTextBox_PreviewMouseLeftButtonDown"
-                                            IsEnabled="False"
                                             Height="25"
                                             Width="125"
                                             VerticalContentAlignment="Center"
@@ -728,6 +745,7 @@
                                             Click="SaveCameraProfileButton_Click"
                                             Content="&#128190;"
                                             IsEnabled="False"
+                                            Background="#9ABEAA"
                                             Width="25"
                                             BorderThickness="0"
                                             Cursor="Hand"/>
@@ -941,6 +959,8 @@
                                                         x:Name="BrowseSaveDirectoryButton"
                                                         Click="BrowseSaveDirectoryButton_Click"
                                                         Content="&#128193;"
+                                                        ToolTip="Browse directories."
+                                                        Background="#FFC300"
                                                         Height="30"
                                                         Width="30"
                                                         BorderThickness="0"
@@ -948,13 +968,33 @@
                                                         Cursor="Hand"/>
                                                 </StackPanel>
 
-                                                <!--collection number-->
                                                 <StackPanel Orientation="Horizontal">
+
+                                                    <!--collection number-->
                                                     <TextBox
                                                         x:Name="CollectionNrTextBox"
                                                         PreviewKeyDown="CollectionNrTextBox_PreviewKeyDown"
                                                         Height="30"
                                                         Width="30"
+                                                        VerticalContentAlignment="Center"
+                                                        BorderThickness="0"
+                                                        Margin="0, 0, 0, 5" />
+
+                                                    <!--device name-->
+                                                    <Label 
+                                                        Content="Device Name:"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalContentAlignment="Center"
+                                                        Height="30"
+                                                        Width="85"
+                                                        Margin="5, 0, 0, 5"/>
+
+                                                    <!--device-->
+                                                    <TextBox
+                                                        x:Name="CollectionDeviceTextBox"
+                                                        PreviewKeyDown="CollectionDeviceTextBox_PreviewKeyDown"
+                                                        Height="30"
+                                                        Width="60"
                                                         VerticalContentAlignment="Center"
                                                         BorderThickness="0"
                                                         Margin="0, 0, 0, 5" />
@@ -965,6 +1005,7 @@
                                                     <Button
                                                         x:Name="RemovePoseButton"
                                                         Click="RemovePoseButton_Click"
+                                                        ToolTip="Remove a pose."
                                                         Background="#005EB8"
                                                         Height="30"
                                                         Width="30"
@@ -982,6 +1023,7 @@
                                                     <Button
                                                         x:Name="AddPoseButton"
                                                         Click="AddPoseButton_Click"
+                                                        ToolTip="Add a pose."
                                                         Background="#005EB8"
                                                         Height="30"
                                                         Width="30"
@@ -1003,34 +1045,44 @@
                                     <!--save collection-->
                                     <StackPanel Margin="30, 0, 0, 0">
                                         <Label 
-                                            Content="Save Collection"
+                                            Content="Save Collection*"
                                             FontWeight="Bold" 
                                             HorizontalAlignment="Center"/>
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel 
+                                            Orientation="Horizontal"
+                                            Margin="0, 0, 0, 10">
                                             <Label 
                                                 Content="Collection name:"
                                                 HorizontalAlignment="Right"
                                                 VerticalContentAlignment="Center"
-                                                Height="30"
-                                                />
+                                                Height="30"/>
                                             <!--profile name-->
                                             <TextBox
                                                 x:Name="CollectionNameTextBox"
                                                 PreviewMouseLeftButtonDown="CollectionNameTextBox_PreviewMouseLeftButtonDown"
                                                 Height="30"
-                                                Width="150"
+                                                Width="140"
                                                 VerticalContentAlignment="Center"
                                                 BorderThickness="0"/>
                                             <Button
                                                 x:Name="SaveCollectionButton"
                                                 Click="SaveCollectionButton_Click"
+                                                ToolTip="Save collection."
                                                 IsEnabled="False"
                                                 Content="&#128190;"
+                                                Background="#00BC7A"
                                                 Height="30"
-                                                Width="30"
+                                                Width="60"
                                                 BorderThickness="0"
                                                 Cursor="Hand"/>
                                         </StackPanel>
+
+                                        <TextBlock
+                                            Text="*Note: Each collection must have a specific camera associated with it. Therefore, a camera MUST be connected before saving a collection."
+                                            FontSize="10"
+                                            Width="200"
+                                            TextWrapping="Wrap"
+                                            HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -1091,7 +1143,7 @@
                                     <Label 
                                         Content="Description"
                                         HorizontalContentAlignment="Center"
-                                        Width="100"
+                                        Width="150"
                                         Foreground="#FFFFFF" />
                                     <Line 
                                         Stroke="#FFFFFF" 
@@ -1102,18 +1154,6 @@
                                         Y2="30"/>
                                     <Label 
                                         Content="Camera Profile"
-                                        HorizontalContentAlignment="Center"
-                                        Width="100"
-                                        Foreground="#FFFFFF"/>
-                                    <Line 
-                                        Stroke="#FFFFFF" 
-                                        Width="15"
-                                        X1="7"
-                                        X2="7"
-                                        Y1="0"
-                                        Y2="30"/>
-                                    <Label 
-                                        Content="Device"
                                         HorizontalContentAlignment="Center"
                                         Width="100"
                                         Foreground="#FFFFFF"/>
@@ -1156,20 +1196,14 @@
                                         Y2="500"/>
                                     <Line 
                                         Stroke="#a6a6a6" 
-                                        X1="318"
-                                        X2="318"
+                                        X1="368"
+                                        X2="368"
                                         Y1="0"
                                         Y2="500"/>
                                     <Line 
                                         Stroke="#a6a6a6" 
-                                        X1="433"
-                                        X2="433"
-                                        Y1="0"
-                                        Y2="500"/>
-                                    <Line 
-                                        Stroke="#a6a6a6" 
-                                        X1="548"
-                                        X2="548"
+                                        X1="483"
+                                        X2="483"
                                         Y1="0"
                                         Y2="500"/>
                                 </Grid>
@@ -1182,7 +1216,7 @@
                                     PreviewKeyDown="CollectionScreenPoseListView_PreviewKeyDown"
                                     PreviewMouseLeftButtonDown="CollectionScreenPoseListView_PreviewMouseLeftButtonDown"
                                     Background="Transparent"
-                                    Width="730"
+                                    Width="665"
                                     Margin="0, 30, 0, 0"
                                     BorderThickness="0">
                                 </ListView>
@@ -1268,13 +1302,6 @@
                                                 Foreground="#FFFFFF"
                                                 Margin="0, 0, 0, 5"/>
                                             <Label
-                                                Content="Device Name: "
-                                                Height="25"
-                                                HorizontalContentAlignment="Right"
-                                                VerticalContentAlignment="Center"
-                                                Foreground="#FFFFFF"
-                                                Margin="0, 0, 0, 5"/>
-                                            <Label
                                                 Content="Filename: "
                                                 Height="25"
                                                 HorizontalContentAlignment="Right"
@@ -1337,6 +1364,7 @@
                                                 x:Name="LoadThumbnailButton"
                                                 Content="Load Thumbnails"
                                                 Click="LoadThumbnailButton_Click"
+                                                Background="#FFC300"
                                                 Height="25"
                                                 Width="100"
                                                 HorizontalAlignment="Left"
@@ -1351,16 +1379,8 @@
                                                 Width="150"
                                                 VerticalContentAlignment="Center"
                                                 BorderThickness="0"
-                                                Margin="0, 0, 0, 5"/>
-
-                                            <!--pose device-->
-                                            <TextBox
-                                                x:Name="PoseDeviceTextbox"
-                                                Height="25"
-                                                Width="150"
-                                                VerticalContentAlignment="Center"
-                                                BorderThickness="0"
-                                                Margin="0, 0, 0, 5"/>
+                                                Margin="0, 0, 0, 5"
+                                                Cursor="Hand"/>
 
                                             <!--pose filename-->
                                             <TextBox
@@ -1368,19 +1388,35 @@
                                                 Height="25"
                                                 Width="150"
                                                 VerticalContentAlignment="Center"
-                                                BorderThickness="0"
-                                                Margin="0, 0, 0, 5"/>
-
-                                            <!--apply changes button-->
-                                            <Button
-                                                x:Name="PoseSettings_ApplyChanges"
-                                                Content="Apply Changes"
-                                                Click="PoseSettings_ApplyChanges_Click"
-                                                Height="25"
-                                                Width="100"
-                                                BorderThickness="0"
-                                                Cursor="Hand"/>
+                                                BorderThickness="0"/>
                                         </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel 
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Margin="0, 20, 20, 0">
+
+                                        <!--apply changes button-->
+                                        <Button
+                                            x:Name="PoseSettings_ApplyChangesButton"
+                                            Content="Apply Changes"
+                                            Click="PoseSettings_ApplyChangesButton_Click"
+                                            Background="#478863"
+                                            Height="25"
+                                            Width="100"
+                                            BorderThickness="0"
+                                            Cursor="Hand"/>
+
+                                        <!--cancel changes button-->
+                                        <Button
+                                            Content="Cancel"
+                                            Click="HidePoseSettingsButton_Click"
+                                            Background="#9BD3DD"
+                                            Height="25"
+                                            Width="100"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Margin="10, 0, 0, 0"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -1388,7 +1424,7 @@
                     </Grid>
                 </Grid>
 
-
+                
                 <!--bottom status bar-->
                 <StatusBar 
                     Height="30" 
@@ -1442,29 +1478,30 @@
                 <Grid Background="#2C2A29" Opacity="0.9"/>
 
                 <!--message box-->
-                <StackPanel Height="200" Width="400" Background="#FFFFFF">
+                <StackPanel 
+                    Height="200" 
+                    Width="400" 
+                    Background="#FFFFFF">
 
                     <!--message bar-->
-                    <Grid x:Name="MessageBar" Height="30">
-                        <Label 
-                            x:Name="MessageBarLabel" 
-                            HorizontalAlignment="Center" 
-                            FontWeight="Bold" />
-                    </Grid>
+                    <Label 
+                        x:Name="MessageBarLabel" 
+                        Height="30"
+                        Width="400"
+                        HorizontalContentAlignment="Center" 
+                        FontWeight="Bold"
+                        Margin="0, -1, 0, 0"/>
 
                     <!--message-->
-                    <StackPanel HorizontalAlignment="Center" Margin="0, 30, 0, 0">
-                        <Label 
-                            x:Name="MessageLabel1" 
-                            HorizontalContentAlignment="Center" 
-                            FontWeight="Bold" 
-                            Width="375"/>
-                        <Label 
-                            x:Name="MessageLabel2" 
-                            HorizontalContentAlignment="Center" 
-                            FontWeight="Bold" 
-                            Width="375"/>
-                    </StackPanel>
+                    <TextBlock
+                        x:Name="MessageTextBlock"
+                        HorizontalAlignment="Center"
+                        Height="50"
+                        Width="300"
+                        FontWeight="Bold"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center"
+                        Margin="0, 30, 0, 0"/>
 
                     <!--button-->
                     <Button 

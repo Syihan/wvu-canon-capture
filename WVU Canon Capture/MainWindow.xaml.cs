@@ -159,6 +159,7 @@ namespace WVU_Canon_Capture
                 FStopLabel.Content = AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue;
                 ExposureLabel.Content = TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue;
                 ISOLabel.Content = ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue;
+                WhiteBalanceLabel.Content = MainCamera.GetStringSetting(PropertyID.WhiteBalance).ToString();
 
                 // TODO: DETERMINE IF THE BELOW THREE LINES ARE ACTUALLY NECESSARY
                 // sets up camera event handlers
@@ -189,6 +190,8 @@ namespace WVU_Canon_Capture
                     ExposureLabel.Content = "N/A";
                 if (ISOLabel != null)
                     ISOLabel.Content = "N/A";
+                if (WhiteBalanceLabel != null)
+                    WhiteBalanceLabel.Content = "N/A";
             }
         }
 
@@ -975,9 +978,11 @@ namespace WVU_Canon_Capture
                 {
                     // adds the profile to the CameraProfileListView
                     // the profile name
+                    // adds an extra underscore to display the access key
+                    string name = profile.name.Replace("_", "__");
                     Label proName = new Label()
                     {
-                        Content = "[" + profile.camera + "] " + profile.name,
+                        Content = "[" + profile.camera + "] " + name,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1106,27 +1111,31 @@ namespace WVU_Canon_Capture
 
                     // Adds the collection to the CollectionListView
                     // the collection name
-                    Label colName = new Label()
+                    // adds an extra underscore to display the access key
+                    string colName = collection.name.Replace("_", "__");
+                    Label colNameAndNo = new Label()
                     {
-                        Content = collection.name,
+                        Content = colName + " [Col #" + collection.collectionNumber + "]",
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
                     };
 
-                    // the collection descriptors
-                    Label colDesc = new Label()
+                    // the collection savepath
+                    // adds an extra underscore to display the access key
+                    string savePath = collection.savingDirectory.Replace("_", "__");
+                    Label colSavePath = new Label()
                     {
-                        Content = "Col #: " + collection.collectionNumber + ", Poses: " + collection.numberOfPoses,
+                        Content = "Save path: " + savePath,
                         FontStyle = FontStyles.Italic,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 10,
                     };
 
-                    // the collection savepath
-                    Label colSavePath = new Label()
+                    // the collection descriptors
+                    Label colDesc = new Label()
                     {
-                        Content = "Save path: " + collection.savingDirectory,
+                        Content = "Poses: " + collection.numberOfPoses + ", Device Name: " + collection.deviceName,
                         FontStyle = FontStyles.Italic,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 10,
@@ -1138,9 +1147,9 @@ namespace WVU_Canon_Capture
                         Height = 70,
                         Cursor = Cursors.Hand
                     };
-                    item.Children.Add(colName);
-                    item.Children.Add(colDesc);
+                    item.Children.Add(colNameAndNo);
                     item.Children.Add(colSavePath);
+                    item.Children.Add(colDesc);
 
                     // adds the collection StackPanel to the CollectionListView
                     CollectionListView.Items.Add(item);
@@ -1238,7 +1247,7 @@ namespace WVU_Canon_Capture
                     {
                         Content = pose.description,
                         Height = 30,
-                        Width = 100,
+                        Width = 150,
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Background = background,
@@ -1269,29 +1278,6 @@ namespace WVU_Canon_Capture
 
                     // item separator 5
                     Line separator5 = new Line()
-                    {
-                        Stroke = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 166, 166, 166)),
-                        X1 = 7,
-                        X2 = 7,
-                        Y1 = 0,
-                        Y2 = 45,
-                        Width = 15,
-                    };
-
-                    // the pose device
-                    Label poseDevice = new Label()
-                    {
-                        Content = pose.device,
-                        Height = 30,
-                        Width = 100,
-                        HorizontalContentAlignment = HorizontalAlignment.Center,
-                        VerticalContentAlignment = VerticalAlignment.Center,
-                        Background = background,
-                        BorderThickness = new Thickness(0)
-                    };
-
-                    // item separator 6
-                    Line separator6 = new Line()
                     {
                         Stroke = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 166, 166, 166)),
                         X1 = 7,
@@ -1335,8 +1321,6 @@ namespace WVU_Canon_Capture
                     item.Children.Add(separator4);
                     item.Children.Add(poseCameraProfile);
                     item.Children.Add(separator5);
-                    item.Children.Add(poseDevice);
-                    item.Children.Add(separator6);
                     item.Children.Add(poseFileName);
 
                     // adds the collection StackPanel to the CollectionListView
@@ -1360,6 +1344,8 @@ namespace WVU_Canon_Capture
             public string collectionNumber { get; set; }    // the collection number
             public int numberOfPoses { get; set; }          // the number of poses in the collection
             public string savingDirectory { get; set; }     // the save path of the collection
+            public string deviceName { get; set; }          // the device name for filename purposes
+            public string camera { get; set; }              // the camera associated with the collection
             public List<Pose> poses { get; set; }           // the list of camera profiles that make up the collection
 
 
@@ -1372,6 +1358,8 @@ namespace WVU_Canon_Capture
                 collectionNumber = null;
                 numberOfPoses = 0;
                 savingDirectory = null;
+                deviceName = null;
+                camera = null;
                 poses = null;
             }
 
@@ -1383,12 +1371,14 @@ namespace WVU_Canon_Capture
             /// <param name="colNum">the collection number</param>
             /// <param name="nrPoses">the number of poses in the collection</param>
             /// <param name="savePath">the save path of the collection</param>
-            public Collection(string nameVal, string colNum, int nrPoses, string savePath)
+            public Collection(string nameVal, string colNum, int nrPoses, string savePath, string devName, string camVal)
             {
                 name = nameVal;
                 collectionNumber = colNum;
                 numberOfPoses = nrPoses;
                 savingDirectory = savePath;
+                deviceName = devName;
+                camera = camVal;
                 poses = new List<Pose>();
             }
 
@@ -1412,7 +1402,6 @@ namespace WVU_Canon_Capture
             public string title { get; set; }           // the pose title
             public string description { get; set; }     // the description of the pose
             public string thumbnail { get; set; }       // the thumbnail for the pose
-            public string device { get; set; }          // the device name for the pose
             public string filename { get; set; }        // the filename for the pose
             public string cameraProfile { get; set; }   // the camera profile for the pose
 
@@ -1425,7 +1414,6 @@ namespace WVU_Canon_Capture
                 title = null;
                 description = null;
                 thumbnail = null;
-                device = null;
                 filename = null;
                 cameraProfile = null;
             }
@@ -1440,12 +1428,11 @@ namespace WVU_Canon_Capture
             /// <param name="devVal">the device name for the pose</param>
             /// <param name="filnamVal">the filename for the pose</param>
             /// <param name="camProfile">the camera profile for the pose</param>
-            public Pose(string titleVal, string descVal, string thumbSource, string devVal, string filnamVal, string camProfile)
+            public Pose(string titleVal, string descVal, string thumbSource, string filnamVal, string camProfile)
             {
                 title = titleVal;
                 description = descVal;
                 thumbnail = thumbSource;
-                device = devVal;
                 filename = filnamVal;
                 cameraProfile = camProfile;
             }
@@ -1564,31 +1551,26 @@ namespace WVU_Canon_Capture
                 var bc = new BrushConverter();
                 if (color == "red")
                 {
-                    MessageBar.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#BE3A34");
+                    MessageBarLabel.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#BE3A34");
                     MessageBarLabel.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FFFFFF");
                 }
                 else if (color == "yellow")
                 {
-                    MessageBar.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#FDDA24");
+                    MessageBarLabel.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#FDDA24");
                     MessageBarLabel.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#000000");
                 }
                 else if (color == "green")
                 {
-                    MessageBar.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#9ABEAA");
+                    MessageBarLabel.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#9ABEAA");
                     MessageBarLabel.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#000000");
                 }
 
+                // clears text before writing new message
+                MessageTextBlock.Text = null;
+
                 // fills in the title and the message content
                 MessageBarLabel.Content = title;
-                if (message.Length > 50)
-                {
-                    MessageLabel1.Content = message.Substring(0, 50);
-                    MessageLabel2.Content = message.Substring(50, message.Length - 50);
-                }
-                else
-                {
-                    MessageLabel1.Content = message;
-                }
+                MessageTextBlock.Text = message;
             });
         }
 
@@ -1659,7 +1641,7 @@ namespace WVU_Canon_Capture
         /// <summary>
         /// Populates the PoseListView with collection thumbnails
         /// </summary>
-        private void PopulatePoseListView()
+        private void LoadHomePoseList()
         {
             if(CollectionComboBox.SelectedItem != null)
             {
@@ -1669,10 +1651,21 @@ namespace WVU_Canon_Capture
                 // adds the pose to the PoseListView
                 foreach (Pose pose in poses)
                 {
+                    // the pose thumbnail
+                    System.Windows.Controls.Image poseThumbnail = new System.Windows.Controls.Image()
+                    {
+                        Source = LoadImage(pose.thumbnail, 75), 
+                        RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
+                        RenderTransform = new RotateTransform(90),
+                        Height = 120,
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    };
+
                     // the pose name
                     Label poseTitle = new Label()
                     {
                         Content = pose.title,
+                        Height = 20,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1682,6 +1675,7 @@ namespace WVU_Canon_Capture
                     Label poseDesc = new Label()
                     {
                         Content = pose.description,
+                        Height = 20,
                         FontStyle = FontStyles.Italic,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1690,10 +1684,12 @@ namespace WVU_Canon_Capture
                     // creates the StackPanel to hold all the content
                     StackPanel item = new StackPanel()
                     {
-                        Width = 100,
+                        Height = 160, 
+                        Width = 115,
                         VerticalAlignment = VerticalAlignment.Bottom,
                         Cursor = Cursors.Hand
                     };
+                    item.Children.Add(poseThumbnail);
                     item.Children.Add(poseTitle);
                     item.Children.Add(poseDesc);
 
@@ -1880,8 +1876,10 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CameraComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // if a camera is selected, turn on the live view and display all of the camera settings
             if (CameraComboBox.SelectedIndex != 0)
             {
+                // turns on the live view
                 ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
                 SetLiveViewOn(true);
                 InitializeCameraSettings();
@@ -1897,13 +1895,14 @@ namespace WVU_Canon_Capture
                 ExposureComboBox.IsEnabled = true;
                 ISOComboBox.IsEnabled = true;
                 WhiteBalanceComboBox.IsEnabled = true;
-                CameraSettings_ApplyChanges.IsEnabled = true;
+                CameraSettings_ApplyChangesButton.IsEnabled = true;
                 CameraProfileNameTextBox.IsEnabled = true;
                 SaveCameraProfileButton.IsEnabled = true;
 
                 // deselects any camera profile previously selected on the camera screen
                 CameraProfileListView.SelectedItem = null;
             }
+            // if a camera is not selected, turn off the live view
             else
             {
                 if(ToggleLiveViewHomeButton != null)
@@ -1919,8 +1918,8 @@ namespace WVU_Canon_Capture
                     ISOComboBox.IsEnabled = false;
                 if (WhiteBalanceComboBox != null)
                     WhiteBalanceComboBox.IsEnabled = false;
-                if (CameraSettings_ApplyChanges != null)
-                    CameraSettings_ApplyChanges.IsEnabled = false;
+                if (CameraSettings_ApplyChangesButton != null)
+                    CameraSettings_ApplyChangesButton.IsEnabled = false;
                 if (CameraProfileNameTextBox != null)
                     CameraProfileNameTextBox.IsEnabled = false;
                 if (SaveCameraProfileButton != null)
@@ -1989,10 +1988,10 @@ namespace WVU_Canon_Capture
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CollectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PoseListView.Items.Clear();
-            PopulatePoseListView();
+            LoadHomePoseList();
         }
 
 
@@ -2065,7 +2064,7 @@ namespace WVU_Canon_Capture
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CameraSettings_ApplyChanges_Click(object sender, RoutedEventArgs e)
+        private void CameraSettings_ApplyChangesButton_Click(object sender, RoutedEventArgs e)
         {
             CameraProfileListView.SelectedItem = null;
 
@@ -2288,6 +2287,8 @@ namespace WVU_Canon_Capture
                 // inserts collection information
                 SaveDirectoryTextBox.Text = collection.savingDirectory;
                 CollectionNrTextBox.Text = collection.collectionNumber;
+                CollectionDeviceTextBox.Text = collection.deviceName;
+                CollectionNameTextBox.Text = collection.name;
 
                 // makes a copy list for collections
                 PoseList = new List<Pose>();
@@ -2373,13 +2374,24 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Deselects selected collection when CollectionNrTextBox is pressed
+        /// Deselects selected collection when user types in CollectionNrTextBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CollectionNrTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             CollectionListView.SelectedItem = null;
+        }
+
+
+        /// <summary>
+        /// Deselects selected collection when user types in CollectionDeviceTextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CollectionDeviceTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
         }
 
 
@@ -2392,10 +2404,7 @@ namespace WVU_Canon_Capture
         {
             // verifies that number of poses is nonnegative
             if (PoseList == null || PoseList.Count <= 0)
-            {
-                ShowMessage("red", "Error", "Please enter a nonnegative number.");
                 return;
-            }
 
             // disables the SaveCollectionButton
             if (PoseList.Count == 1)
@@ -2429,7 +2438,7 @@ namespace WVU_Canon_Capture
                 PoseList = new List<Pose>();
 
             // verifies that number of poses is within reason
-            if (PoseList.Count > 100)
+            if (PoseList.Count >= 100)
             {
                 ShowMessage("red", "Error", "Number of poses is too large.");
                 return;
@@ -2439,7 +2448,7 @@ namespace WVU_Canon_Capture
             string defaultThumb = System.IO.Path.GetFullPath(@"Resources\Thumbnails\RAW\0.png");
 
             // adds default pose
-            Pose defaultPose = new Pose("Sample", "Sample", defaultThumb, "Sample", "Sample", "sample");
+            Pose defaultPose = new Pose("Sample Title", "Sample Description", defaultThumb,  "sample_filename", "Sample Profile");
             PoseList.Add(defaultPose);
 
             // display the new list of poses
@@ -2510,7 +2519,6 @@ namespace WVU_Canon_Capture
                 PoseNoLabel.Content = CollectionScreenPoseListView.SelectedIndex + 1;
                 PoseTitleTextBox.Text = pose.title;
                 PoseDescTextBox.Text = pose.description;
-                PoseDeviceTextbox.Text = pose.device;
                 PoseFilenameTextbox.Text = pose.filename;
             }
         }
@@ -2545,6 +2553,17 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void HidePoseSettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            // verifies that a camera profile has been chosen before exiting
+            if (PoseList.ElementAt(CollectionScreenPoseListView.SelectedIndex).cameraProfile == "Sample Profile")
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    "There is no selected camera profile for this pose. This may cause problems during a session. Are you sure you want to exit pose settings?", "Warning!",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
             PoseSettingsGridBackground.Visibility = Visibility.Collapsed;
             PoseSettingsGrid.Visibility = Visibility.Collapsed;
             CollectionScreenPoseListView.SelectedItem = null;
@@ -2595,14 +2614,34 @@ namespace WVU_Canon_Capture
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PoseSettings_ApplyChanges_Click(object sender, RoutedEventArgs e)
+        private void PoseSettings_ApplyChangesButton_Click(object sender, RoutedEventArgs e)
         {
+            // checks that all required fields are filled (title, description, thumbnail, camera profile, filename)
+            if (PoseTitleTextBox.Text.Length <= 0 ||
+                PoseDescTextBox.Text.Length <= 0 ||
+                PoseThumbnailLabel.Content.ToString().Length <= 0 ||
+                PoseFilenameTextbox.Text.Length <= 0 ||
+                PoseCameraProfileComboBox.SelectedItem == null)
+            {
+                ShowMessage("red", "Unfilled fields", "Title, description, thumbnail, camera profile, and filename must be filled before saving pose.");
+                return;
+            }
+
+            // regex to identify special characters
+            var regex = new Regex(@"[.,/;'\[\]\\`<>?:\""{}|~!@#$%^&*()+= ]+");
+
+            // checks if filename is valid
+            if (regex.IsMatch(PoseFilenameTextbox.Text))
+            {
+                ShowMessage("red", "Invalid filename", "Cannot use spaces or special characters.");
+                return;
+            }
+
             // edits the pose with the right changes
             Pose pose = new Pose(
                 PoseTitleTextBox.Text, 
                 PoseDescTextBox.Text,
                 PoseThumbnailLabel.Content.ToString(), 
-                PoseDeviceTextbox.Text, 
                 PoseFilenameTextbox.Text, 
                 PoseCameraProfileComboBox.Text);
             PoseList[CollectionScreenPoseListView.SelectedIndex] = pose;
@@ -2628,6 +2667,7 @@ namespace WVU_Canon_Capture
             string collectionName = CollectionNameTextBox.Text; // the new collection name
             string saveDirectory = SaveDirectoryTextBox.Text;   // the new collection save directory
             string collectionNr = CollectionNrTextBox.Text;     // the new collection number
+            string deviceName = CollectionDeviceTextBox.Text;   // the new collection device
             
             // regex to identify special characters
             var regex = new Regex(@"[.,/;'\[\]\\`<>?:\""{}|~!@#$%^&*()+= ]+");
@@ -2639,6 +2679,23 @@ namespace WVU_Canon_Capture
                 return;
             }
 
+            // checks if device name is valid
+            if (regex.IsMatch(deviceName))
+            {
+                ShowMessage("red", "Invalid device name", "Cannot use spaces or special characters.");
+                return;
+            }
+
+            // checks that all required fields are filled (save directory, collection number, device name, collection name)
+            if (saveDirectory.Length <= 0 ||
+                collectionNr.Length <= 0 ||
+                deviceName.Length <= 0 ||
+                collectionName.Length <= 0)
+            {
+                ShowMessage("red", "Unfilled fields", "Save directory, collection number, device name, and collection name must be filled before saving collection.");
+                return;
+            }
+
             // checks if the collection number entered is an integer
             int newColNrInt;
             if (!int.TryParse(CollectionNrTextBox.Text, out newColNrInt))
@@ -2647,81 +2704,86 @@ namespace WVU_Canon_Capture
                 return;
             }
 
-            // if all required fields are filled (f-stop, exposure, iso), changes are applied
-            if (saveDirectory.Length > 0 &&   
-                collectionNr.Length > 0 &&
-                collectionName.Length > 0)
+            // checks if an accurate camera name is attached to the collection
+            if (CameraComboBox.SelectedIndex == 0)
             {
-                // makes a copy list for collections
-                List<Collection> newList = new List<Collection>();
-                foreach (Collection col in CollectionList)
-                    newList.Add(col);
-
-                // checks for repeat names
-                foreach (Collection col in CollectionList)
-                {
-                    // verifies whether user wants to replace an existing collection with the same name
-                    if (col.name.ToLower() == collectionName.ToLower())
-                    {
-                        MessageBoxResult result = MessageBox.Show("A collection with this name already exists. Do you want to overwrite it?", "Warning!",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            newList.Remove(col);
-                            break;
-                        }
-                        else
-                            return;
-                    }
-
-                    // verifies whether user wants to replace an existing collection with the same collection number
-                    int colNrInt;
-                    int.TryParse(col.collectionNumber, out colNrInt);
-                    if (colNrInt == newColNrInt)
-                    {
-                        MessageBoxResult result = MessageBox.Show("A collection with this collection number already exists. Do you want to overwrite it?", "Warning!",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            newList.Remove(col);
-                            break;
-                        }
-                        else
-                            return;
-                    }
-                }
-
-                // creates a brand new collection and enters the specified data
-                Collection collection = new Collection();
-                collection.name = collectionName;
-                collection.collectionNumber = collectionNr;
-                collection.numberOfPoses = PoseList.Count;
-                collection.savingDirectory = saveDirectory;
-                collection.poses = PoseList;
-
-                // adds the collection to the collection list and writes it to the configuration file
-                newList.Add(collection);
-                CollectionList = newList;
-                string output = JsonConvert.SerializeObject(CollectionList, Formatting.Indented);
-                File.WriteAllText(COLLECTIONCONFIGFILE, output);
-                LoadCollections();
-
-                // clears the list of poses
-                IsCollectionChanged = false;
-                PoseList = null;
-                CollectionScreenPoseListView.Items.Clear();
-
-                // disables the save collection button
-                SaveCollectionButton.IsEnabled = false;
+                ShowMessage("red", "Camera must be connected", "A camera must be connected before saving a collection.");
+                return;
             }
-            // if required fields are not filled, throws an error
-            else
-                ShowMessage("red", "Unfilled fields", "Save directory, collection number, and collection name must be filled before saving collection.");
 
-            // deselects any selected collection in the CollectionListView
+            // verifies that the camera connected is the correct camera to be associated with the collection
+            else
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    "Are you sure that " + CameraComboBox.Text + " is the camera you want associated with this collection?", "Check camera",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
+            // creates a brand new collection and enters the specified data
+            Collection collection = new Collection(
+                collectionName,
+                collectionNr,
+                PoseList.Count,
+                saveDirectory,
+                deviceName,
+                CameraComboBox.Text);
+            collection.poses = PoseList;
+
+            // makes a copy list for collections
+            List<Collection> newList = new List<Collection>();
+            foreach (Collection col in CollectionList)
+                newList.Add(col);
+
+            // checks for repeat collections
+            bool isOverwritingCollection = false;
+            foreach (Collection col in CollectionList)
+            {
+                // verifies whether user wants to replace an existing collection with the same collection number
+                int colNrInt;
+                int.TryParse(col.collectionNumber, out colNrInt);
+                if (colNrInt == newColNrInt)
+                {
+                    MessageBoxResult result = MessageBox.Show("A collection with this collection number already exists. Do you want to overwrite it?", "Warning!",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        int i = newList.IndexOf(col);
+                        newList.Remove(col);
+                        newList.Insert(i, collection);
+                        isOverwritingCollection = true;
+                        break;
+                    }
+                    else
+                        return;
+                }
+            }
+
+            // adds the collection to the list if the collection hasn't already been overwritten
+            if(!isOverwritingCollection)
+                newList.Add(collection);
+            CollectionList = newList;
+
+            // writes the collection to the configuration file
+            string output = JsonConvert.SerializeObject(CollectionList, Formatting.Indented);
+            File.WriteAllText(COLLECTIONCONFIGFILE, output);
+            LoadCollections();
+
+            // clears the list of poses
+            IsCollectionChanged = false;
+            PoseList = null;
+            CollectionScreenPoseListView.Items.Clear();
+
+            // adjusts the UI
+            SaveCollectionButton.IsEnabled = false;
             CollectionListView.SelectedItem = null;
+            SaveDirectoryTextBox.Text = null;
+            CollectionNrTextBox.Text = null;
+            CollectionDeviceTextBox.Text = null;
+            CollectionNameTextBox.Text = null;
         }
 
 
