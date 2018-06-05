@@ -81,6 +81,7 @@ namespace WVU_Canon_Capture
         private List<Camera> CameraList;                        // the list of cameras available for connection
         private ImageBrush LiveViewBrush = new ImageBrush();    // the brush to paint the Live View canvas
         private Action<BitmapImage> SetImageAction;             // the accumulation of Live View images
+        private bool IsCameraOn;                                // boolean to determine if the camera is on
 
 
         /// <summary>
@@ -136,6 +137,7 @@ namespace WVU_Canon_Capture
 
                 // opens a brand new camera session
                 MainCamera.OpenSession();
+                IsCameraOn = true;
 
                 // sets up the LiveViewCanvas
                 SetImageAction = (BitmapImage img) => { LiveViewBrush.ImageSource = img; };
@@ -152,7 +154,10 @@ namespace WVU_Canon_Capture
                     CameraLiveViewCanvas.Background = LiveViewBrush;
                 }
 
+                // starts the live view
                 MainCamera.StartLiveView();
+
+                // adjusts some UI elements
                 ToggleLiveViewHomeButton.Content = "\u23f8";
 
                 // displays the current camera settings
@@ -174,12 +179,17 @@ namespace WVU_Canon_Capture
                     // paints the LiveView black
                     HomeLiveViewCanvas.Background = System.Windows.Media.Brushes.Transparent;
                     CameraLiveViewCanvas.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
+                    
+                    // adjusts some UI elements
                     if (ToggleLiveViewHomeButton != null)
                         ToggleLiveViewHomeButton.Content = "\u25b6";
+                    if (SessionSettingsAutofocusButton != null)
+                        SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
 
                     // closes the camera session
                     MainCamera?.StopLiveView();
                     MainCamera?.CloseSession();
+                    IsCameraOn = false;
                 }
                 catch { }
 
@@ -210,16 +220,29 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void FocusCamera()
         {
-            // TODO: implement focus camera
+            try { MainCamera.SendCommand(CameraCommand.DoEvfAf, (int)EDSDK.EdsEvfAf.CameraCommand_EvfAf_ON); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
         }
 
 
         /// <summary>
-        /// Takes picture
+        /// Unfocuses the camera
+        /// </summary>
+        private void UnfocusCamera()
+        {
+            try { MainCamera.SendCommand(CameraCommand.DoEvfAf, (int)EDSDK.EdsEvfAf.CameraCommand_EvfAf_OFF); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
+        }
+
+
+        /// <summary>
+        /// Takes a picture
         /// </summary>
         private void TakePicture()
         {
             // TODO: implement taking picture
+            try { MainCamera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.Completely_NonAF); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
         }
 
 
@@ -1096,7 +1119,10 @@ namespace WVU_Canon_Capture
         {
             // clears the CollectionListView and CollectionComboBox
             CollectionListView.Items.Clear();
-            CollectionComboBox.Items.Clear();
+            for (int i = CollectionComboBox.Items.Count - 1; i > 0; i--)
+            {
+                CameraComboBox.Items.RemoveAt(i);
+            }
 
             using (StreamReader r = new StreamReader(COLLECTIONCONFIGFILE))
             {
@@ -1599,6 +1625,7 @@ namespace WVU_Canon_Capture
         #region Session Functionality
         // ================================================================== SESSION FUNCTIONALITY ================================================================== //
 
+
         private int CaptureNumber;              // int which stores the index of the current capture in the collection
         private const int HIGHRESOLUTION = 375; // the height of a high resolution thumbnail
         private const int LOWRESOLUTION = 183;  // the height of a low resolution thumbnail
@@ -1611,6 +1638,9 @@ namespace WVU_Canon_Capture
         {
             // TODO: toggle proper UI buttons
             // TODO: assign variables
+            SessionSettingsGrid.Visibility = Visibility.Hidden;
+            SessionSettingsGrid.Visibility = Visibility.Hidden;
+            CameraControlsGrid.Visibility = Visibility.Visible;
         }
 
 
@@ -1642,9 +1672,9 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void LoadHomePoseList()
         {
-            if(CollectionComboBox.SelectedItem != null)
+            if(CollectionComboBox.SelectedIndex != 0)
             {
-                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex);
+                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
                 List<Pose> poses = collection.poses;
 
                 // adds the pose to the PoseListView
@@ -1812,6 +1842,18 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
+        /// Button that hides the error on the Error Grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HideMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            HideMessage();
+            AboutProgramBox.Visibility = Visibility.Collapsed;
+        }
+
+
+        /// <summary>
         /// Event handler for non-severe errors
         /// </summary>
         /// <param name="sender"></param>
@@ -1855,21 +1897,47 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Toggle Live View button
+        /// Event handler that toggles the Live View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ToggleLiveViewHomeButton_Click(object sender, RoutedEventArgs e)
         {
             if (!MainCamera.SessionOpen)
+            {
                 SetLiveViewOn(true);
+                if(SessionSettingsGrid.Visibility == Visibility.Visible)
+                    SessionSettingsAutofocusButton.Visibility = Visibility.Visible;
+            }
             else
                 SetLiveViewOn(false);
         }
 
 
         /// <summary>
-        /// Changing the selection within the Camera ComboBox
+        /// Event handler that autofocuses the camera if button is pressed and held
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SessionSettingsAutofocusButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that unfocuses the camera once the button is released
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SessionSettingsAutofocusButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UnfocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that changes the selection within the Camera ComboBox and turns on the selected camera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1880,10 +1948,11 @@ namespace WVU_Canon_Capture
             {
                 // turns on the live view
                 ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
+                SessionSettingsAutofocusButton.Visibility = Visibility.Visible;
                 SetLiveViewOn(true);
                 InitializeCameraSettings();
 
-                // selects the current settings
+                // selects the current settings on the Camera Menu
                 FStopComboBox.SelectedIndex = FStopComboBox.Items.IndexOf(AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue);
                 ExposureComboBox.SelectedIndex = ExposureComboBox.Items.IndexOf(TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue);
                 ISOComboBox.SelectedIndex = ISOComboBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
@@ -1904,8 +1973,8 @@ namespace WVU_Canon_Capture
             // if a camera is not selected, turn off the live view
             else
             {
-                if(ToggleLiveViewHomeButton != null)
-                    ToggleLiveViewHomeButton.Visibility = Visibility.Collapsed;
+                if (ToggleLiveViewHomeButton != null)
+                    ToggleLiveViewHomeButton.Visibility = Visibility.Hidden;
                 SetLiveViewOn(false);
 
                 // disables all of the camera settings comboboxes on the camera screen
@@ -1928,14 +1997,14 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Button that hides the error on the Error Grid
+        /// Event handler that loads a new collection
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void HideMessageButton_Click(object sender, RoutedEventArgs e)
+        private void CollectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            HideMessage();
-            AboutProgramBox.Visibility = Visibility.Collapsed;
+            PoseListView.Items.Clear();
+            LoadHomePoseList();
         }
 
 
@@ -1978,7 +2047,7 @@ namespace WVU_Canon_Capture
                 }
 
                 // verifies that the collection is compatible with camera
-                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex);
+                Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
                 if (collection.camera != CameraComboBox.Text)
                 {
                     ShowMessage("red", "Invalid camera", "The connected camera is not associated with this collection.");
@@ -2012,8 +2081,10 @@ namespace WVU_Canon_Capture
                         return;
                     }
                 }
-
-                // TODO: begin session
+                
+                // if all conditions are met, begin a new session
+                BeginSession();
+                SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
             }
             else
                 ShowMessage("red", "Invalid input", "Input must be in the following form: <RID>_<DATE>_<COLLECTION NUMBER>");
@@ -2033,17 +2104,50 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Event handler that loads a new collection
+        /// Event handler that takes a photo
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CollectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CaptureButton_Click(object sender, RoutedEventArgs e)
         {
-            PoseListView.Items.Clear();
-            LoadHomePoseList();
+            TakePicture();
         }
 
 
+        /// <summary>
+        /// Event handler that autofocuses the camera if button is pressed and held
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CameraControlsAutofocusButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that unfocuses the camera once the button is released
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CameraControlsAutofocusButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UnfocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that closes a current session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            SessionSettingsGrid.Visibility = Visibility.Visible;
+            if(IsCameraOn)
+                SessionSettingsAutofocusButton.Visibility = Visibility.Visible;
+            CameraControlsGrid.Visibility = Visibility.Hidden;
+        }
 
         #endregion
 
@@ -2052,7 +2156,7 @@ namespace WVU_Canon_Capture
         #region Camera Screen Event Handlers
         // ================================================================== CAMERA SCREEN EVENT HANDLERS ================================================================== //
 
-        
+
         /// <summary>
         /// Event handler that deselects selected profile when pressing the FStopComboBox
         /// </summary>
@@ -2287,6 +2391,28 @@ namespace WVU_Canon_Capture
             {
                 ShowMessage("red", "No camera profile selected", "Please select a camera profile to delete first.");
             }
+        }
+
+
+        /// <summary>
+        /// Event handler that autofocuses the camera if button is pressed and held
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CameraScreenAutofocusButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that unfocuses the camera once the button is released
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CameraScreenAutofocusButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UnfocusCamera();
         }
 
 
