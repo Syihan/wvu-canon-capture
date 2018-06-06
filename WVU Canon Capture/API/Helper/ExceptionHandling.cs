@@ -369,6 +369,7 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">If <paramref name="errorCode"/> is something other than <see cref="ErrorCode.OK"/></exception>
         public static void CheckError(ErrorCode errorCode)
         {
+            //System.Windows.MessageBox.Show(errorCode.ToString() + " : " + ErrorCode.OK);
             if (errorCode != ErrorCode.OK) throw new SDKException(errorCode);
         }
 

@@ -1,45 +1,5 @@
 [
   {
-    "name": "Default",
-    "camera": "Canon EOS 5D Mark III",
-    "fstop": "5.6",
-    "exposure": "1/250",
-    "iso": "ISO 12800",
-    "whiteBalance": null
-  },
-  {
-    "name": "Outside",
-    "camera": "Canon EOS 5D Mark III",
-    "fstop": "9",
-    "exposure": "1/40",
-    "iso": "ISO 2500",
-    "whiteBalance": null
-  },
-  {
-    "name": "Dark",
-    "camera": "Canon EOS 5D Mark III",
-    "fstop": "13 (1/3)",
-    "exposure": "1/80",
-    "iso": "ISO 10000",
-    "whiteBalance": "WhitePaper"
-  },
-  {
-    "name": "Bright",
-    "camera": "Canon EOS 5D Mark III",
-    "fstop": "3.2",
-    "exposure": "1/80",
-    "iso": "ISO 5000",
-    "whiteBalance": null
-  },
-  {
-    "name": "RAW",
-    "camera": "Canon EOS 5D Mark III",
-    "fstop": "10",
-    "exposure": "1/60",
-    "iso": "ISO 1000",
-    "whiteBalance": "Tungsten"
-  },
-  {
     "name": "550nm10",
     "camera": "Canon EOS 5D Mark III",
     "fstop": "6.3",
@@ -56,6 +16,22 @@
     "whiteBalance": "Tungsten"
   },
   {
+    "name": "5DSRchecker",
+    "camera": "Canon EOS 5DS R",
+    "fstop": "7.1",
+    "exposure": "1\"3",
+    "iso": "ISO 6400",
+    "whiteBalance": "Tungsten"
+  },
+  {
+    "name": "Bright",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "3.2",
+    "exposure": "1/80",
+    "iso": "ISO 5000",
+    "whiteBalance": null
+  },
+  {
     "name": "CloudyDay",
     "camera": "Canon EOS 5D Mark III",
     "fstop": "10",
@@ -64,19 +40,35 @@
     "whiteBalance": "Cloudy"
   },
   {
-    "name": "Example",
+    "name": "Dark",
     "camera": "Canon EOS 5D Mark III",
-    "fstop": "10",
-    "exposure": "1/160",
+    "fstop": "13 (1/3)",
+    "exposure": "1/80",
+    "iso": "ISO 10000",
+    "whiteBalance": "WhitePaper"
+  },
+  {
+    "name": "Default",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "5.6",
+    "exposure": "1/250",
     "iso": "ISO 12800",
     "whiteBalance": null
   },
   {
-    "name": "5DSRchecker",
-    "camera": "Canon EOS 5DS R",
-    "fstop": "7.1",
-    "exposure": "1\"3",
-    "iso": "ISO 6400",
+    "name": "Outside",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "9",
+    "exposure": "1/40",
+    "iso": "ISO 2500",
+    "whiteBalance": null
+  },
+  {
+    "name": "RAW",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/60",
+    "iso": "ISO 1000",
     "whiteBalance": "Tungsten"
   }
 ]

@@ -347,16 +347,32 @@ namespace EOSDigital.API
             {
                 try
                 {
-                    var DownloadReadyEvent = DownloadReady;
-                    if (inEvent == ObjectEventID.DirItemRequestTransfer && DownloadReadyEvent != null)
+                    //var DownloadReadyEvent = DownloadReady;
+                    //if (inEvent == ObjectEventID.DirItemRequestTransfer && DownloadReadyEvent != null)
+                    //{
+                    //    DownloadReadyEvent(this, new DownloadInfo(inRef));
+                    //}
+                    //else if (inEvent == ObjectEventID.DirItemCreated && saveFilm && DownloadReadyEvent != null)
+                    //{
+                    //    saveFilm = false;
+                    //    DownloadReadyEvent(this, new DownloadInfo(inRef));
+                    //}
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
-                        DownloadReadyEvent(this, new DownloadInfo(inRef));
-                    }
-                    else if (inEvent == ObjectEventID.DirItemCreated && saveFilm && DownloadReadyEvent != null)
-                    {
-                        saveFilm = false;
-                        DownloadReadyEvent(this, new DownloadInfo(inRef));
-                    }
+                        {
+                            var DownloadReadyEvent = DownloadReady;
+                            if (inEvent == ObjectEventID.DirItemRequestTransfer && DownloadReadyEvent != null)
+                            {
+                                DownloadReadyEvent(this, new DownloadInfo(inRef));
+                            }
+                            else if (inEvent == ObjectEventID.DirItemCreated && saveFilm && DownloadReadyEvent != null)
+                            {
+                                saveFilm = false;
+                                DownloadReadyEvent(this, new DownloadInfo(inRef));
+                            }
+                        }
+                    });
                 }
                 catch (Exception ex) { if (!IsDisposed && !ErrorHandler.ReportError(this, ex)) throw; }
 

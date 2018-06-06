@@ -42,7 +42,7 @@
                                     <TransformGroup>
                                         <ScaleTransform/>
                                         <SkewTransform/>
-                                        <RotateTransform Angle="90"/>
+                                        <RotateTransform Angle="-90"/>
                                         <TranslateTransform/>
                                     </TransformGroup>
                                 </Grid.RenderTransform>
@@ -282,6 +282,7 @@
                             Height="30"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left">
+                            
                             <!--toggle camera button-->
                             <Button 
                                 x:Name="ToggleLiveViewHomeButton" 
@@ -359,17 +360,33 @@
 
                             <!--image-->
                             <Label Content="Selected Image" Height="30" HorizontalAlignment="Center" Foreground="#FFFFFF" FontWeight="Bold"/>
-                            <Grid Height="399" Width="266" Background="#000000"/>
+                            <Grid 
+                                Height="399" 
+                                Width="266">
+                                <Border 
+                                    BorderThickness="1"
+                                    BorderBrush="White"/>
+                                <Image x:Name="SelectedImage"/>
+                            </Grid>
 
                             <!--title-->
-                            <Label Content="Ground Truth" Height="30" HorizontalAlignment="Center" Foreground="#FFFFFF" FontWeight="Bold"/>
+                            <Label 
+                                Height="30" 
+                                HorizontalAlignment="Center" 
+                                Foreground="#FFFFFF" 
+                                FontWeight="Bold"/>
 
                             <!--description-->
-                            <Label Content="Description" Height="30" HorizontalContentAlignment="Center" Foreground="#FFFFFF"/>
+                            <Label 
+                                Height="30" 
+                                HorizontalContentAlignment="Center" 
+                                Foreground="#FFFFFF"/>
 
-                            <!--recapture and open buttons-->
+                            <!--recapture and autofocus buttons-->
                             <StackPanel Height="30" Width="100" Orientation="Horizontal" Margin="0, 5, 0, 0">
                                 <Button 
+                                    x:Name="RecaptureButton"
+                                    Visibility="Hidden"
                                     Content="&#8630; &#x1f4f7;" 
                                     Height="30" 
                                     Width="65" 
@@ -380,6 +397,8 @@
                                     FontFamily="Segoe UI Symbol" 
                                     Cursor="Hand"/>
                                 <Button 
+                                    x:Name="RecaptureAutofocusButton"
+                                    Visibility="Hidden"
                                     Height="30" 
                                     Width="30" 
                                     Background="#005EB8" 
@@ -419,11 +438,17 @@
                                 HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" 
                                 FontWeight="Bold"/>
-                            <Grid Height="246" Width="164" Background="#000000"/>
+                            <Grid 
+                                Height="246" 
+                                Width="164">
+                                <Border 
+                                    BorderThickness="1"
+                                    BorderBrush="White"/>
+                                <Image x:Name="NextImage"/>
+                            </Grid>
 
                             <!--title-->
                             <Label 
-                                Content="27.5 Right" 
                                 Height="30" 
                                 HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" 
@@ -431,7 +456,6 @@
 
                             <!--description-->
                             <Label 
-                                Content="Description" 
                                 Height="30" 
                                 HorizontalContentAlignment="Center" 
                                 Foreground="#FFFFFF"/>
@@ -454,7 +478,9 @@
                             FontSize="18"/>
                         <ListView 
                             x:Name="PoseListView" 
+                            PreviewMouseWheel="PoseListView_PreviewMouseWheel"
                             Height="185" 
+                            VerticalAlignment="Bottom"
                             BorderThickness="0" 
                             Background="Transparent">
 
@@ -525,6 +551,12 @@
 
             <!--middle column-->
             <Grid Grid.Column="1" Background="#330600">
+                
+                <!--row definitions to establish better scaling-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70*"/>
+                    <RowDefinition Height="21*"/>
+                </Grid.RowDefinitions>
 
                 <!--camera settings-->
                 <Label 
@@ -537,6 +569,7 @@
                     FontSize="15"/>
                 
                 <StackPanel 
+                    VerticalAlignment="Center"
                     Margin="0, 50, 0, 0">
 
                     <!--current settings-->
@@ -623,11 +656,6 @@
                                 HorizontalContentAlignment="Right"
                                 Foreground="#FFFFFF"
                                 Margin="0, 5, 0, 0"/>
-                            <Label
-                                Content="Save profile"
-                                HorizontalContentAlignment="Right"
-                                Foreground="#FFFFFF"
-                                Margin="0, 65, 0, 0"/>
                         </StackPanel>
 
                         <!--camera profile setting comboboxes-->
@@ -691,31 +719,53 @@
                                 Margin="0, 5, 0, 10"
                                 BorderThickness="0"
                                 Cursor="Hand"/>
-
-                            <!--save profile-->
-                            <StackPanel
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Right"
-                                Margin="0, 0, 0, 0">
-                                <TextBox 
-                                    x:Name="CameraProfileNameTextBox"
-                                    PreviewMouseLeftButtonDown="CameraProfileNameTextBox_PreviewMouseLeftButtonDown"
-                                    Height="25"
-                                    Width="125"
-                                    VerticalContentAlignment="Center"
-                                    BorderThickness="0"/>
-                                <Button
-                                    x:Name="SaveCameraProfileButton"
-                                    Click="SaveCameraProfileButton_Click"
-                                    Content="&#128190;"
-                                    IsEnabled="False"
-                                    Background="#9ABEAA"
-                                    Width="25"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
-                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
+
+                    <!--save camera profile-->
+                    <Label 
+                        Content="Save Camera Profile*"
+                        FontWeight="Bold" 
+                        HorizontalAlignment="Center"
+                        Foreground="#FFFFFF"
+                        Margin="0, 30, 0, 0"/>
+                    <!--save profile-->
+                    <StackPanel
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+                        <Label
+                            Content="Profile name"
+                            Height="25"
+                            HorizontalContentAlignment="Right"
+                            Foreground="#FFFFFF"/>
+                        <TextBox 
+                            x:Name="CameraProfileNameTextBox"
+                            PreviewMouseLeftButtonDown="CameraProfileNameTextBox_PreviewMouseLeftButtonDown"
+                            Height="25"
+                            Width="125"
+                            VerticalContentAlignment="Center"
+                            BorderThickness="0"/>
+                        <Button
+                            x:Name="SaveCameraProfileButton"
+                            Click="SaveCameraProfileButton_Click"
+                            Content="&#128190;"
+                            IsEnabled="False"
+                            Background="#9ABEAA"
+                            Height="25"
+                            Width="25"
+                            BorderThickness="0"
+                            Cursor="Hand"/>
+                    </StackPanel>
+                    
+                    <!--camera must be connected note-->
+                    <TextBlock
+                        Text="*Note: Each camera profile must have a specific camera associated with it. Therefore, a camera MUST be connected before saving a profile."
+                        FontSize="10"
+                        Width="150"
+                        TextWrapping="Wrap"
+                        Foreground="#FFFFFF"
+                        HorizontalAlignment="Center"
+                        Margin="0, 10, 0, 0"/>
                 </StackPanel>
             </Grid>
 
@@ -735,7 +785,7 @@
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
-                                    <RotateTransform Angle="90"/>
+                                    <RotateTransform Angle="-90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
@@ -747,6 +797,7 @@
                         x:Name="CameraScreenAutofocusButton"
                         PreviewMouseLeftButtonDown="CameraScreenAutofocusButton_PreviewMouseLeftButtonDown"
                         PreviewMouseLeftButtonUp="CameraScreenAutofocusButton_PreviewMouseLeftButtonUp"
+                        Visibility="Hidden"
                         Height="30" 
                         Width="30" 
                         Background="#005EB8" 
@@ -868,7 +919,6 @@
                         VerticalAlignment="Top" 
                         VerticalContentAlignment="Center" 
                         HorizontalAlignment="Center" 
-                        Foreground="#333F48" 
                         FontWeight="Bold" 
                         FontSize="15"/>
 
@@ -1350,12 +1400,27 @@
                                         Cursor="Hand"/>
 
                                     <!--pose filename-->
-                                    <TextBox
-                                        x:Name="PoseFilenameTextbox"
+                                    <StackPanel
+                                        Orientation="Horizontal"
                                         Height="25"
-                                        Width="150"
-                                        VerticalContentAlignment="Center"
-                                        BorderThickness="0"/>
+                                        Width="150">
+                                        <TextBox
+                                            x:Name="PoseFilenameTextbox"
+                                            VerticalContentAlignment="Center"
+                                            Width="85"
+                                            BorderThickness="0"/>
+                                        <ComboBox
+                                            x:Name="PoseFilenameComboBox"
+                                            SelectedItem="0"
+                                            VerticalContentAlignment="Center"
+                                            Width="60"
+                                            BorderThickness="0"
+                                            Margin="5, 0, 0, 0"
+                                            Cursor="Hand">
+                                            <ComboBoxItem Content=".JPEG"/>
+                                            <ComboBoxItem Content=".PNG"/>
+                                        </ComboBox>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel 
