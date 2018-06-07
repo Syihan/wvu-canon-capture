@@ -42,7 +42,7 @@
                                     <TransformGroup>
                                         <ScaleTransform/>
                                         <SkewTransform/>
-                                        <RotateTransform Angle="-90"/>
+                                        <RotateTransform Angle="90"/>
                                         <TranslateTransform/>
                                     </TransformGroup>
                                 </Grid.RenderTransform>
@@ -162,8 +162,10 @@
                                     <Button 
                                         x:Name="CaptureButton"
                                         Click="CaptureButton_Click"
+                                        PreviewMouseRightButtonDown="CaptureButton_PreviewMouseRightButtonDown"
+                                        PreviewMouseRightButtonUp="CaptureButton_PreviewMouseRightButtonUp"
                                         Content="&#xE114;" 
-                                        ToolTip="Capture photo. Right click and hold to focus camera." 
+                                        ToolTip="Capture the next image in the session. Right click and hold to focus camera." 
                                         FontSize="50" 
                                         FontFamily="Segoe UI Symbol" 
                                         Height="90" 
@@ -199,7 +201,7 @@
                                             PreviewMouseLeftButtonUp="CameraControlsAutofocusButton_PreviewMouseLeftButtonUp"
                                             Height="30" 
                                             Width="55" 
-                                            ToolTip="Press and hold to focus camera" 
+                                            ToolTip="Press and hold to focus camera and set next pose camera settings." 
                                             Background="#005EB8" 
                                             BorderThickness="0" 
                                             Margin="5, 0, 0, 0"
@@ -263,11 +265,11 @@
                             <!--close session button-->
                             <Button 
                                 x:Name="CloseSessionButton"
-                                Click="CloseSessionButton_Click"
+                                Click="CloseSessionButton_Click" 
                                 Content="&#xE21C;" 
+                                ToolTip="Exit Session" 
                                 Height="30" 
                                 Width="30" 
-                                ToolTip="Exit Session" 
                                 BorderThickness="0" 
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Right" 
@@ -360,25 +362,35 @@
 
                             <!--image-->
                             <Label Content="Selected Image" Height="30" HorizontalAlignment="Center" Foreground="#FFFFFF" FontWeight="Bold"/>
-                            <Grid 
+                            <Grid
                                 Height="399" 
                                 Width="266">
                                 <Border 
                                     BorderThickness="1"
                                     BorderBrush="White"/>
-                                <Image x:Name="SelectedImage"/>
+                                <Image x:Name="SelectedImage"
+                                       Height="266"
+                                       Width="399"
+                                       RenderTransformOrigin="0.5, 0.5"
+                                       Margin="-67, 0, -67, 0">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="90" />
+                                    </Image.RenderTransform>
+                                </Image>
                             </Grid>
 
                             <!--title-->
                             <Label 
-                                Height="30" 
+                                x:Name="SelectedPoseTitleLabel"
+                                Height="25" 
                                 HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" 
                                 FontWeight="Bold"/>
 
                             <!--description-->
                             <Label 
-                                Height="30" 
+                                x:Name="SelectedPoseDescLabel"
+                                Height="25" 
                                 HorizontalContentAlignment="Center" 
                                 Foreground="#FFFFFF"/>
 
@@ -386,23 +398,28 @@
                             <StackPanel Height="30" Width="100" Orientation="Horizontal" Margin="0, 5, 0, 0">
                                 <Button 
                                     x:Name="RecaptureButton"
+                                    Click="RecaptureButton_Click"
+                                    PreviewMouseRightButtonDown="RecaptureButton_PreviewMouseRightButtonDown"
+                                    PreviewMouseRightButtonUp="RecaptureButton_PreviewMouseRightButtonUp"
+                                    ToolTip="Recapture the currently selected photo. Right click and hold to focus camera."
                                     Visibility="Hidden"
                                     Content="&#8630; &#x1f4f7;" 
                                     Height="30" 
                                     Width="65" 
-                                    Background="#0D5257" 
-                                    ToolTip="Recapture photo. Right click and hold to focus camera." 
+                                    Background="#0D5257"  
                                     Foreground="#FFFFFF" 
                                     BorderThickness="0" 
                                     FontFamily="Segoe UI Symbol" 
                                     Cursor="Hand"/>
                                 <Button 
                                     x:Name="RecaptureAutofocusButton"
+                                    PreviewMouseLeftButtonDown="RecaptureAutofocusButton_PreviewMouseLeftButtonDown"
+                                    PreviewMouseLeftButtonUp="RecaptureAutofocusButton_PreviewMouseLeftButtonUp"
+                                    ToolTip="Press and hold to focus camera and set selected pose camera settings." 
                                     Visibility="Hidden"
                                     Height="30" 
                                     Width="30" 
                                     Background="#005EB8" 
-                                    ToolTip="Press and hold to focus camera." 
                                     Margin="5, 0" 
                                     BorderThickness="0" 
                                     FontFamily="Segoe UI Sybol"
@@ -429,7 +446,9 @@
                         </StackPanel>
 
                         <!--next image-->
-                        <StackPanel VerticalAlignment="Bottom" Margin="50, 0, 0, 40">
+                        <StackPanel 
+                            VerticalAlignment="Bottom" 
+                            Margin="50, 0, 0, 50">
 
                             <!--image-->
                             <Label 
@@ -444,19 +463,29 @@
                                 <Border 
                                     BorderThickness="1"
                                     BorderBrush="White"/>
-                                <Image x:Name="NextImage"/>
+                                <Image x:Name="NextImage"
+                                       Height="158"
+                                       Width="237"
+                                       RenderTransformOrigin="0.5, 0.5"
+                                       Margin="-40, 0, -40, 0">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="90"/>
+                                    </Image.RenderTransform>
+                                </Image>
                             </Grid>
 
                             <!--title-->
                             <Label 
-                                Height="30" 
+                                x:Name="NextPoseTitleLabel"
+                                Height="25" 
                                 HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" 
                                 FontWeight="Bold"/>
 
                             <!--description-->
                             <Label 
-                                Height="30" 
+                                x:Name="NextPoseDescLabel"
+                                Height="25" 
                                 HorizontalContentAlignment="Center" 
                                 Foreground="#FFFFFF"/>
                         </StackPanel>
@@ -477,8 +506,9 @@
                             FontWeight="Bold" 
                             FontSize="18"/>
                         <ListView 
-                            x:Name="PoseListView" 
-                            PreviewMouseWheel="PoseListView_PreviewMouseWheel"
+                            x:Name="HomeScreenPoseListView" 
+                            SelectionChanged="HomeScreenPoseListView_SelectionChanged"
+                            PreviewMouseWheel="HomeScreenPoseListView_PreviewMouseWheel"
                             Height="185" 
                             VerticalAlignment="Bottom"
                             BorderThickness="0" 
@@ -785,7 +815,7 @@
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
-                                    <RotateTransform Angle="-90"/>
+                                    <RotateTransform Angle="90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
