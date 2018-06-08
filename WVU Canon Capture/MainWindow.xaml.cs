@@ -25,7 +25,6 @@ namespace WVU_Canon_Capture
     {
 
 
-
         #region Startup
         // ================================================================== STARTUP ================================================================== //
 
@@ -146,11 +145,11 @@ namespace WVU_Canon_Capture
                 ToggleLiveViewHomeButton.Content = "\u23f8";
                 CaptureButton.IsEnabled = true;
                 CameraControlsAutofocusButton.IsEnabled = true;
-                // the Camera Menu current settings
+                // the Camera Screen current settings
                 FStopLabel.Content = AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue;
                 ExposureLabel.Content = TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue;
                 ISOLabel.Content = ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue;
-                // the Camera Menu profile settings
+                // the Camera Screen profile settings
                 FStopComboBox.IsEnabled = true;
                 ExposureComboBox.IsEnabled = true;
                 ISOComboBox.IsEnabled = true;
@@ -184,11 +183,11 @@ namespace WVU_Canon_Capture
                     SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
                     CaptureButton.IsEnabled = false;
                     CameraControlsAutofocusButton.IsEnabled = false;
-                    // the Camera Menu current settings
+                    // the Camera Screen current settings
                     FStopLabel.Content = "N/A";
                     ExposureLabel.Content = "N/A";
                     ISOLabel.Content = "N/A";
-                    // the Camera Menu profile settings
+                    // the Camera Screen profile settings
                     FStopComboBox.IsEnabled = false;
                     ExposureComboBox.IsEnabled = false;
                     ISOComboBox.IsEnabled = false;
@@ -209,7 +208,7 @@ namespace WVU_Canon_Capture
         private void FocusCamera()
         {
             try { MainCamera.SendCommand(CameraCommand.DoEvfAf, (int)EDSDK.EdsEvfAf.CameraCommand_EvfAf_ON); }
-            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the Live View on and off."); }
         }
 
 
@@ -219,7 +218,7 @@ namespace WVU_Canon_Capture
         private void UnfocusCamera()
         {
             try { MainCamera.SendCommand(CameraCommand.DoEvfAf, (int)EDSDK.EdsEvfAf.CameraCommand_EvfAf_OFF); }
-            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the Live View on and off."); }
         }
 
 
@@ -250,7 +249,7 @@ namespace WVU_Canon_Capture
                 ToggleLiveViewHomeButton.Visibility = Visibility.Hidden;
                 CloseSessionButton.IsEnabled = false;
             }
-            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the camera's live view."); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the Live View on and off."); }
         }
 
 
@@ -355,7 +354,7 @@ namespace WVU_Canon_Capture
                     Application.Current.Dispatcher.BeginInvoke(SetImageAction, EvfImage);
                 }
             }
-            catch (Exception ex) { ShowMessage("red", "Live View ERROR", ex.Message); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + ".\nPlease try toggling the Live View on and off."); }
         }
 
 
@@ -368,7 +367,7 @@ namespace WVU_Canon_Capture
         private void MainCamera_StateChanged(Camera sender, StateEventID eventID, int parameter)
         {
             try { if (eventID == StateEventID.Shutdown) { Dispatcher.Invoke((Action)delegate { SetLiveViewOn(false); }); } }
-            catch (Exception ex) { ShowMessage("red", "Error", ex.Message); }
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + ".\nPlease try toggling the Live View on and off."); }
         }
 
 
@@ -1998,7 +1997,7 @@ namespace WVU_Canon_Capture
         /// <param name="ex"></param>
         private void ErrorHandler_NonSevereErrorHappened(object sender, ErrorCode ex)
         {
-            ShowMessage("red", "NonSevere ERROR", $"SDK Error code: {ex} ({((int)ex).ToString("X")})");
+            ShowMessage("red", "ERROR", $"SDK Error code: {ex} ({((int)ex).ToString("X")})");
         }
 
 
@@ -2009,7 +2008,7 @@ namespace WVU_Canon_Capture
         /// <param name="ex"></param>
         private void ErrorHandler_SevereErrorHappened(object sender, Exception ex)
         {
-            ShowMessage("red", "Severe ERROR", ex.Message);
+            ShowMessage("red", "ERROR", ex.Message);
         }
 
 
@@ -2023,6 +2022,12 @@ namespace WVU_Canon_Capture
             MainCamera?.CloseSession();
             MainCamera?.Dispose();
             API?.Dispose();
+
+            if(IsSessionOngoing)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit in the middle of a session?", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No) e.Cancel = true;
+            }
         }
 
 
@@ -2068,7 +2073,7 @@ namespace WVU_Canon_Capture
                 SetLiveViewOn(true);
                 InitializeCameraSettings();
 
-                // selects the current settings on the Camera Menu
+                // selects the current settings on the Camera Screen
                 FStopComboBox.SelectedIndex = FStopComboBox.Items.IndexOf(AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue);
                 ExposureComboBox.SelectedIndex = ExposureComboBox.Items.IndexOf(TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue);
                 ISOComboBox.SelectedIndex = ISOComboBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
@@ -2164,7 +2169,7 @@ namespace WVU_Canon_Capture
                     {
                         ShowMessage("red", "Invalid camera profile",
                             "There is an invalid camera profile in the \"" + collection.name + "\" Collection." +
-                            "\nPlease remove camera profile \"" + pose.cameraProfile + "\"from the collection in the Collections Menu."
+                            "\nPlease remove camera profile \"" + pose.cameraProfile + "\"from the collection on the Collections Screen."
                             );
                         return;
                     }
@@ -2177,7 +2182,7 @@ namespace WVU_Canon_Capture
                     {
                         ShowMessage("red", "Camera profile and camera are incompatible",
                             "\"" + collection.name + "\"uses the camera profile \"" + profile.name + "\", which is incompatible with " + CameraComboBox.Text +
-                            ". Please edit \"" + collection.name + "\" under the Collections Menu.");
+                            ".\nPlease edit \"" + collection.name + "\" in the Collections Screen.");
                         return;
                     }
                 }
@@ -2186,7 +2191,7 @@ namespace WVU_Canon_Capture
                 if (!Directory.Exists(collection.savingDirectory))
                 {
                     ShowMessage("red", "Invalid save directory.", "The directory specified for \"" + collection.name + "\" no longer exists. " +
-                        "Please edit \"" + collection.name + "\" under the Collections Menu.");
+                        "Please edit \"" + collection.name + "\" in the Collections Screen.");
                     return;
                 }
 
@@ -2207,7 +2212,7 @@ namespace WVU_Canon_Capture
                 // checks if there are any files in the SavePath
                 DirectoryInfo dir2 = new DirectoryInfo(SavePath);
                 if (Directory.Exists(dir2.ToString()) && (dir2.GetDirectories().Length > 0 || dir2.GetFiles().Length > 0))
-                    ShowMessage("red", "Warning", "Participant already has session files for this session. Files may be overwritten if you continue.");
+                    ShowMessage("yellow", "Warning", "Participant already has session files for this session. Files may be overwritten if you continue.");
 
                 // begin a new session
                 BeginSession();
@@ -2766,50 +2771,50 @@ namespace WVU_Canon_Capture
         {
             if (SubjectOuterBoundingBoxCheckBox.IsChecked ?? false)
             {
-                OuterBoxHomeMenu.Visibility = Visibility.Visible;
-                OuterBoxCameraMenu.Visibility = Visibility.Visible;
+                OuterBoxHomeScreen.Visibility = Visibility.Visible;
+                OuterBoxCameraScreen.Visibility = Visibility.Visible;
             }
             else
             {
-                OuterBoxHomeMenu.Visibility = Visibility.Hidden;
-                OuterBoxCameraMenu.Visibility = Visibility.Hidden;
+                OuterBoxHomeScreen.Visibility = Visibility.Hidden;
+                OuterBoxCameraScreen.Visibility = Visibility.Hidden;
             }
 
             if (SubjectInnerBoundingBoxCheckBox.IsChecked ?? false)
             {
-                InnerBoxHomeMenu.Visibility = Visibility.Visible;
-                InnerBoxCameraMenu.Visibility = Visibility.Visible;
+                InnerBoxHomeScreen.Visibility = Visibility.Visible;
+                InnerBoxCameraScreen.Visibility = Visibility.Visible;
             }
             else
             {
-                InnerBoxHomeMenu.Visibility = Visibility.Hidden;
-                InnerBoxCameraMenu.Visibility = Visibility.Hidden;
+                InnerBoxHomeScreen.Visibility = Visibility.Hidden;
+                InnerBoxCameraScreen.Visibility = Visibility.Hidden;
             }
 
             if (EyeBoxCheckBox.IsChecked ?? false)
             {
-                EyeBoxHomeMenu.Visibility = Visibility.Visible;
-                EyeBoxCameraMenu.Visibility = Visibility.Visible;
+                EyeBoxHomeScreen.Visibility = Visibility.Visible;
+                EyeBoxCameraScreen.Visibility = Visibility.Visible;
             }
             else
             {
-                EyeBoxHomeMenu.Visibility = Visibility.Hidden;
-                EyeBoxCameraMenu.Visibility = Visibility.Hidden;
+                EyeBoxHomeScreen.Visibility = Visibility.Hidden;
+                EyeBoxCameraScreen.Visibility = Visibility.Hidden;
             }
 
             if (CrosshairsCheckBox.IsChecked ?? false)
             {
-                XCrosshairHomeMenu.Visibility = Visibility.Visible;
-                XCrosshairCameraMenu.Visibility = Visibility.Visible;
-                YCrosshairHomeMenu.Visibility = Visibility.Visible;
-                YCrosshairCameraMenu.Visibility = Visibility.Visible;
+                XCrosshairHomeScreen.Visibility = Visibility.Visible;
+                XCrosshairCameraScreen.Visibility = Visibility.Visible;
+                YCrosshairHomeScreen.Visibility = Visibility.Visible;
+                YCrosshairCameraScreen.Visibility = Visibility.Visible;
             }
             else
             {
-                XCrosshairHomeMenu.Visibility = Visibility.Hidden;
-                XCrosshairCameraMenu.Visibility = Visibility.Hidden;
-                YCrosshairHomeMenu.Visibility = Visibility.Hidden;
-                YCrosshairCameraMenu.Visibility = Visibility.Hidden;
+                XCrosshairHomeScreen.Visibility = Visibility.Hidden;
+                XCrosshairCameraScreen.Visibility = Visibility.Hidden;
+                YCrosshairHomeScreen.Visibility = Visibility.Hidden;
+                YCrosshairCameraScreen.Visibility = Visibility.Hidden;
             }
         }
 

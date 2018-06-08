@@ -52,11 +52,11 @@
                                 </Grid.RenderTransform>
                             </Grid>
                         </Viewbox>
-                        
+
                         <!--reference frames-->
                         <!--subject outer bounding box (85%)-->
                         <Rectangle 
-                            x:Name="OuterBoxHomeMenu"
+                            x:Name="OuterBoxHomeScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="447" 
@@ -66,7 +66,7 @@
 
                         <!--subject inner bounding box (65%)-->
                         <Rectangle 
-                            x:Name="InnerBoxHomeMenu"
+                            x:Name="InnerBoxHomeScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="348" 
@@ -76,7 +76,7 @@
 
                         <!-- eye box -->
                         <Rectangle 
-                            x:Name="EyeBoxHomeMenu"
+                            x:Name="EyeBoxHomeScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="84" 
@@ -87,7 +87,7 @@
 
                         <!-- Crosshairs-->
                         <Rectangle 
-                            x:Name="YCrosshairHomeMenu"
+                            x:Name="YCrosshairHomeScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="525" 
@@ -96,7 +96,7 @@
                             Width="1" 
                             Margin="0, 0, 0, 0"/>
                         <Rectangle 
-                            x:Name="XCrosshairHomeMenu"
+                            x:Name="XCrosshairHomeScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="1" 
@@ -152,7 +152,7 @@
                                             Width="160" 
                                             BorderThickness="0"
                                             Cursor="Hand">
-                                            
+
                                             <!--<ComboBoxItem Content=""/>-->
                                             <ComboBoxItem Content=""/>
                                         </ComboBox>
@@ -254,7 +254,7 @@
                                         Height="30" 
                                         Orientation="Horizontal" 
                                         Margin="0, 5, 0, 0">
-                                        
+
                                         <!--open containing folder-->
                                         <Button 
                                             x:Name="OpenContainingFolderButton"
@@ -268,7 +268,7 @@
                                             BorderThickness="0" 
                                             FontFamily="Segoe UI Symbol"
                                             Cursor="Hand"/>
-                                        
+
                                         <!--autofocus button-->
                                         <Button 
                                             x:Name="CameraControlsAutofocusButton"
@@ -359,7 +359,7 @@
                             Height="30"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left">
-                            
+
                             <!--toggle camera button-->
                             <Button 
                                 x:Name="ToggleLiveViewHomeButton" 
@@ -617,7 +617,7 @@
             Visibility="Collapsed" 
             Background="#161616"
             Margin="0, 30, 0, 0">
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350*" MaxWidth="350"/>
                 <ColumnDefinition Width="350*" MinWidth="290"/>
@@ -625,7 +625,7 @@
             </Grid.ColumnDefinitions>
 
             <!--load camera profile-->
-            <Grid Grid.Column="0" Background="#550A00">
+            <Grid Grid.Column="0" Background="#54140C">
                 <Label 
                     Content="Camera Profiles" 
                     Height="50" VerticalAlignment="Top" 
@@ -664,12 +664,14 @@
             </Grid>
 
             <!--middle column-->
-            <Grid Grid.Column="1" Background="#330600">
-                
+            <Grid 
+                Grid.Column="1" 
+                Background="#330600">
+
                 <!--row definitions to establish better scaling-->
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="70*"/>
-                    <RowDefinition Height="21*"/>
+                    <RowDefinition Height="2.5*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
 
                 <!--camera settings-->
@@ -681,7 +683,7 @@
                     Foreground="#FFFFFF" 
                     FontWeight="Bold" 
                     FontSize="15"/>
-                
+
                 <StackPanel 
                     VerticalAlignment="Center"
                     Margin="0, 50, 0, 0">
@@ -818,7 +820,8 @@
                                 Click="CameraSettings_ApplyChangesButton_Click"
                                 Content="Apply Changes"
                                 IsEnabled="False"
-                                Background="#66D6D6"
+                                Background="#326470"
+                                Foreground="#FFFFFF"
                                 Height="25"
                                 Width="100"
                                 Margin="0, 5, 0, 10"
@@ -847,7 +850,7 @@
                             x:Name="CameraProfileNameTextBox"
                             PreviewMouseLeftButtonDown="CameraProfileNameTextBox_PreviewMouseLeftButtonDown"
                             Height="25"
-                            Width="125"
+                            Width="100"
                             VerticalContentAlignment="Center"
                             BorderThickness="0"/>
                         <Button
@@ -857,11 +860,11 @@
                             IsEnabled="False"
                             Background="#9ABEAA"
                             Height="25"
-                            Width="25"
+                            Width="50"
                             BorderThickness="0"
                             Cursor="Hand"/>
                     </StackPanel>
-                    
+
                     <!--camera must be connected note-->
                     <TextBlock
                         Text="*Note: Each camera profile must have a specific camera associated with it. Therefore, a camera MUST be connected before saving a profile."
@@ -879,7 +882,7 @@
                 <StackPanel 
                     Width="350"
                     VerticalAlignment="Center">
-                    
+
                     <Grid>
                         <!--live view-->
                         <Viewbox Height="525" Width="350" Stretch="Fill">
@@ -899,11 +902,11 @@
                                 </Grid.RenderTransform>
                             </Grid>
                         </Viewbox>
-                        
+
                         <!--reference frames-->
                         <!--subject outer bounding box (85%)-->
                         <Rectangle 
-                            x:Name="OuterBoxCameraMenu"
+                            x:Name="OuterBoxCameraScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="447" 
@@ -913,7 +916,7 @@
 
                         <!--subject inner bounding box (65%)-->
                         <Rectangle 
-                            x:Name="InnerBoxCameraMenu"
+                            x:Name="InnerBoxCameraScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="348" 
@@ -923,7 +926,7 @@
 
                         <!-- eye box -->
                         <Rectangle 
-                            x:Name="EyeBoxCameraMenu"
+                            x:Name="EyeBoxCameraScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="84" 
@@ -934,7 +937,7 @@
 
                         <!-- Crosshairs-->
                         <Rectangle 
-                            x:Name="YCrosshairCameraMenu"
+                            x:Name="YCrosshairCameraScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="525" 
@@ -943,7 +946,7 @@
                             Width="1" 
                             Margin="0, 0, 0, 0"/>
                         <Rectangle 
-                            x:Name="XCrosshairCameraMenu"
+                            x:Name="XCrosshairCameraScreen"
                             Visibility="Hidden"
                             HorizontalAlignment="Center" 
                             Height="1" 
@@ -1007,13 +1010,13 @@
                             <CheckBox 
                                 x:Name="SubjectOuterBoundingBoxCheckBox"
                                 Click="ToggleReferenceFrames"
-                                Content="Subject Outer Bounding Box"
+                                Content="Subject Outer Bounding Box (85%)"
                                 Foreground="#FFFFFF" 
                                 Cursor="Hand"/>
                             <CheckBox 
                                 x:Name="SubjectInnerBoundingBoxCheckBox"
                                 Click="ToggleReferenceFrames"
-                                Content="Subject Inner Bounding Box" 
+                                Content="Subject Inner Bounding Box (65%)" 
                                 Foreground="#FFFFFF" 
                                 Cursor="Hand"/>
                             <CheckBox 
@@ -1188,13 +1191,11 @@
                                             <!--device name-->
                                             <Label 
                                                 Content="Device Name:"
-                                                HorizontalAlignment="Right"
+                                                HorizontalContentAlignment="Right"
                                                 VerticalContentAlignment="Center"
                                                 Height="30"
                                                 Width="85"
                                                 Margin="5, 0, 0, 5"/>
-
-                                            <!--device-->
                                             <TextBox
                                                 x:Name="CollectionDeviceTextBox"
                                                 PreviewKeyDown="CollectionDeviceTextBox_PreviewKeyDown"
@@ -1205,7 +1206,7 @@
                                                 Margin="0, 0, 0, 5" />
                                         </StackPanel>
 
-                                        <!--device-->
+                                        <!--modality-->
                                         <TextBox
                                             x:Name="CollectionModalityTextBox"
                                             PreviewKeyDown="CollectionModalityTextBox_PreviewKeyDown"
@@ -1397,19 +1398,19 @@
                                 X1="43"
                                 X2="43"
                                 Y1="0"
-                                Y2="1000"/>
+                                Y2="2000"/>
                             <Line 
                                 Stroke="#a6a6a6" 
                                 X1="88"
                                 X2="88"
                                 Y1="0"
-                                Y2="1000"/>
+                                Y2="2000"/>
                             <Line 
                                 Stroke="#a6a6a6" 
                                 X1="203"
                                 X2="203"
                                 Y1="0"
-                                Y2="1000"/>
+                                Y2="2000"/>
                             <Line 
                                 Stroke="#a6a6a6" 
                                 X1="368"
@@ -1421,7 +1422,7 @@
                                 X1="483"
                                 X2="483"
                                 Y1="0"
-                                Y2="1000"/>
+                                Y2="2000"/>
                         </Grid>
 
                         <!--poses listview-->
@@ -1866,7 +1867,6 @@
             </StackPanel>
         </Grid>
     </Grid>
-    <!--</ScrollViewer>-->
 
     <!--style resources-->
     <Window.Resources>
