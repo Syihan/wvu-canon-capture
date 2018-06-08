@@ -1,143 +1,121 @@
 [
   {
-    "name": "TwinsDay2017",
-    "collectionNumber": "25",
-    "numberOfPoses": 8,
-    "savingDirectory": "C:\\Users\\Syihan\\Downloads",
-    "deviceName": "C5D3",
-    "camera": "Canon EOS 5D Mark III",
+    "name": "Buttface2",
+    "collectionNumber": "27",
+    "numberOfPoses": 7,
+    "savingDirectory": "C:\\Users\\Syihan\\Downloads\\Test",
+    "deviceName": "5DSR",
+    "modality": "5DSR",
+    "camera": "Canon EOS 5DS R",
     "poses": [
-      {
-        "title": "Number Card",
-        "description": "Blue - Middle",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\NC.png",
-        "filename": "NC.JPEG",
-        "cameraProfile": "RAW"
-      },
       {
         "title": "Color Card",
-        "description": "Blue - Middle",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\CC.png",
-        "filename": "CC.JPEG",
-        "cameraProfile": "RAW"
-      },
-      {
-        "title": "-90 Degrees",
-        "description": "Red - Right",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\-90.png",
-        "filename": "-90.JPEG",
-        "cameraProfile": "RAW"
-      },
-      {
-        "title": "-45 Degrees",
-        "description": "Black - Right",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\-45.png",
-        "filename": "-45.JPEG",
-        "cameraProfile": "RAW"
-      },
-      {
-        "title": "0 Degrees",
-        "description": "Blue - Middle",
+        "description": "0",
         "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
-        "filename": "0.JPEG",
-        "cameraProfile": "RAW"
+        "filename": "1.JPEG",
+        "cameraProfile": "New"
       },
       {
-        "title": "45 Degrees",
-        "description": "Black - Left",
+        "title": "Sample Title",
+        "description": "Sample Description",
         "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
-        "filename": "45.JPEG",
-        "cameraProfile": "RAW"
+        "filename": "2.JPEG",
+        "cameraProfile": "New"
       },
       {
-        "title": "90 Degrees",
-        "description": "Red - Left",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\90.png",
-        "filename": "90.JPEG",
-        "cameraProfile": "RAW"
-      },
-      {
-        "title": "Goofy",
-        "description": "Blue - Middle",
+        "title": "Sample Title",
+        "description": "Sample Description",
         "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
-        "filename": "goofy.JPEG",
-        "cameraProfile": "RAW"
+        "filename": "3.JPEG",
+        "cameraProfile": "New"
+      },
+      {
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "4.JPEG",
+        "cameraProfile": "New"
+      },
+      {
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "5.JPEG",
+        "cameraProfile": "New"
+      },
+      {
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "6.JPEG",
+        "cameraProfile": "New"
+      },
+      {
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "7.JPEG",
+        "cameraProfile": "New"
       }
     ]
   },
   {
-    "name": "Test",
-    "collectionNumber": "26",
-    "numberOfPoses": 4,
+    "name": "Buttface",
+    "collectionNumber": "50",
+    "numberOfPoses": 7,
     "savingDirectory": "C:\\Users\\Syihan\\Downloads\\Test",
     "deviceName": "C5D3",
+    "modality": "FACE",
     "camera": "Canon EOS 5D Mark III",
     "poses": [
       {
-        "title": "Test Pose 1",
-        "description": "Blue - Middle",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\CC.png",
-        "filename": "NC.JPEG",
-        "cameraProfile": "RAW"
+        "title": "Color Card",
+        "description": "0",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Test Pose 2",
-        "description": "Blue - Middle",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\650nm20\\-22.5.png",
-        "filename": "CC.JPEG",
-        "cameraProfile": "RAW"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Test Pose 3",
-        "description": "Red - Right",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\590nm10\\45.png",
-        "filename": "-90.PNG",
-        "cameraProfile": "RAW"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Test Pose 4",
-        "description": "Black - Right",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\CC.png",
-        "filename": "-45.PNG",
-        "cameraProfile": "RAW"
-      }
-    ]
-  },
-  {
-    "name": "TestHand",
-    "collectionNumber": "27",
-    "numberOfPoses": 4,
-    "savingDirectory": "C:\\Users\\Syihan\\Downloads\\Test",
-    "deviceName": "C5D3",
-    "camera": "Canon EOS 5D Mark III",
-    "poses": [
-      {
-        "title": "Left - 4 Fingers",
-        "description": "Left, 4 fingers",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\HAND\\left_back_4_fingers.png",
-        "filename": "left_hand_4.PNG",
-        "cameraProfile": "RAW"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Right Hand Palm",
-        "description": "Five fingers, right",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\HAND\\right_front_5_fingers_grid.png",
-        "filename": "right_hand_palm.JPEG",
-        "cameraProfile": "RAW"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Weird face",
-        "description": "Weirdo",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\590nm10\\-67.5.png",
-        "filename": "fake_name3.PNG",
-        "cameraProfile": "Bright"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       },
       {
-        "title": "Thumbs",
-        "description": "thumby thumb thumb",
-        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\HAND\\thumbs.png",
-        "filename": "thumbs.JPEG",
-        "cameraProfile": "Dark"
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": "buttface"
       }
     ]
   }

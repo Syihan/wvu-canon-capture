@@ -23,7 +23,7 @@
             x:Name="HomeScreenGrid" 
             Visibility="Visible" 
             Background="#161616"
-            Margin="0, 30, 0, 30">
+            Margin="0, 30, 0, 0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="400" />
@@ -37,7 +37,11 @@
                     <!--live view-->
                     <Grid Grid.Row="0" Height="525" Background="#000000" >
                         <Viewbox Stretch="Fill">
-                            <Grid x:Name="HomeLiveViewCanvas" Height="350" Width="350" RenderTransformOrigin="0.5,0.5">
+                            <Grid 
+                                x:Name="HomeLiveViewCanvas" 
+                                Height="350" 
+                                Width="350" 
+                                RenderTransformOrigin="0.5,0.5">
                                 <Grid.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -48,6 +52,58 @@
                                 </Grid.RenderTransform>
                             </Grid>
                         </Viewbox>
+                        
+                        <!--reference frames-->
+                        <!--subject outer bounding box (85%)-->
+                        <Rectangle 
+                            x:Name="OuterBoxHomeMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="447" 
+                            Stroke="#CC00FF97" 
+                            VerticalAlignment="Center" 
+                            Width="298"/>
+
+                        <!--subject inner bounding box (65%)-->
+                        <Rectangle 
+                            x:Name="InnerBoxHomeMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="348" 
+                            Stroke="#CC00AEFF" 
+                            VerticalAlignment="Center" 
+                            Width="232"/>
+
+                        <!-- eye box -->
+                        <Rectangle 
+                            x:Name="EyeBoxHomeMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="84" 
+                            Stroke="#CCFFDC00" 
+                            VerticalAlignment="Center" 
+                            Width="232" 
+                            Margin="0, 0, 0, 19"/>
+
+                        <!-- Crosshairs-->
+                        <Rectangle 
+                            x:Name="YCrosshairHomeMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="525" 
+                            Stroke="#3300FFFF" 
+                            VerticalAlignment="Center" 
+                            Width="1" 
+                            Margin="0, 0, 0, 0"/>
+                        <Rectangle 
+                            x:Name="XCrosshairHomeMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="1" 
+                            Stroke="#3300FFFF" 
+                            VerticalAlignment="Center" 
+                            Width="350" 
+                            Margin="0, 0, 0, 19"/>
                     </Grid>
 
                     <!--control panel-->
@@ -62,12 +118,30 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top">
                             <StackPanel>
-                                <Label Content="Session Settings" Height="50" VerticalAlignment="Top" Foreground="#EAAA00" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>
-                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label 
+                                    Content="Session Settings" 
+                                    Height="50" 
+                                    VerticalAlignment="Top" 
+                                    Foreground="#EAAA00" 
+                                    FontWeight="Bold" 
+                                    FontSize="18" 
+                                    HorizontalAlignment="Center"/>
+                                <StackPanel 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center">
 
                                     <!--camera selection-->
-                                    <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                                        <Label Content="Camera " Foreground="#FFFFFF" HorizontalContentAlignment="Right" Width="100" FontWeight="Bold"/>
+                                    <StackPanel 
+                                        Height="30" 
+                                        DockPanel.Dock="Top" 
+                                        Orientation="Horizontal" 
+                                        Margin="0, 0, 0, 5">
+                                        <Label 
+                                            Content="Camera " 
+                                            Foreground="#FFFFFF" 
+                                            HorizontalContentAlignment="Right" 
+                                            Width="100" 
+                                            FontWeight="Bold"/>
                                         <ComboBox 
                                             x:Name="CameraComboBox" 
                                             Text="TestCamera"
@@ -184,6 +258,7 @@
                                         <!--open containing folder-->
                                         <Button 
                                             x:Name="OpenContainingFolderButton"
+                                            Click="OpenContainingFolderButton_Click"
                                             Content="&#xE187;" 
                                             Height="30" 
                                             Width="30" 
@@ -340,7 +415,9 @@
             </Grid>
 
             <!--capture box-->
-            <Grid Grid.Column="1" Background="#232323">
+            <Grid 
+                Grid.Column="1" 
+                Background="#232323">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*"/>
@@ -348,7 +425,10 @@
                 </Grid.RowDefinitions>
 
                 <!--preview box-->
-                <Grid Grid.Row="0" MinWidth="800" HorizontalAlignment="Center">
+                <Grid 
+                    Grid.Row="0" 
+                    MinWidth="800" 
+                    HorizontalAlignment="Center">
 
                     <!--image previews-->
                     <StackPanel 
@@ -361,7 +441,11 @@
                         <StackPanel Height="530">
 
                             <!--image-->
-                            <Label Content="Selected Image" Height="30" HorizontalAlignment="Center" Foreground="#FFFFFF" FontWeight="Bold"/>
+                            <Label 
+                                Content="Selected Image" 
+                                Height="30" 
+                                HorizontalAlignment="Center" 
+                                Foreground="#FFFFFF" FontWeight="Bold"/>
                             <Grid
                                 Height="399" 
                                 Width="266">
@@ -369,10 +453,10 @@
                                     BorderThickness="1"
                                     BorderBrush="White"/>
                                 <Image x:Name="SelectedImage"
-                                       Height="266"
-                                       Width="399"
+                                       Height="270"
+                                       Width="405"
                                        RenderTransformOrigin="0.5, 0.5"
-                                       Margin="-67, 0, -67, 0">
+                                       Margin="-68, 3, -68, 0">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="90" />
                                     </Image.RenderTransform>
@@ -464,8 +548,8 @@
                                     BorderThickness="1"
                                     BorderBrush="White"/>
                                 <Image x:Name="NextImage"
-                                       Height="158"
-                                       Width="237"
+                                       Height="140"
+                                       Width="210"
                                        RenderTransformOrigin="0.5, 0.5"
                                        Margin="-40, 0, -40, 0">
                                     <Image.RenderTransform>
@@ -532,7 +616,7 @@
             x:Name="CameraScreenGrid" 
             Visibility="Collapsed" 
             Background="#161616"
-            Margin="0, 30, 0, 30">
+            Margin="0, 30, 0, 0">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350*" MaxWidth="350"/>
@@ -624,10 +708,6 @@
                                 Content="ISO: " 
                                 HorizontalContentAlignment="Right"
                                 Foreground="#FFFFFF"/>
-                            <Label 
-                                Content="White Balance: " 
-                                HorizontalContentAlignment="Right"
-                                Foreground="#FFFFFF"/>
                         </StackPanel>
                         <StackPanel Width="90">
                             <Label 
@@ -643,10 +723,6 @@
                                 x:Name="ISOLabel"
                                 Content="N/A"
                                 Foreground="#FFFFFF"/>
-                            <Label  
-                                x:Name="WhiteBalanceLabel"
-                                Content="N/A"
-                                Foreground="#FFFFFF"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -657,6 +733,12 @@
                         HorizontalAlignment="Center"
                         Foreground="#FFFFFF"
                         Margin="0, 30, 0, 0"/>
+                    <Label 
+                        Content="Camera must be connected to adjust camera settings!"
+                        Height="25"
+                        FontSize="9"
+                        HorizontalAlignment="Center"
+                        Foreground="#FFFFFF"/>
                     <StackPanel 
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
@@ -681,7 +763,7 @@
                                 Foreground="#FFFFFF"
                                 Margin="0, 5, 0, 0"/>
                             <Label 
-                                Content="White Balance*" 
+                                Content="White Balance" 
                                 Height="25"
                                 HorizontalContentAlignment="Right"
                                 Foreground="#FFFFFF"
@@ -729,13 +811,6 @@
                                 BorderThickness="0"
                                 Margin="0, 5, 0, 0"
                                 Cursor="Hand"/>
-
-                            <Label 
-                                Content="*May cause minor errors."
-                                Height="25"
-                                FontSize="9"
-                                HorizontalAlignment="Center"
-                                Foreground="#FFFFFF"/>
 
                             <!--apply changes button-->
                             <Button
@@ -799,28 +874,84 @@
                 </StackPanel>
             </Grid>
 
-            <!--live view-->
+            <!--live view column-->
             <Grid Grid.Column="2">
                 <StackPanel 
                     Width="350"
                     VerticalAlignment="Center">
-                    <Viewbox Height="525" Width="350" Stretch="Fill">
-                        <Grid 
+                    
+                    <Grid>
+                        <!--live view-->
+                        <Viewbox Height="525" Width="350" Stretch="Fill">
+                            <Grid 
                             x:Name="CameraLiveViewCanvas" 
                             Height="350" 
                             Width="350" 
                             RenderTransformOrigin="0.5,0.5" 
                             Background="#000000">
-                            <Grid.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="90"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Grid.RenderTransform>
-                        </Grid>
-                    </Viewbox>
+                                <Grid.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="90"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Grid.RenderTransform>
+                            </Grid>
+                        </Viewbox>
+                        
+                        <!--reference frames-->
+                        <!--subject outer bounding box (85%)-->
+                        <Rectangle 
+                            x:Name="OuterBoxCameraMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="447" 
+                            Stroke="#CC00FF97" 
+                            VerticalAlignment="Center" 
+                            Width="298"/>
+
+                        <!--subject inner bounding box (65%)-->
+                        <Rectangle 
+                            x:Name="InnerBoxCameraMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="348" 
+                            Stroke="#CC00AEFF" 
+                            VerticalAlignment="Center" 
+                            Width="232"/>
+
+                        <!-- eye box -->
+                        <Rectangle 
+                            x:Name="EyeBoxCameraMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="84" 
+                            Stroke="#CCFFDC00" 
+                            VerticalAlignment="Center" 
+                            Width="232" 
+                            Margin="0, 0, 0, 19"/>
+
+                        <!-- Crosshairs-->
+                        <Rectangle 
+                            x:Name="YCrosshairCameraMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="525" 
+                            Stroke="#3300FFFF" 
+                            VerticalAlignment="Center" 
+                            Width="1" 
+                            Margin="0, 0, 0, 0"/>
+                        <Rectangle 
+                            x:Name="XCrosshairCameraMenu"
+                            Visibility="Hidden"
+                            HorizontalAlignment="Center" 
+                            Height="1" 
+                            Stroke="#3300FFFF" 
+                            VerticalAlignment="Center" 
+                            Width="350" 
+                            Margin="0, 0, 0, 19"/>
+                    </Grid>
 
                     <!--autofocus button-->
                     <Button 
@@ -873,9 +1004,30 @@
                         <StackPanel 
                             HorizontalAlignment="Center"
                             Margin="15, 0, 15, 0">
-                            <CheckBox Foreground="#FFFFFF">Closeup Frame</CheckBox>
-                            <CheckBox Foreground="#FFFFFF">Enable feature XYZ</CheckBox>
-                            <CheckBox Foreground="#FFFFFF">Enable feature WWW</CheckBox>
+                            <CheckBox 
+                                x:Name="SubjectOuterBoundingBoxCheckBox"
+                                Click="ToggleReferenceFrames"
+                                Content="Subject Outer Bounding Box"
+                                Foreground="#FFFFFF" 
+                                Cursor="Hand"/>
+                            <CheckBox 
+                                x:Name="SubjectInnerBoundingBoxCheckBox"
+                                Click="ToggleReferenceFrames"
+                                Content="Subject Inner Bounding Box" 
+                                Foreground="#FFFFFF" 
+                                Cursor="Hand"/>
+                            <CheckBox 
+                                x:Name="EyeBoxCheckBox"
+                                Click="ToggleReferenceFrames" 
+                                Content="Eye Box"
+                                Foreground="#FFFFFF" 
+                                Cursor="Hand"/>
+                            <CheckBox
+                                x:Name="CrosshairsCheckBox"
+                                Click="ToggleReferenceFrames"
+                                Content="Crosshairs"
+                                Foreground="#FFFFFF"
+                                Cursor="Hand"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -888,7 +1040,7 @@
             x:Name="CollectionsScreenGrid" 
             Visibility="Collapsed" 
             Background="#9BD3DD"
-            Margin="0, 30, 0, 30">
+            Margin="0, 30, 0, 0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350"/>
@@ -981,6 +1133,12 @@
                                             Height="30"
                                             Margin="0, 0, 0, 5"/>
                                         <Label 
+                                            Content="Modality:"
+                                            HorizontalAlignment="Right"
+                                            VerticalContentAlignment="Center"
+                                            Height="30"
+                                            Margin="0, 0, 0, 5"/>
+                                        <Label 
                                             Content="# of Poses:"
                                             HorizontalAlignment="Right"
                                             VerticalContentAlignment="Center"
@@ -1046,6 +1204,17 @@
                                                 BorderThickness="0"
                                                 Margin="0, 0, 0, 5" />
                                         </StackPanel>
+
+                                        <!--device-->
+                                        <TextBox
+                                            x:Name="CollectionModalityTextBox"
+                                            PreviewKeyDown="CollectionModalityTextBox_PreviewKeyDown"
+                                            Height="30"
+                                            Width="60"
+                                            HorizontalAlignment="Left"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            Margin="0, 0, 0, 5" />
 
                                         <StackPanel Orientation="Horizontal">
 
@@ -1624,47 +1793,6 @@
         </Grid>
 
 
-        <!--bottom status bar-->
-        <StatusBar 
-                VerticalAlignment="Bottom" 
-                Background="#2C2A29" 
-                Foreground="#000000"
-                Height="30">
-
-            <!--progress bar-->
-            <StatusBarItem 
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
-                <ProgressBar 
-                        x:Name="MainProgressBar"  
-                        Height="20" 
-                        Width="150" 
-                        Value="0" 
-                        Minimum="0" 
-                        Maximum="100"
-                        BorderThickness="0">
-
-                    <!--TODO: FIGURE OUT HOW TO ACCOMPLISH THIS WITHOUT THE GRADIENT-->
-                    <!--unloaded gradient-->
-                    <ProgressBar.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF181515"/>
-                            <GradientStop Color="#FF181515"/>
-                        </LinearGradientBrush>
-                    </ProgressBar.Background>
-
-                    <!--loaded gradient-->
-                    <ProgressBar.Foreground>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#657A68"/>
-                            <GradientStop Color="#657A68"/>
-                        </LinearGradientBrush>
-                    </ProgressBar.Foreground>
-                </ProgressBar>
-            </StatusBarItem>
-        </StatusBar>
-
-
         <!--message grid-->
         <Grid 
             x:Name="MessageGrid" 
@@ -1749,13 +1877,13 @@
         <SolidColorBrush x:Key="ScrollBarColor" Color="#FF161616" />
         <SolidColorBrush x:Key="White" Color="#FFFFFF" />
         <SolidColorBrush x:Key="PressedBrush" Color="#000000" />
-        
+
         <!--repeat button-->
         <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Focusable" Value="false"/>
-            
+
             <!--template-->
             <Setter Property="Template">
                 <Setter.Value>
@@ -1772,7 +1900,7 @@
                                 Fill="{StaticResource White}"
                                 Data="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border>
-                        
+
                         <!--triggers-->
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsPressed" Value="true">
@@ -1828,13 +1956,13 @@
                     <RowDefinition Height="0.00001*"/>
                     <RowDefinition MaxHeight="18"/>
                 </Grid.RowDefinitions>
-                
+
                 <!--the border for the bar-->
                 <Border
                     Grid.ColumnSpan="2"
                     CornerRadius="0" 
                     Background="Transparent" />
-                
+
                 <!--top repeat button-->
                 <RepeatButton 
                     Grid.Row="0"                           
@@ -1843,7 +1971,7 @@
                     Command="ScrollBar.LineUpCommand"
                     Content="M 0 4 L 8 4 L 4 0 Z" 
                     Cursor="Hand"/>
-                
+
                 <!--bar track-->
                 <Track 
                     Name="PART_Track"
@@ -1889,7 +2017,7 @@
                     <ColumnDefinition Width="0.00001*"/>
                     <ColumnDefinition MaxWidth="18"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!--the border for the bar-->
                 <Border
                     Grid.ColumnSpan="2"
@@ -1904,7 +2032,7 @@
                     Command="ScrollBar.LineLeftCommand"
                     Content="M 4 0 L 4 8 L 0 4 Z" 
                     Cursor="Hand"/>
-                
+
                 <!--bar track-->
                 <Track 
                     Name="PART_Track"
@@ -1916,7 +2044,7 @@
                             Style="{StaticResource ScrollBarPageButton}"
                             Command="ScrollBar.PageLeftCommand" />
                     </Track.DecreaseRepeatButton>
-                    
+
                     <Track.Thumb>
                         <Thumb 
                             Style="{StaticResource ScrollBarThumb}" 
@@ -1930,7 +2058,7 @@
                             Command="ScrollBar.PageRightCommand" />
                     </Track.IncreaseRepeatButton>
                 </Track>
-                
+
                 <!--right repeat button-->
                 <RepeatButton 
                     Grid.Column="3"
@@ -1959,7 +2087,5 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </Window.Resources>
-
 </Window>

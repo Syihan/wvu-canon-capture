@@ -1,27 +1,20 @@
-﻿using System;
+﻿using EDSDKLib;
+using EOSDigital.API;
+using EOSDigital.SDK;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-// added manually
-using System.Threading;
-using System.Drawing;
-using EOSDigital.API;
-using EOSDigital.SDK;
-using EDSDKLib;
-using System.IO;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace WVU_Canon_Capture
 {
@@ -36,11 +29,12 @@ namespace WVU_Canon_Capture
         #region Startup
         // ================================================================== STARTUP ================================================================== //
 
+
         public MainWindow()
         {
 
             // initial startup
-            //DisplaySplashScreen();
+            DisplaySplashScreen();
             InitializeComponent();
 
             // initializes the API and retrieves the list of connected cameras
@@ -75,7 +69,7 @@ namespace WVU_Canon_Capture
         #region Camera and Live View
         // ================================================================== CAMERA AND LIVE VIEW ================================================================== //
 
-        
+
         public CanonAPI API;                                    // the class that mainly handles the SDK lifetime, the connected Cameras and the SDK events
         public Camera MainCamera;                               // the main camera
         private List<Camera> CameraList;                        // the list of cameras available for connection
@@ -92,10 +86,8 @@ namespace WVU_Canon_Capture
             // clears list of cameras
             this.Dispatcher.Invoke(() =>
             {
-                for(int i=CameraComboBox.Items.Count-1; i>0; i--)
-                {
+                for (int i = CameraComboBox.Items.Count - 1; i > 0; i--)
                     CameraComboBox.Items.RemoveAt(i);
-                }
             });
 
             // retrieves all Canon cameras connected to the computer
@@ -105,18 +97,6 @@ namespace WVU_Canon_Capture
             // populates the Camera ComboBox with the list
             foreach (Camera cameraOption in CameraList)
                 this.Dispatcher.Invoke(() => { CameraComboBox.Items.Add(cameraOption.DeviceName); });
-
-            // TODO: Analyze whether this is the right thing to do
-            // honestly not sure what this does
-            //if (MainCamera?.SessionOpen == true)
-            //    this.Dispatcher.Invoke(() => { CameraComboBox.SelectedIndex = CameraList.FindIndex(t => t.ID == MainCamera.ID); });
-            //else if (CameraList.Count > 0) CameraComboBox.SelectedIndex = 0;
-            //else
-            //{
-            //    MessageBox.Show("Fix this.");
-            //    //LockUINoCamera();
-            //}
-
         }
 
 
@@ -126,7 +106,6 @@ namespace WVU_Canon_Capture
         private void SetLiveViewOn(Boolean on)
         {
             // if ON is true, resume live view
-            // if ON is false, close the camera session
             if (on)
             {
                 // closes any already open camera session
@@ -143,7 +122,7 @@ namespace WVU_Canon_Capture
                 SetImageAction = (BitmapImage img) => { LiveViewBrush.ImageSource = img; };
 
                 // paints the LiveViewCanvas
-                if(HomeScreenGrid.Visibility == Visibility.Visible)
+                if (HomeScreenGrid.Visibility == Visibility.Visible)
                 {
                     HomeLiveViewCanvas.Background = LiveViewBrush;
                     CameraLiveViewCanvas.Background = System.Windows.Media.Brushes.Black;
@@ -157,6 +136,12 @@ namespace WVU_Canon_Capture
                 // starts the live view
                 MainCamera.StartLiveView();
 
+                // sets up camera event handlers
+                MainCamera.LiveViewUpdated += MainCamera_LiveViewUpdated;
+                //MainCamera.ProgressChanged += MainCamera_ProgressChanged;
+                MainCamera.StateChanged += MainCamera_StateChanged;
+                MainCamera.DownloadReady += MainCamera_DownloadReady;
+
                 // adjusts some UI elements
                 ToggleLiveViewHomeButton.Content = "\u23f8";
                 CaptureButton.IsEnabled = true;
@@ -165,24 +150,21 @@ namespace WVU_Canon_Capture
                 FStopLabel.Content = AvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Av)).StringValue;
                 ExposureLabel.Content = TvValues.GetValue(MainCamera.GetInt32Setting(PropertyID.Tv)).StringValue;
                 ISOLabel.Content = ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue;
-                WhiteBalanceLabel.Content = MainCamera.GetStringSetting(PropertyID.WhiteBalance).ToString();
                 // the Camera Menu profile settings
                 FStopComboBox.IsEnabled = true;
                 ExposureComboBox.IsEnabled = true;
                 ISOComboBox.IsEnabled = true;
                 WhiteBalanceComboBox.IsEnabled = true;
-                CameraSettings_ApplyChangesButton.IsEnabled = true;
-                CameraProfileNameTextBox.IsEnabled = true;
-                SaveCameraProfileButton.IsEnabled = true;
                 CameraScreenAutofocusButton.Visibility = Visibility.Visible;
-
-                // TODO: DETERMINE IF THE BELOW THREE LINES ARE ACTUALLY NECESSARY
-                // sets up camera event handlers
-                MainCamera.LiveViewUpdated += MainCamera_LiveViewUpdated;
-                MainCamera.ProgressChanged += MainCamera_ProgressChanged;
-                MainCamera.StateChanged += MainCamera_StateChanged;
-                MainCamera.DownloadReady += MainCamera_DownloadReady;
+                if (!IsSessionOngoing)
+                {
+                    CameraSettings_ApplyChangesButton.IsEnabled = true;
+                    CameraProfileNameTextBox.IsEnabled = true;
+                    SaveCameraProfileButton.IsEnabled = true;
+                }
             }
+
+            // if ON is false, close the camera session
             else
             {
                 try
@@ -206,7 +188,6 @@ namespace WVU_Canon_Capture
                     FStopLabel.Content = "N/A";
                     ExposureLabel.Content = "N/A";
                     ISOLabel.Content = "N/A";
-                    WhiteBalanceLabel.Content = "N/A";
                     // the Camera Menu profile settings
                     FStopComboBox.IsEnabled = false;
                     ExposureComboBox.IsEnabled = false;
@@ -218,48 +199,7 @@ namespace WVU_Canon_Capture
                     CameraScreenAutofocusButton.Visibility = Visibility.Hidden;
                 }
                 catch { }
-                
-                //// adjusts some UI elements
-                //if (ToggleLiveViewHomeButton != null)
-                //    ToggleLiveViewHomeButton.Content = "\u25b6";
-                //if (SessionSettingsAutofocusButton != null)
-                //    SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
-                //if (CameraScreenAutofocusButton != null)
-                //    CameraScreenAutofocusButton.Visibility = Visibility.Hidden;
-                //// the Camera Menu current settings
-                //if (FStopLabel != null)
-                //    FStopLabel.Content = "N/A";
-                //if (ExposureLabel != null)
-                //    ExposureLabel.Content = "N/A";
-                //if (ISOLabel != null)
-                //    ISOLabel.Content = "N/A";
-                //if (WhiteBalanceLabel != null)
-                //    WhiteBalanceLabel.Content = "N/A";
-                //// the Camera Menu profile settings
-                //if (FStopComboBox != null)
-                //    FStopComboBox.IsEnabled = false;
-                //if (ExposureComboBox != null)
-                //    ExposureComboBox.IsEnabled = false;
-                //if (ISOComboBox != null)
-                //    ISOComboBox.IsEnabled = false;
-                //if (WhiteBalanceComboBox != null)
-                //    WhiteBalanceComboBox.IsEnabled = false;
-                //if (CameraSettings_ApplyChangesButton != null)
-                //    CameraSettings_ApplyChangesButton.IsEnabled = false;
-                //if (CameraProfileNameTextBox != null)
-                //    CameraProfileNameTextBox.IsEnabled = false;
-                //if (SaveCameraProfileButton != null)
-                //    SaveCameraProfileButton.IsEnabled = false;
             }
-        }
-
-
-        /// <summary>
-        /// Closes an existing camera session
-        /// </summary>
-        private void CloseCameraSession()
-        {
-            MainCamera?.CloseSession();
         }
 
 
@@ -308,17 +248,9 @@ namespace WVU_Canon_Capture
                 CameraControlsAutofocusButton.IsEnabled = false;
                 CameraScreenAutofocusButton.IsEnabled = false;
                 ToggleLiveViewHomeButton.Visibility = Visibility.Hidden;
+                CloseSessionButton.IsEnabled = false;
             }
-            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the camera's live view." ); }
-        }
-
-
-        /// <summary>
-        /// Toggles the crosshairs on/off
-        /// </summary>
-        private void ToggleCrosshairs()
-        {
-            //TODO: toggle crosshairs
+            catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the camera's live view."); }
         }
 
 
@@ -336,6 +268,11 @@ namespace WVU_Canon_Capture
             SetExposure(exposure);
             SetISO(iso);
             SetWhiteBalance(wb);
+
+            // adjusts UI elements
+            FStopLabel.Content = fstop;
+            ExposureLabel.Content = exposure;
+            ISOLabel.Content = iso;
         }
 
 
@@ -360,12 +297,10 @@ namespace WVU_Canon_Capture
             AvList = MainCamera.GetSettingsList(PropertyID.Av);
             TvList = MainCamera.GetSettingsList(PropertyID.Tv);
             ISOList = MainCamera.GetSettingsList(PropertyID.ISO);
-            
+
             // retrieves list of all possible white balance settings (other presets cannot be set, for some reason)
-            WBList = new WhiteBalance[20]
+            WBList = new WhiteBalance[13]
             {
-                WhiteBalance.Pasted,
-                WhiteBalance.Click,
                 WhiteBalance.Auto,
                 WhiteBalance.Daylight,
                 WhiteBalance.Cloudy,
@@ -378,12 +313,7 @@ namespace WVU_Canon_Capture
                 WhiteBalance.PCSet1,
                 WhiteBalance.PCSet2,
                 WhiteBalance.PCSet3,
-                WhiteBalance.WhitePaper2,
-                WhiteBalance.WhitePaper3,
-                WhiteBalance.WhitePaper4,
-                WhiteBalance.WhitePaper5,
-                WhiteBalance.PCSet4,
-                WhiteBalance.PCSet5
+                WhiteBalance.WhitePaper2
             };
 
             // inserts all options into the comboboxes
@@ -411,7 +341,6 @@ namespace WVU_Canon_Capture
         /// <param name="img"></param>
         private void MainCamera_LiveViewUpdated(Camera sender, Stream img)
         {
-
             try
             {
                 using (WrapStream memory = new WrapStream(img))
@@ -426,21 +355,7 @@ namespace WVU_Canon_Capture
                     Application.Current.Dispatcher.BeginInvoke(SetImageAction, EvfImage);
                 }
             }
-            catch (Exception ex) {
-                ShowMessage("red", "Live View ERROR", ex.Message);
-            }
-        }
-
-
-        /// <summary>
-        /// Event handler triggered by the camera's progress changing; updates the MainProgressBar
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="progress"></param>
-        private void MainCamera_ProgressChanged(object sender, int progress)
-        {
-            try { MainProgressBar.Dispatcher.Invoke((Action)delegate { MainProgressBar.Value = progress; }); }
-            catch (Exception ex) { ShowMessage("red", "Progress Changed ERROR", ex.Message); }
+            catch (Exception ex) { ShowMessage("red", "Live View ERROR", ex.Message); }
         }
 
 
@@ -458,30 +373,36 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
-        /// Event handler for when the camera is ready to download an image
+        /// Event handler triggered when the image is ready to be downloaded
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="Info"></param>
         private void MainCamera_DownloadReady(Camera sender, DownloadInfo Info)
         {
-            Collection collection = CollectionList[CollectionComboBox.SelectedIndex - 1];
-            int currIndex = IsRecapture ? HomeScreenPoseListView.SelectedIndex : CaptureNumber-1;
-
-            // TODO: update the session and modality fields
-            // saves the captured image
-            // FORMAT: RID_DATE_COL#_SESSION_MODALITY_DEVICENAME_CAMERAPROFILE_FILENAME
-            Pose pose = SessionPoseList[currIndex];
-            string savePath = collection.savingDirectory + @"\" + ridDateCol[0] + @"\" + ridDateCol[1] + @"\" + collection.deviceName + @"\" + pose.cameraProfile;
-            string filePath = ridDateCol[0] + "_" + ridDateCol[1] + "_" + collection.collectionNumber + "_" + collection.deviceName + "_" + pose.cameraProfile + "_" + pose.filename;
-            Info.FileName = filePath;
-            sender.DownloadFile(Info, savePath);
-
-            // updates the thumbnail in the HomeScreenPoseListView
-            pose.thumbnail = savePath + @"\" + filePath;
-            HomeScreenPoseListView.Items[currIndex] = UpdatePoseThumbnail(pose);
-
             // releases the shutter
             MainCamera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.OFF);
+
+            // loads the collection and current index information
+            Collection collection = CollectionList[CollectionComboBox.SelectedIndex - 1];
+            int currIndex = IsRecapture ? HomeScreenPoseListView.SelectedIndex : CaptureNumber - 1;
+            
+            // saves the captured image
+            // FORMAT: SAVEPATH \ RID \ DATE \ SESSION \ MODALITY \ DEVICE \ CAMERA PROFILE \ RID_DATE_COL#_SESSION_MODALITY_DEVICENAME_CAMERAPROFILE_FILENAME
+            Pose pose = SessionPoseList[currIndex];
+            string actionPath = SavePath + @"\ActionLog.txt";
+            string filePath = ridDateCol[0] + "_" + ridDateCol[1] + "_" + collection.collectionNumber + "_" + SessionNumber.ToString("D1") + "_" + collection.modality + "_" + collection.deviceName + "_" + pose.cameraProfile + "_" + pose.filename;
+            Info.FileName = filePath;
+            sender.DownloadFile(Info, SavePath + @"\" + pose.cameraProfile);
+
+            // logs the time of the capture
+            if (!IsRecapture)
+                File.AppendAllLines(actionPath, new[] { "Captured image - " + pose.filename + " @ " + DateTime.Now.ToString() });
+            else
+                File.AppendAllLines(actionPath, new[] { "Recaptured image - " + pose.filename + " @ " + DateTime.Now.ToString() });
+
+            // updates the thumbnail in the HomeScreenPoseListView
+            pose.thumbnail = SavePath + @"\" + pose.cameraProfile + @"\" + filePath;
+            HomeScreenPoseListView.Items[currIndex] = UpdatePoseThumbnail(pose);
 
             // unlocks UI elements
             HomeScreenPoseListView.SelectedIndex = currIndex;
@@ -491,7 +412,8 @@ namespace WVU_Canon_Capture
             CameraControlsAutofocusButton.IsEnabled = true;
             CameraScreenAutofocusButton.IsEnabled = true;
             ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
-            if(HomeScreenPoseListView.SelectedIndex < CaptureNumber)
+            CloseSessionButton.IsEnabled = true;
+            if (HomeScreenPoseListView.SelectedIndex < CaptureNumber)
             {
                 RecaptureButton.Visibility = Visibility.Visible;
                 RecaptureAutofocusButton.Visibility = Visibility.Visible;
@@ -1100,16 +1022,21 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void LoadCameraProfiles()
         {
+            // clears all visible camera profile lists
             CameraProfileListView.Items.Clear();
+            PoseCameraProfileComboBox.Items.Clear();
 
             using (StreamReader r = new StreamReader(CAMERACONFIGFILE))
             {
                 string json = r.ReadToEnd();
                 CameraProfileList = JsonConvert.DeserializeObject<List<CameraProfile>>(json);
 
-                // add each camera profile to the camera profiles listview
+                // add each camera profile to the CameraProfilesListView and the PoseCameraProfileComboBox
                 foreach (CameraProfile profile in CameraProfileList)
                 {
+                    // adds profile to the PoseCameraProfileComboBox
+                    PoseCameraProfileComboBox.Items.Add(profile.name + " (" + profile.camera + ")");
+
                     // the profile name
                     // adds an extra underscore to display the access key
                     string name = profile.name.Replace("_", "__");
@@ -1147,7 +1074,7 @@ namespace WVU_Canon_Capture
                     StackPanel item = new StackPanel()
                     {
                         Height = 75,
-                        Width = 255, 
+                        Width = 255,
                         Cursor = Cursors.Hand
                     };
                     item.Children.Add(proName);
@@ -1156,7 +1083,6 @@ namespace WVU_Canon_Capture
 
                     // adds the collection StackPanel to the CollectionListView
                     CameraProfileListView.Items.Add(item);
-
                 }
 
                 // closes the stream
@@ -1169,7 +1095,7 @@ namespace WVU_Canon_Capture
         /// an object to store the camera profile details
         /// </summary>
         class CameraProfile
-        { 
+        {
             public string name { get; set; }            // the camera profile name
             public string camera { get; set; }          // the camera used to make this profile
             public string fstop { get; set; }           // the F-stop setting
@@ -1220,7 +1146,7 @@ namespace WVU_Canon_Capture
         #region Collections
         // ================================================================== COLLECTIONS ================================================================== //
 
-        
+
         const string COLLECTIONCONFIGFILE = @"collection_config.json";  // the filename of the collection configuration file
         List<Collection> CollectionList;                                // a list of Collections
         List<Pose> PoseList;                                            // a list of Poses
@@ -1298,7 +1224,7 @@ namespace WVU_Canon_Capture
                     StackPanel item = new StackPanel()
                     {
                         Height = 75,
-                        Width = 320, 
+                        Width = 320,
                         Cursor = Cursors.Hand
                     };
                     item.Children.Add(colNameAndNo);
@@ -1311,11 +1237,15 @@ namespace WVU_Canon_Capture
 
                 }
 
+                // closes the stream
                 r.Close();
             }
         }
 
 
+        /// <summary>
+        /// Displays the pose information on the CollectionSCreenPoseListView
+        /// </summary>
         private void LoadCollectionPoseList()
         {
             try
@@ -1333,6 +1263,16 @@ namespace WVU_Canon_Capture
                         background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 242, 242, 242));
                     else
                         background = System.Windows.Media.Brushes.Transparent;
+                    
+                    // StackPanel to hold all the content
+                    StackPanel item = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Height = 45,
+                        Width = PoseSettingsGridBackground.Width,
+                        Cursor = Cursors.Hand,
+                        Background = background
+                    };
 
                     // the pose number
                     Label poseNo = new Label()
@@ -1358,9 +1298,9 @@ namespace WVU_Canon_Capture
                     // the pose thumbnail
                     System.Windows.Controls.Image poseThumbnailPanel = new System.Windows.Controls.Image()
                     {
-                        Source = LoadImage(pose.thumbnail, 45), 
+                        Source = LoadImage(pose.thumbnail, 45),
                         RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
-                        RenderTransform = new RotateTransform(90), 
+                        RenderTransform = new RotateTransform(90),
                         Width = 30,
                         HorizontalAlignment = HorizontalAlignment.Center
                     };
@@ -1458,16 +1398,7 @@ namespace WVU_Canon_Capture
                         BorderThickness = new Thickness(0)
                     };
 
-                    // StackPanel to hold all the content
-                    StackPanel item = new StackPanel()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Height = 45,
-                        Width = PoseSettingsGridBackground.Width,
-                        Cursor = Cursors.Hand, 
-                        Background = background
-                    };
-
+                    // adds all of the content to the StackPanel item
                     item.Children.Add(poseNo);
                     item.Children.Add(separator1);
                     item.Children.Add(poseThumbnailPanel);
@@ -1484,11 +1415,7 @@ namespace WVU_Canon_Capture
                     CollectionScreenPoseListView.Items.Add(item);
                 }
             }
-            catch (Exception ex)
-            {
-                ShowMessage("red", "Nothing to load.", ex.Message);
-                //"Cannot load collection poses."
-            }
+            catch (Exception ex) { ShowMessage("red", "Nothing to load.", ex.Message); }
         }
 
 
@@ -1502,6 +1429,7 @@ namespace WVU_Canon_Capture
             public int numberOfPoses { get; set; }          // the number of poses in the collection
             public string savingDirectory { get; set; }     // the save path of the collection
             public string deviceName { get; set; }          // the device name for filename purposes
+            public string modality { get; set; }            // the modality (face, hand, fingerprint, etc.)
             public string camera { get; set; }              // the camera associated with the collection
             public List<Pose> poses { get; set; }           // the list of camera profiles that make up the collection
 
@@ -1516,6 +1444,7 @@ namespace WVU_Canon_Capture
                 numberOfPoses = 0;
                 savingDirectory = null;
                 deviceName = null;
+                modality = null;
                 camera = null;
                 poses = null;
             }
@@ -1528,13 +1457,14 @@ namespace WVU_Canon_Capture
             /// <param name="colNum">the collection number</param>
             /// <param name="nrPoses">the number of poses in the collection</param>
             /// <param name="savePath">the save path of the collection</param>
-            public Collection(string nameVal, string colNum, int nrPoses, string savePath, string devName, string camVal)
+            public Collection(string nameVal, string colNum, int nrPoses, string savePath, string devName, string modName, string camVal)
             {
                 name = nameVal;
                 collectionNumber = colNum;
                 numberOfPoses = nrPoses;
                 savingDirectory = savePath;
                 deviceName = devName;
+                modality = modName;
                 camera = camVal;
                 poses = new List<Pose>();
             }
@@ -1575,7 +1505,7 @@ namespace WVU_Canon_Capture
                 cameraProfile = null;
             }
 
-            
+
             /// <summary>
             /// Constructor for a pose
             /// </summary>
@@ -1601,13 +1531,9 @@ namespace WVU_Canon_Capture
 
 
         #region UI Functions
-        // ================================================================== UI FUNCTIONS ================================================================== //
+        // ================================================================== UI FUNCTIONS ================================================================== //           
 
 
-        private Boolean isCameraChanged = false;    // boolean to check if camera settings have changed
-                                                    // to know when to reapply original camera settings               
-        
-        
         /// <summary>
         /// Switches between window screens
         /// </summary>
@@ -1618,13 +1544,6 @@ namespace WVU_Canon_Capture
             var bc = new BrushConverter();
             if (screen == "home")
             {
-                // TODO: reapply original camera settings if previously on CameraScreen
-                //if (isCameraChanged == true && )
-                //{
-                //    resetLiveView();
-                //    isCameraChanged = false;
-                //}
-
                 // turn on home live view
                 if (CameraComboBox.SelectedIndex > 0)
                 {
@@ -1667,13 +1586,6 @@ namespace WVU_Canon_Capture
             }
             else if (screen == "collections")
             {
-                // TODO: reapply original camera settings if previously on CameraScreen
-                //if (isCameraChanged == true)
-                //{
-                //    resetLiveView();
-                //    isCameraChanged = false;
-                //}
-
                 // switch screens
                 HomeScreenGrid.Visibility = Visibility.Collapsed;
                 CameraScreenGrid.Visibility = Visibility.Collapsed;
@@ -1687,7 +1599,6 @@ namespace WVU_Canon_Capture
             }
             else
                 ShowMessage("red", "Ummm...", "If you see this it means that I mispelled one of the navigation screens while I was coding...Sorry....");
-
         }
 
 
@@ -1753,19 +1664,20 @@ namespace WVU_Canon_Capture
         #endregion
 
 
-        
+
         #region Session Functionality
         // ================================================================== SESSION FUNCTIONALITY ================================================================== //
 
 
         private const int HIGHRESOLUTION = 375; // the height of a high resolution thumbnail
         private const int LOWRESOLUTION = 183;  // the height of a low resolution thumbnail
-        private int CaptureNumber;              // int which stores the index of the current capture in the collection
         private List<Pose> SessionPoseList;     // the list of poses for one session
-        private string[] ridDateCol;            // holds the RID, date, and collection number
         private bool IsSessionOngoing = false;  // true if the session is ongoing
-        //private string SavePath;              // full savepath of the image
         private bool IsRecapture;               // true if the photo taken is a recapture
+        private int CaptureNumber;              // int which stores the index of the current capture in the collection
+        private string SavePath;                // string storing the folder of the current session
+        private string[] ridDateCol;            // array that holds the RID, date, and collection number
+        private int SessionNumber;              // int that counts the iteration of the current session
 
 
         /// <summary>
@@ -1773,12 +1685,17 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void BeginSession()
         {
+            Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
+
+            // logs the beginning of a session
+            File.AppendAllLines(SavePath + @"\ActionLog.txt", new[] { "Subject RID: " + ridDateCol[0] + "\n Session Start: " + DateTime.Now.ToString() });
+
             // clones the collection pose list to SessionPoseList
-            SessionPoseList = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1).poses.ConvertAll(pose => new Pose(
-                pose.title, 
-                pose.description, 
-                pose.thumbnail, 
-                pose.filename, 
+            SessionPoseList = collection.poses.ConvertAll(pose => new Pose(
+                pose.title,
+                pose.description,
+                pose.thumbnail,
+                pose.filename,
                 pose.cameraProfile));
 
             // adjusts UI
@@ -1786,7 +1703,6 @@ namespace WVU_Canon_Capture
             SessionSettingsGrid.Visibility = Visibility.Hidden;
             CameraControlsGrid.Visibility = Visibility.Visible;
             CameraSettings_ApplyChangesButton.IsEnabled = false;
-            
 
             // sets up the camera
             MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host);
@@ -1847,6 +1763,10 @@ namespace WVU_Canon_Capture
             RIDTextBox.Clear();
             CollectionComboBox.SelectedIndex = 0;
             LoadHomePoseList();
+            if (PoseList != null)
+                if(PoseList.Count > 0)
+                    SaveCollectionButton.IsEnabled = true;
+            CameraSettings_ApplyChangesButton.IsEnabled = true;
         }
 
 
@@ -1857,7 +1777,7 @@ namespace WVU_Canon_Capture
         {
             HomeScreenPoseListView.Items.Clear();
 
-            if(CollectionComboBox.SelectedIndex != 0)
+            if (CollectionComboBox.SelectedIndex != 0)
             {
                 //Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
                 List<Pose> poses = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1).poses;
@@ -1902,7 +1822,7 @@ namespace WVU_Canon_Capture
                 RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
                 RenderTransform = new RotateTransform(90),
                 Height = 100,
-                Margin = new Thickness(-25, 0, -25, 0), 
+                Margin = new Thickness(-25, 0, -25, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
 
@@ -1987,7 +1907,7 @@ namespace WVU_Canon_Capture
             source.BeginInit();
             source.StreamSource = ms;
             source.DecodePixelHeight = imageHeight;
-            source.DecodePixelWidth = imageHeight*(2/3);
+            source.DecodePixelWidth = imageHeight * (2 / 3);
             source.DecodeFailed += Source_DecodeFailed;
             source.EndInit();
 
@@ -2109,7 +2029,7 @@ namespace WVU_Canon_Capture
         #endregion
 
 
-        
+
         #region Home Screen Event Handlers
         // ================================================================== HOME SCREEN EVENT HANDLERS ================================================================== //
 
@@ -2124,7 +2044,7 @@ namespace WVU_Canon_Capture
             if (!MainCamera.SessionOpen)
             {
                 SetLiveViewOn(true);
-                if(SessionSettingsGrid.Visibility == Visibility.Visible)
+                if (SessionSettingsGrid.Visibility == Visibility.Visible)
                     SessionSettingsAutofocusButton.Visibility = Visibility.Visible;
             }
             else
@@ -2214,14 +2134,15 @@ namespace WVU_Canon_Capture
                 // verifies that RID, Date, and Collection Number are the correct number of digits
                 if (rid.Length != 7 || date.Length != 8 || col.Length <= 0)
                 {
-                    ShowMessage("red", "Invalid input", "RID_Date_Col must be in the following format: <7 DIGITS>_<8 DIGITS>_<1-2 DIGITS>");
+                    ShowMessage("red", "Invalid input", "RID_Date_Col must be in the following format: <7 DIGITS>_<8 DIGITS>_<1 OR MORE DIGITS>");
                     return;
                 }
 
                 // verifies that the collection number matches the selected collection
                 if (col != collection.collectionNumber)
                 {
-                    ShowMessage("red", "Mismatched collections", "The collection number in your input does not match that of the collection you have selected.");
+                    ShowMessage("red", "Mismatched collections", "The collection number in the RID does not match that of the selected collection." +
+                        "\nPlease try entering the RID again or choosing a different collection.");
                     return;
                 }
 
@@ -2242,8 +2163,9 @@ namespace WVU_Canon_Capture
                     else
                     {
                         ShowMessage("red", "Invalid camera profile",
-                            "The pose \"" + pose.title + "\" in \"" + CollectionComboBox.Text + "\" lists \"" + pose.cameraProfile + "\" as a camera profile, which is not available. " +
-                            "Please edit the pose and its camera profile under the Collections Menu.");
+                            "There is an invalid camera profile in the \"" + collection.name + "\" Collection." +
+                            "\nPlease remove camera profile \"" + pose.cameraProfile + "\"from the collection in the Collections Menu."
+                            );
                         return;
                     }
                 }
@@ -2251,10 +2173,10 @@ namespace WVU_Canon_Capture
                 // verifies if camera profiles are compatible with the connected camera
                 foreach (CameraProfile profile in profiles)
                 {
-                    if(profile.camera != CameraComboBox.Text)
+                    if (profile.camera != CameraComboBox.Text)
                     {
-                        ShowMessage("red", "Camera profile and camera are incompatible", 
-                            "\"" + collection.name + "\"uses the camera profile \"" + profile.name + "\", which is incompatible with " + CameraComboBox.Text + 
+                        ShowMessage("red", "Camera profile and camera are incompatible",
+                            "\"" + collection.name + "\"uses the camera profile \"" + profile.name + "\", which is incompatible with " + CameraComboBox.Text +
                             ". Please edit \"" + collection.name + "\" under the Collections Menu.");
                         return;
                     }
@@ -2268,12 +2190,26 @@ namespace WVU_Canon_Capture
                     return;
                 }
 
-                DirectoryInfo dir = new DirectoryInfo(collection.savingDirectory + @"\" + ridDateCol[0] + @"\" + ridDateCol[1] + @"\" + collection.deviceName);
-                MessageBox.Show(dir.ToString());
-                if (Directory.Exists(dir.ToString()) && (dir.GetDirectories().Length > 0 || dir.GetFiles().Length > 0))
-                    ShowMessage("red", "Warning", "Participant already has session files on this date. Files may be overwritten if you continue.");
+                // if all conditions are met, resume with folder creation
+                // increments the SessionNumber if sessions already exist
+                DirectoryInfo dir1 = new DirectoryInfo(collection.savingDirectory + @"\" + ridDateCol[0] + @"\" + ridDateCol[1]);
+                SessionNumber = (Directory.Exists(dir1.ToString())) ? (dir1.GetDirectories().Length + 1) : 1;
+                if(SessionNumber > 1)
+                {
+                    MessageBoxResult result = MessageBox.Show("There already exists a session folder here. Do you want to overwrite this session?" +
+                        "\nPress \"No\" to continue with a brand new session.", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                        SessionNumber--;
+                }
+                SavePath = collection.savingDirectory + @"\" + ridDateCol[0] + @"\" + ridDateCol[1] + @"\" + SessionNumber + @"\" + collection.modality + @"\" + collection.deviceName;
+                Directory.CreateDirectory(SavePath);
 
-                // if all conditions are met, begin a new session
+                // checks if there are any files in the SavePath
+                DirectoryInfo dir2 = new DirectoryInfo(SavePath);
+                if (Directory.Exists(dir2.ToString()) && (dir2.GetDirectories().Length > 0 || dir2.GetFiles().Length > 0))
+                    ShowMessage("red", "Warning", "Participant already has session files for this session. Files may be overwritten if you continue.");
+
+                // begin a new session
                 BeginSession();
                 SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
             }
@@ -2302,7 +2238,7 @@ namespace WVU_Canon_Capture
         private void CaptureButton_Click(object sender, RoutedEventArgs e)
         {
             // if the session has not reached the end, adjust the camera settings, take a picture, and update the session
-            if(CaptureNumber < SessionPoseList.Count)
+            if (CaptureNumber < SessionPoseList.Count)
             {
                 CameraProfile item = CameraProfileList.FirstOrDefault(profile => SessionPoseList[CaptureNumber].cameraProfile == profile.name);
                 if (item != null)
@@ -2321,7 +2257,7 @@ namespace WVU_Canon_Capture
             }
 
             // ends the session
-            else if(CaptureNumber > SessionPoseList.Count)
+            else if (CaptureNumber > SessionPoseList.Count)
                 EndSession();
         }
 
@@ -2374,6 +2310,18 @@ namespace WVU_Canon_Capture
         private void CameraControlsAutofocusButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             UnfocusCamera();
+        }
+
+
+        /// <summary>
+        /// Event handler that opens the folder of the current session
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenContainingFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            Collection collection = CollectionList[CollectionComboBox.SelectedIndex - 1];
+            if (Directory.Exists(SavePath)) System.Diagnostics.Process.Start(SavePath);
         }
 
 
@@ -2487,10 +2435,10 @@ namespace WVU_Canon_Capture
                 if (HomeScreenPoseListView.SelectedIndex < 0)
                     HomeScreenPoseListView.SelectedIndex = 0;
                 Pose pose = SessionPoseList[HomeScreenPoseListView.SelectedIndex];
-                SelectedImage.Source = LoadImage(pose.thumbnail, 399);
+                SelectedImage.Source = LoadImage(pose.thumbnail, 350);
                 SelectedPoseTitleLabel.Content = pose.title;
                 SelectedPoseDescLabel.Content = pose.description;
-                if(HomeScreenPoseListView.SelectedIndex < CaptureNumber)
+                if (HomeScreenPoseListView.SelectedIndex < CaptureNumber)
                 {
                     RecaptureButton.Visibility = Visibility.Visible;
                     RecaptureAutofocusButton.Visibility = Visibility.Visible;
@@ -2536,17 +2484,13 @@ namespace WVU_Canon_Capture
                 {
                     DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
                     if (child != null && child is T)
-                    {
                         yield return (T)child;
-                    }
-
                     foreach (T childOfChild in FindVisualChildren<T>(child))
-                    {
                         yield return childOfChild;
-                    }
                 }
             }
         }
+
 
         #endregion
 
@@ -2621,21 +2565,21 @@ namespace WVU_Canon_Capture
             CameraProfileListView.SelectedItem = null;
 
             // if all required fields are filled (f-stop, exposure, iso), changes are applied
-            if(FStopComboBox.SelectedItem != null &&
+            if (FStopComboBox.SelectedItem != null &&
                 ExposureComboBox.SelectedItem != null &&
-                ISOComboBox.SelectedItem != null )
+                ISOComboBox.SelectedItem != null)
             {
                 // applies changes
                 if (WhiteBalanceComboBox.SelectedItem != null)
                     SetCameraSettings(
-                        FStopComboBox.SelectedItem.ToString(), 
-                        ExposureComboBox.SelectedItem.ToString(), 
-                        ISOComboBox.SelectedItem.ToString(), 
+                        FStopComboBox.SelectedItem.ToString(),
+                        ExposureComboBox.SelectedItem.ToString(),
+                        ISOComboBox.SelectedItem.ToString(),
                         WhiteBalanceComboBox.SelectedItem.ToString());
                 else
                     SetCameraSettings(
-                        FStopComboBox.SelectedItem.ToString(), 
-                        ExposureComboBox.SelectedItem.ToString(), 
+                        FStopComboBox.SelectedItem.ToString(),
+                        ExposureComboBox.SelectedItem.ToString(),
                         ISOComboBox.SelectedItem.ToString());
 
                 // turns off live view and then turns it back on
@@ -2760,7 +2704,7 @@ namespace WVU_Canon_Capture
         private void DeleteCameraProfileButton_Click(object sender, RoutedEventArgs e)
         {
             // if a camera profile is selected, delete the profile
-            if(CameraProfileListView.SelectedItem != null)
+            if (CameraProfileListView.SelectedItem != null)
             {
                 // verifies whether a user wants to delete the selected camera profile
                 MessageBoxResult result = MessageBox.Show("This will delete the selected camera profile permanently. Are you sure you want to delete it?", "Warning!",
@@ -2787,9 +2731,7 @@ namespace WVU_Canon_Capture
             }
             // if a camera profile is not selected, throw an error
             else
-            {
                 ShowMessage("red", "No camera profile selected", "Please select a camera profile to delete first.");
-            }
         }
 
 
@@ -2813,6 +2755,63 @@ namespace WVU_Canon_Capture
         {
             UnfocusCamera();
         }
+        
+        
+        /// <summary>
+        /// Event handler that toggles the reference frames on the live view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToggleReferenceFrames(object sender, RoutedEventArgs e)
+        {
+            if (SubjectOuterBoundingBoxCheckBox.IsChecked ?? false)
+            {
+                OuterBoxHomeMenu.Visibility = Visibility.Visible;
+                OuterBoxCameraMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                OuterBoxHomeMenu.Visibility = Visibility.Hidden;
+                OuterBoxCameraMenu.Visibility = Visibility.Hidden;
+            }
+
+            if (SubjectInnerBoundingBoxCheckBox.IsChecked ?? false)
+            {
+                InnerBoxHomeMenu.Visibility = Visibility.Visible;
+                InnerBoxCameraMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                InnerBoxHomeMenu.Visibility = Visibility.Hidden;
+                InnerBoxCameraMenu.Visibility = Visibility.Hidden;
+            }
+
+            if (EyeBoxCheckBox.IsChecked ?? false)
+            {
+                EyeBoxHomeMenu.Visibility = Visibility.Visible;
+                EyeBoxCameraMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EyeBoxHomeMenu.Visibility = Visibility.Hidden;
+                EyeBoxCameraMenu.Visibility = Visibility.Hidden;
+            }
+
+            if (CrosshairsCheckBox.IsChecked ?? false)
+            {
+                XCrosshairHomeMenu.Visibility = Visibility.Visible;
+                XCrosshairCameraMenu.Visibility = Visibility.Visible;
+                YCrosshairHomeMenu.Visibility = Visibility.Visible;
+                YCrosshairCameraMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                XCrosshairHomeMenu.Visibility = Visibility.Hidden;
+                XCrosshairCameraMenu.Visibility = Visibility.Hidden;
+                YCrosshairHomeMenu.Visibility = Visibility.Hidden;
+                YCrosshairCameraMenu.Visibility = Visibility.Hidden;
+            }
+        }
 
 
         #endregion
@@ -2833,7 +2832,7 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CollectionListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(CollectionListView.SelectedItem != null)
+            if (CollectionListView.SelectedItem != null)
             {
                 // verifies whether a user wants to discard progress on currently displayed collection
                 if (IsCollectionChanged == true)
@@ -2862,6 +2861,7 @@ namespace WVU_Canon_Capture
                 SaveDirectoryTextBox.Text = collection.savingDirectory;
                 CollectionNrTextBox.Text = collection.collectionNumber;
                 CollectionDeviceTextBox.Text = collection.deviceName;
+                CollectionModalityTextBox.Text = collection.modality;
                 CollectionNameTextBox.Text = collection.name;
 
                 // makes a copy list for collections
@@ -2886,7 +2886,7 @@ namespace WVU_Canon_Capture
             if (CollectionListView.SelectedItem != null)
             {
                 // verifies whether a user wants to delete the selected collection
-                MessageBoxResult result = MessageBox.Show("This will delete the selected collection permanently. Are you sure you want to delete it?", "Warning!", 
+                MessageBoxResult result = MessageBox.Show("This will delete the selected collection permanently. Are you sure you want to delete it?", "Warning!",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
@@ -2910,9 +2910,7 @@ namespace WVU_Canon_Capture
             }
             // if a collection is not selected, throw an error
             else
-            {
                 ShowMessage("red", "No collection selected", "Please select a collection to delete first.");
-            }
         }
 
 
@@ -2940,9 +2938,7 @@ namespace WVU_Canon_Capture
                 }
                 // if the specified directory does not exist, throw an error
                 catch
-                {
-                    ShowMessage("red", "Error", "Directory does not exist.");
-                }
+                { ShowMessage("red", "Error", "Directory does not exist."); }
             }
         }
 
@@ -2965,7 +2961,18 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CollectionDeviceTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            CollectionListView.SelectedItem = null;
+        }
 
+
+        /// <summary>
+        /// Event handler that deselects selected collection when user types in CollectionModalityTextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CollectionModalityTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            CollectionListView.SelectedItem = null;
         }
 
 
@@ -3022,7 +3029,7 @@ namespace WVU_Canon_Capture
             string defaultThumb = System.IO.Path.GetFullPath(@"Resources\Thumbnails\FACE\RAW\0.png");
 
             // adds default pose
-            Pose defaultPose = new Pose("Sample Title", "Sample Description", defaultThumb,  "sample_filename.JPEG", null);
+            Pose defaultPose = new Pose("Sample Title", "Sample Description", defaultThumb, "sample_filename.JPEG", null);
             PoseList.Add(defaultPose);
 
             // display the new list of poses
@@ -3068,21 +3075,15 @@ namespace WVU_Canon_Capture
             {
                 Pose pose = PoseList.ElementAt(CollectionScreenPoseListView.SelectedIndex);
 
-                // clears the camera profiles combobox
-                PoseCameraProfileComboBox.Items.Clear();
-
                 // makes pose settings visible
                 PoseSettingsGridBackground.Visibility = Visibility.Visible;
                 PoseSettingsGrid.Visibility = Visibility.Visible;
 
-                // adds camera profiles combobox and selects the profile of the selected pose
-                
-                foreach (CameraProfile profile in CameraProfileList)
-                    PoseCameraProfileComboBox.Items.Add(profile.name + " (" + profile.camera + ")");
+                // selects the camera profile profile of the selected pose
                 CameraProfile item = CameraProfileList.FirstOrDefault(profile => pose.cameraProfile == profile.name);
-                if(item != null)
+                if (item != null)
                     PoseCameraProfileComboBox.SelectedIndex = CameraProfileList.IndexOf(item);
-                
+
 
                 // loads a thumbnail if the pose has one
                 if (pose.thumbnail != null)
@@ -3159,7 +3160,7 @@ namespace WVU_Canon_Capture
         {
             // gets the full directory of the thumbnails folder
             string thumbnailDirectory = System.IO.Path.GetFullPath(@"Resources\Thumbnails");
-            
+
             // create OpenFileDialog 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.InitialDirectory = thumbnailDirectory;
@@ -3219,10 +3220,10 @@ namespace WVU_Canon_Capture
 
             // edits the pose with the right changes
             Pose pose = new Pose(
-                PoseTitleTextBox.Text, 
+                PoseTitleTextBox.Text,
                 PoseDescTextBox.Text,
-                PoseThumbnailLabel.Content.ToString(), 
-                PoseFilenameTextbox.Text + PoseFilenameComboBox.Text, 
+                PoseThumbnailLabel.Content.ToString(),
+                PoseFilenameTextbox.Text + PoseFilenameComboBox.Text,
                 CameraProfileList[PoseCameraProfileComboBox.SelectedIndex].name);
             PoseList[CollectionScreenPoseListView.SelectedIndex] = pose;
 
@@ -3248,7 +3249,15 @@ namespace WVU_Canon_Capture
             string saveDirectory = SaveDirectoryTextBox.Text;   // the new collection save directory
             string collectionNr = CollectionNrTextBox.Text;     // the new collection number
             string deviceName = CollectionDeviceTextBox.Text;   // the new collection device
-            
+            string modality = CollectionDeviceTextBox.Text;     // the new collection modality
+
+            // stops the user if a session is ongoing
+            if(IsSessionOngoing)
+            {
+                ShowMessage("red", "Session is ongoing", "You cannot save a collection during a session.");
+                return;
+            }
+
             // regex to identify special characters
             var regex = new Regex(@"[.,/;'\[\]\\`<>?:\""{}|~!@#$%^&*()+= ]+");
 
@@ -3266,10 +3275,18 @@ namespace WVU_Canon_Capture
                 return;
             }
 
+            // checks if modality is valid
+            if (regex.IsMatch(modality))
+            {
+                ShowMessage("red", "Invalid modality", "Cannot use spaces or special characters.");
+                return;
+            }
+
             // checks that all required fields are filled (save directory, collection number, device name, collection name)
             if (saveDirectory.Length <= 0 ||
                 collectionNr.Length <= 0 ||
                 deviceName.Length <= 0 ||
+                modality.Length <= 0 ||
                 collectionName.Length <= 0)
             {
                 ShowMessage("red", "Unfilled fields", "Save directory, collection number, device name, and collection name must be filled before saving collection.");
@@ -3309,6 +3326,7 @@ namespace WVU_Canon_Capture
                 PoseList.Count,
                 saveDirectory,
                 deviceName,
+                modality, 
                 CameraComboBox.Text);
             collection.poses = PoseList;
 
