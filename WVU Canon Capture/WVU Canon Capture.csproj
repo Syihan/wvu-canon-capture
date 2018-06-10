@@ -109,6 +109,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -266,6 +267,9 @@
   <ItemGroup>
     <Resource Include="Resources\canon_capture_icon.ico" />
     <Resource Include="Resources\splash_screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about_page.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

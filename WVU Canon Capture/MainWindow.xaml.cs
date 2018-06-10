@@ -31,7 +31,6 @@ namespace WVU_Canon_Capture
 
         public MainWindow()
         {
-
             // initial startup
             DisplaySplashScreen();
             InitializeComponent();
@@ -53,11 +52,9 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void DisplaySplashScreen()
         {
-
             SplashScreen splash = new SplashScreen(@"Resources\splash_screen.png");
             splash.Show(true);
-            Thread.Sleep(3000);  // TODO: MAKE SPLASH SCREEN LAST LONGER
-
+            Thread.Sleep(3000);
         }
 
 
@@ -137,12 +134,10 @@ namespace WVU_Canon_Capture
 
                 // sets up camera event handlers
                 MainCamera.LiveViewUpdated += MainCamera_LiveViewUpdated;
-                //MainCamera.ProgressChanged += MainCamera_ProgressChanged;
                 MainCamera.StateChanged += MainCamera_StateChanged;
                 MainCamera.DownloadReady += MainCamera_DownloadReady;
 
                 // adjusts some UI elements
-                ToggleLiveViewHomeButton.Content = "\u23f8";
                 CaptureButton.IsEnabled = true;
                 CameraControlsAutofocusButton.IsEnabled = true;
                 // the Camera Screen current settings
@@ -179,7 +174,6 @@ namespace WVU_Canon_Capture
                     CameraLiveViewCanvas.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
 
                     // adjusts some UI elements
-                    ToggleLiveViewHomeButton.Content = "\u25b6";
                     SessionSettingsAutofocusButton.Visibility = Visibility.Hidden;
                     CaptureButton.IsEnabled = false;
                     CameraControlsAutofocusButton.IsEnabled = false;
@@ -246,7 +240,6 @@ namespace WVU_Canon_Capture
                 RecaptureAutofocusButton.Visibility = Visibility.Hidden;
                 CameraControlsAutofocusButton.IsEnabled = false;
                 CameraScreenAutofocusButton.IsEnabled = false;
-                ToggleLiveViewHomeButton.Visibility = Visibility.Hidden;
                 CloseSessionButton.IsEnabled = false;
             }
             catch (Exception ex) { ShowMessage("red", "Error", ex.Message + "\nPlease try toggling the Live View on and off."); }
@@ -329,7 +322,10 @@ namespace WVU_Canon_Capture
         /// <param name="sender"></param>
         private void API_CameraAdded(CanonAPI sender)
         {
-            LoadCameraList();
+            if (CameraComboBox.SelectedIndex == 0)
+                LoadCameraList();
+            else
+                ShowMessage("red", "Error", "Cannot add cameras while another camera is connected. Please turn off the connected camera and try again.");
         }
 
 
@@ -410,7 +406,6 @@ namespace WVU_Canon_Capture
             SessionSettingsAutofocusButton.IsEnabled = true;
             CameraControlsAutofocusButton.IsEnabled = true;
             CameraScreenAutofocusButton.IsEnabled = true;
-            ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
             CloseSessionButton.IsEnabled = true;
             if (HomeScreenPoseListView.SelectedIndex < CaptureNumber)
             {
@@ -1698,6 +1693,8 @@ namespace WVU_Canon_Capture
                 pose.cameraProfile));
 
             // adjusts UI
+            RIDLabel.Content = ridDateCol[0];
+            CollectionLabel.Content = collection.name;
             SessionSettingsGrid.Visibility = Visibility.Hidden;
             SessionSettingsGrid.Visibility = Visibility.Hidden;
             CameraControlsGrid.Visibility = Visibility.Visible;
@@ -1747,6 +1744,8 @@ namespace WVU_Canon_Capture
             IsSessionOngoing = false;
 
             // adjusts the UI
+            RIDLabel.Content = null;
+            CollectionLabel.Content = null;
             CaptureButton.Content = "\uE114";
             CaptureButton.ToolTip = "Capture photo. Right click and hold to focus camera.";
             SelectedImage.Source = null;
@@ -2019,15 +2018,19 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (IsSessionOngoing)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit in the middle of a session?", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
             MainCamera?.CloseSession();
             MainCamera?.Dispose();
             API?.Dispose();
-
-            if(IsSessionOngoing)
-            {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to exit in the middle of a session?", "Warning!", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.No) e.Cancel = true;
-            }
         }
 
 
@@ -2068,7 +2071,6 @@ namespace WVU_Canon_Capture
             if (CameraComboBox.SelectedIndex != 0)
             {
                 // turns on the live view
-                ToggleLiveViewHomeButton.Visibility = Visibility.Visible;
                 SessionSettingsAutofocusButton.Visibility = Visibility.Visible;
                 SetLiveViewOn(true);
                 InitializeCameraSettings();
@@ -2084,11 +2086,7 @@ namespace WVU_Canon_Capture
             }
             // if a camera is not selected, turn off the live view
             else
-            {
-                if (ToggleLiveViewHomeButton != null)
-                    ToggleLiveViewHomeButton.Visibility = Visibility.Hidden;
                 SetLiveViewOn(false);
-            }
         }
 
 
@@ -2135,6 +2133,14 @@ namespace WVU_Canon_Capture
                 rid = ridDateCol[0];
                 date = ridDateCol[1];
                 col = ridDateCol[2];
+
+                // verifies that only digits have been entered
+                var regex = new Regex(@"[a-zA-Z.,/;'\[\]\\`<>?:\""{}|~!@#$%^&*()+= ]+");
+                if (regex.IsMatch(rid) || regex.IsMatch(date) || regex.IsMatch(col))
+                {
+                    ShowMessage("red", "Invalid symbols", "The RID_DATE_COL must only consist of digits.");
+                    return;
+                }
 
                 // verifies that RID, Date, and Collection Number are the correct number of digits
                 if (rid.Length != 7 || date.Length != 8 || col.Length <= 0)
@@ -2275,9 +2281,12 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CaptureButton_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            CameraProfile item = CameraProfileList.FirstOrDefault(profile => SessionPoseList[CaptureNumber].cameraProfile == profile.name);
-            if (item != null)
-                SetCameraSettings(item.fstop, item.exposure, item.iso, item.whiteBalance);
+            if (CaptureNumber < HomeScreenPoseListView.Items.Count)
+            {
+                CameraProfile item = CameraProfileList.FirstOrDefault(profile => SessionPoseList[CaptureNumber].cameraProfile == profile.name);
+                if (item != null)
+                    SetCameraSettings(item.fstop, item.exposure, item.iso, item.whiteBalance);
+            }
             FocusCamera();
         }
 
@@ -2300,9 +2309,12 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CameraControlsAutofocusButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            CameraProfile item = CameraProfileList.FirstOrDefault(profile => SessionPoseList[CaptureNumber].cameraProfile == profile.name);
-            if (item != null)
-                SetCameraSettings(item.fstop, item.exposure, item.iso, item.whiteBalance);
+            if(CaptureNumber < HomeScreenPoseListView.Items.Count)
+            {
+                CameraProfile item = CameraProfileList.FirstOrDefault(profile => SessionPoseList[CaptureNumber].cameraProfile == profile.name);
+                if (item != null)
+                    SetCameraSettings(item.fstop, item.exposure, item.iso, item.whiteBalance);
+            }
             FocusCamera();
         }
 
@@ -2424,7 +2436,12 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void CloseSessionButton_Click(object sender, RoutedEventArgs e)
         {
-            EndSession();
+            // verifies whether user wants to end the session
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to end this session?", "Warning!",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+                EndSession();
         }
 
 
@@ -2887,8 +2904,8 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void DeleteCollectionButton_Click(object sender, RoutedEventArgs e)
         {
-            // if a collection is selected, delete the collection
-            if (CollectionListView.SelectedItem != null)
+            // if a collection is selected and there is no ongoing session, delete the collection
+            if (CollectionListView.SelectedItem != null && !IsSessionOngoing)
             {
                 // verifies whether a user wants to delete the selected collection
                 MessageBoxResult result = MessageBox.Show("This will delete the selected collection permanently. Are you sure you want to delete it?", "Warning!",
@@ -2913,6 +2930,9 @@ namespace WVU_Canon_Capture
                 File.WriteAllText(COLLECTIONCONFIGFILE, output);
                 LoadCollections();
             }
+            // if a session is ongoing, throw an error
+            else if (IsSessionOngoing)
+                ShowMessage("red", "Session in progress", "Cannot delete a collection while there is an ongoing session.");
             // if a collection is not selected, throw an error
             else
                 ShowMessage("red", "No collection selected", "Please select a collection to delete first.");
@@ -3254,7 +3274,7 @@ namespace WVU_Canon_Capture
             string saveDirectory = SaveDirectoryTextBox.Text;   // the new collection save directory
             string collectionNr = CollectionNrTextBox.Text;     // the new collection number
             string deviceName = CollectionDeviceTextBox.Text;   // the new collection device
-            string modality = CollectionDeviceTextBox.Text;     // the new collection modality
+            string modality = CollectionModalityTextBox.Text;     // the new collection modality
 
             // stops the user if a session is ongoing
             if(IsSessionOngoing)
@@ -3294,7 +3314,7 @@ namespace WVU_Canon_Capture
                 modality.Length <= 0 ||
                 collectionName.Length <= 0)
             {
-                ShowMessage("red", "Unfilled fields", "Save directory, collection number, device name, and collection name must be filled before saving collection.");
+                ShowMessage("red", "Unfilled fields", "Save directory, collection number, device name, modality, and collection name must be filled before saving collection.");
                 return;
             }
 
@@ -3383,6 +3403,7 @@ namespace WVU_Canon_Capture
             SaveDirectoryTextBox.Text = null;
             CollectionNrTextBox.Text = null;
             CollectionDeviceTextBox.Text = null;
+            CollectionModalityTextBox.Text = null;
             CollectionNameTextBox.Text = null;
         }
 

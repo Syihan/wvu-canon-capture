@@ -315,8 +315,8 @@
                                         FontSize="10" 
                                         FontWeight="Bold"/>
                                     <Label 
-                                        Content="0000000" 
-                                        Width="50" 
+                                        x:Name="RIDLabel"
+                                        Content="" 
                                         HorizontalContentAlignment="Left" 
                                         Foreground="#FFFFFF" 
                                         FontSize="10" />
@@ -329,8 +329,8 @@
                                         FontSize="10" 
                                         FontWeight="Bold"/>
                                     <Label 
-                                        Content="Default Profile" 
-                                        Width="80" 
+                                        x:Name="CollectionLabel"
+                                        Content="" 
                                         HorizontalContentAlignment="Left" 
                                         Foreground="#FFFFFF" 
                                         FontSize="10"/>
@@ -354,62 +354,38 @@
                                 Cursor="Hand"/>
                         </Grid>
 
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Height="30"
+                        <!--autofocus button-->
+                        <Button 
+                            x:Name="SessionSettingsAutofocusButton"
+                            PreviewMouseLeftButtonDown="SessionSettingsAutofocusButton_PreviewMouseLeftButtonDown"
+                            PreviewMouseLeftButtonUp="SessionSettingsAutofocusButton_PreviewMouseLeftButtonUp"
+                            Visibility="Visible"
+                            Height="30" 
+                            Width="30" 
+                            Background="Transparent" 
+                            ToolTip="Press and hold to focus camera." 
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            HorizontalAlignment="Left">
-
-                            <!--toggle camera button-->
-                            <Button 
-                                x:Name="ToggleLiveViewHomeButton" 
-                                Click="ToggleLiveViewHomeButton_Click" 
-                                Visibility="Hidden" 
-                                Content="&#xE102;" 
-                                ToolTip="Toggle camera on/off." 
-                                Height="30" 
-                                Width="30" 
-                                VerticalAlignment="Top" 
-                                HorizontalAlignment="Left" 
-                                Background="Transparent" 
-                                Foreground="#FFFFFF" 
-                                BorderThickness="0" 
-                                FontFamily="Segoe UI Symbol"
-                                Cursor="Hand"/>
-
-                            <!--autofocus button-->
-                            <Button 
-                                x:Name="SessionSettingsAutofocusButton"
-                                PreviewMouseLeftButtonDown="SessionSettingsAutofocusButton_PreviewMouseLeftButtonDown"
-                                PreviewMouseLeftButtonUp="SessionSettingsAutofocusButton_PreviewMouseLeftButtonUp"
-                                Visibility="Hidden"
-                                Height="30" 
-                                Width="30" 
-                                Background="Transparent" 
-                                ToolTip="Press and hold to focus camera." 
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                BorderThickness="0" 
-                                FontFamily="Segoe UI Sybol"
-                                Cursor="Hand">
-                                <Grid>
-                                    <Label 
-                                        Content="&#9974;" 
-                                        FontSize="15" 
-                                        FontFamily="Segoe UI Symbol" 
-                                        VerticalAlignment="Center" 
-                                        Foreground="#FFFFFF" 
-                                        Margin="0, -1, 0, 0"/>
-                                    <Label 
-                                        Content="&#xE109;" 
-                                        FontSize="6" 
-                                        FontFamily="Segoe UI Symbol" 
-                                        HorizontalAlignment="Center" 
-                                        Foreground="#FFFFFF" 
-                                        Margin="0, 6, 0, 0"/>
-                                </Grid>
-                            </Button>
-                        </StackPanel>
+                            BorderThickness="0" 
+                            FontFamily="Segoe UI Sybol"
+                            Cursor="Hand">
+                            <Grid>
+                                <Label 
+                                    Content="&#9974;" 
+                                    FontSize="15" 
+                                    FontFamily="Segoe UI Symbol" 
+                                    VerticalAlignment="Center" 
+                                    Foreground="#FFFFFF" 
+                                    Margin="0, -1, 0, 0"/>
+                                <Label 
+                                    Content="&#xE109;" 
+                                    FontSize="6" 
+                                    FontFamily="Segoe UI Symbol" 
+                                    HorizontalAlignment="Center" 
+                                    Foreground="#FFFFFF" 
+                                    Margin="0, 6, 0, 0"/>
+                            </Grid>
+                        </Button>
                     </Grid>
                 </StackPanel>
             </Grid>
@@ -593,6 +569,7 @@
                             x:Name="HomeScreenPoseListView" 
                             SelectionChanged="HomeScreenPoseListView_SelectionChanged"
                             PreviewMouseWheel="HomeScreenPoseListView_PreviewMouseWheel"
+                            ScrollViewer.CanContentScroll="False"
                             Height="185" 
                             VerticalAlignment="Bottom"
                             BorderThickness="0" 
@@ -1851,7 +1828,7 @@
 
                 <Image 
                     Height="500" 
-                    Source="Resources/splash_screen.png" />
+                    Source="Resources/about_page.png" />
 
                 <Button 
                     Content="Close" 
