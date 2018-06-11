@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "name": "Blah",
+    "collectionNumber": "01",
+    "numberOfPoses": 1,
+    "savingDirectory": "C:\\Users\\Syihan\\Desktop",
+    "deviceName": "FACE",
+    "modality": "FACE",
+    "camera": "Canon EOS 5D Mark III",
+    "poses": [
+      {
+        "title": "Sample Title",
+        "description": "Sample Description",
+        "thumbnail": "C:\\Users\\Syihan\\Google Drive\\West Virginia University\\'17 - '18 Senior Year\\Other\\Jobs\\Biometrics Lab\\Canon Capture\\WVU Canon Capture\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\RAW\\0.png",
+        "filename": "sample_filename.JPEG",
+        "cameraProfile": null
+      }
+    ]
+  }
+]

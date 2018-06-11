@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "name": "asdfsa",
+    "camera": "Canon EOS 5D Mark III",
+    "fstop": "10",
+    "exposure": "1/8",
+    "iso": "ISO 1000",
+    "whiteBalance": ""
+  }
+]

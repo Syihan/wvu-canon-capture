@@ -31,11 +31,16 @@
             </Grid.ColumnDefinitions>
 
             <!--live view box-->
-            <Grid Grid.Column="0" VerticalAlignment="Center">
+            <Grid 
+                Grid.Column="0" 
+                VerticalAlignment="Center">
                 <StackPanel Width="350">
 
                     <!--live view-->
-                    <Grid Grid.Row="0" Height="525" Background="#000000" >
+                    <Grid 
+                        Grid.Row="0" 
+                        Height="525" 
+                        Background="#000000" >
                         <Viewbox Stretch="Fill">
                             <Grid 
                                 x:Name="HomeLiveViewCanvas" 
@@ -354,12 +359,38 @@
                                 Cursor="Hand"/>
                         </Grid>
 
+                        <!--easter egg grid-->
+                        <Grid 
+                            x:Name="EasterEggGrid"
+                            Visibility="Hidden">
+                            <Label 
+                            Content="Quit wasting time" 
+                            Height="50" 
+                            VerticalAlignment="Top" 
+                            Foreground="#EAAA00" 
+                            FontWeight="Bold" 
+                            FontSize="18" 
+                            HorizontalAlignment="Center"/>
+                            <Button
+                                x:Name="EndEasterEggButton"
+                                Click="EndEasterEggButton_Click"
+                                Content="&#9166;"
+                                ToolTip="Return."
+                                Background="#F44242"
+                                Foreground="#FFFFFF"
+                                FontSize="50"
+                                Height="100"
+                                Width="100"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+                        </Grid>
+
                         <!--autofocus button-->
                         <Button 
                             x:Name="SessionSettingsAutofocusButton"
                             PreviewMouseLeftButtonDown="SessionSettingsAutofocusButton_PreviewMouseLeftButtonDown"
                             PreviewMouseLeftButtonUp="SessionSettingsAutofocusButton_PreviewMouseLeftButtonUp"
-                            Visibility="Visible"
+                            Visibility="Hidden"
                             Height="30" 
                             Width="30" 
                             Background="Transparent" 
@@ -423,6 +454,7 @@
                                 HorizontalAlignment="Center" 
                                 Foreground="#FFFFFF" FontWeight="Bold"/>
                             <Grid
+                                x:Name="SelectedImageBackground"
                                 Height="399" 
                                 Width="266">
                                 <Border 

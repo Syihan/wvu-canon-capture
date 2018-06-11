@@ -322,7 +322,7 @@ namespace WVU_Canon_Capture
         /// <param name="sender"></param>
         private void API_CameraAdded(CanonAPI sender)
         {
-            if (CameraComboBox.SelectedIndex == 0)
+            if (CameraComboBox != null)
                 LoadCameraList();
             else
                 ShowMessage("red", "Error", "Cannot add cameras while another camera is connected. Please turn off the connected camera and try again.");
@@ -391,9 +391,9 @@ namespace WVU_Canon_Capture
 
             // logs the time of the capture
             if (!IsRecapture)
-                File.AppendAllLines(actionPath, new[] { "Captured image - " + pose.filename + " @ " + DateTime.Now.ToString() });
+                File.AppendAllLines(actionPath, new[] { DateTime.Now.ToString() + " - Captured image [" + pose.filename + "]"});
             else
-                File.AppendAllLines(actionPath, new[] { "Recaptured image - " + pose.filename + " @ " + DateTime.Now.ToString() });
+                File.AppendAllLines(actionPath, new[] { DateTime.Now.ToString() + " - Recaptured image [" + pose.filename + "]"});
 
             // updates the thumbnail in the HomeScreenPoseListView
             pose.thumbnail = SavePath + @"\" + pose.cameraProfile + @"\" + filePath;
@@ -1207,7 +1207,7 @@ namespace WVU_Canon_Capture
                     // the collection descriptors
                     TextBlock colDesc = new TextBlock()
                     {
-                        Text = "Poses: " + collection.numberOfPoses + ", Device Name: " + collection.deviceName,
+                        Text = "Modality: " + collection.modality + ", Poses: " + collection.numberOfPoses + ", Device Name: " + collection.deviceName,
                         FontStyle = FontStyles.Italic,
                         Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)),
                         FontSize = 12,
@@ -1217,7 +1217,7 @@ namespace WVU_Canon_Capture
                     // creates the StackPanel to hold all the content
                     StackPanel item = new StackPanel()
                     {
-                        Height = 75,
+                        Height = 80,
                         Width = 320,
                         Cursor = Cursors.Hand
                     };
@@ -1651,7 +1651,32 @@ namespace WVU_Canon_Capture
         /// </summary>
         private void EasterEgg()
         {
-            ShowMessage("green", "SYIHAN IS KWEEN", "Syihan is Queen");
+            CollectionComboBox.SelectedIndex = 0;
+            SessionSettingsGrid.Visibility = Visibility.Hidden;
+            EasterEggGrid.Visibility = Visibility.Visible;
+
+            // fills the selected and next images
+            SelectedImage.Source = LoadImage(@"Resources\EasterEgg\Syihan.jpg", 405);
+            SelectedPoseTitleLabel.Content = "Syihan is Queen";
+            SelectedPoseDescLabel.Content = "Yup, Syi is kwen";
+            NextImage.Source = LoadImage(@"Resources\EasterEgg\5.JPEG", 210);
+            NextPoseTitleLabel.Content = "who yo kween";
+            NextPoseDescLabel.Content = "i am";
+
+            // populates the HomeScreenPoseListView
+            List<Pose> poses = new List<Pose>();
+            Pose pose1 = new Pose("Syihan", "is Kween", @"Resources\EasterEgg\1.JPEG", "syihanEsQueen.jpeg", "");
+            Pose pose2 = new Pose("Who is Queen?", "Syihan is", @"Resources\EasterEgg\2.JPEG", "yoKween.png", "");
+            Pose pose3 = new Pose("You sure?", "You sure Syihan is Queen?", @"Resources\EasterEgg\3.JPEG", "lordSyihan", "");
+            Pose pose4 = new Pose("How dare you even", "ask such a question.", @"Resources\EasterEgg\4.JPEG", "ofcourseSyiis", "");
+            poses.Add(pose1);
+            poses.Add(pose2);
+            poses.Add(pose3);
+            poses.Add(pose4);
+
+            // adds the pose to the PoseListView
+            foreach (Pose pose in poses)
+                HomeScreenPoseListView.Items.Add(UpdatePoseThumbnail(pose));
         }
 
 
@@ -1682,7 +1707,7 @@ namespace WVU_Canon_Capture
             Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
 
             // logs the beginning of a session
-            File.AppendAllLines(SavePath + @"\ActionLog.txt", new[] { "Subject RID: " + ridDateCol[0] + "\n Session Start: " + DateTime.Now.ToString() });
+            File.AppendAllLines(SavePath + @"\ActionLog.txt", new[] { DateTime.Now.ToString() + " - Subject RID: " + ridDateCol[0] + " - Session started."});
 
             // clones the collection pose list to SessionPoseList
             SessionPoseList = collection.poses.ConvertAll(pose => new Pose(
@@ -1749,6 +1774,7 @@ namespace WVU_Canon_Capture
             CaptureButton.Content = "\uE114";
             CaptureButton.ToolTip = "Capture photo. Right click and hold to focus camera.";
             SelectedImage.Source = null;
+            SelectedImageBackground.Background = System.Windows.Media.Brushes.Transparent;
             NextImage.Source = null;
             SelectedPoseTitleLabel.Content = null;
             SelectedPoseDescLabel.Content = null;
@@ -1777,7 +1803,6 @@ namespace WVU_Canon_Capture
 
             if (CollectionComboBox.SelectedIndex != 0)
             {
-                //Collection collection = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1);
                 List<Pose> poses = CollectionList.ElementAt(CollectionComboBox.SelectedIndex - 1).poses;
 
                 // adds the pose to the PoseListView
@@ -1816,7 +1841,7 @@ namespace WVU_Canon_Capture
             // the pose thumbnail
             System.Windows.Controls.Image poseThumbnail = new System.Windows.Controls.Image()
             {
-                Source = LoadImage(pose.thumbnail, 60),
+                Source = LoadImage(pose.thumbnail, 90),
                 RenderTransformOrigin = new System.Windows.Point(0.5, 0.5),
                 RenderTransform = new RotateTransform(90),
                 Height = 100,
@@ -2108,7 +2133,6 @@ namespace WVU_Canon_Capture
         /// <param name="e"></param>
         private void EnterRIDButton_Click(object sender, RoutedEventArgs e)
         {
-
             // converts the RID input to lowercase and splits it with "_"
             string input = RIDTextBox.Text.ToLower();
             ridDateCol = input.Split('_');
@@ -2117,7 +2141,7 @@ namespace WVU_Canon_Capture
             string col;
 
             // funny easter egg
-            if (input.Contains("queen"))
+            if (input.Contains("queen") || input.Contains("kween") || input.Contains("syihan"))
                 EasterEgg();
 
             // throws an error if none of the session settings fields are filled
@@ -2470,8 +2494,32 @@ namespace WVU_Canon_Capture
                     RecaptureButton.Visibility = Visibility.Hidden;
                     RecaptureAutofocusButton.Visibility = Visibility.Hidden;
                 }
+                SelectedImageBackground.Background = System.Windows.Media.Brushes.Black;
             }
             HomeScreenPoseListView.ScrollIntoView(HomeScreenPoseListView.SelectedItem);
+        }
+
+
+        /// <summary>
+        /// Ends the EasterEgg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EndEasterEggButton_Click(object sender, RoutedEventArgs e)
+        {
+            EasterEggGrid.Visibility = Visibility.Hidden;
+            SessionSettingsGrid.Visibility = Visibility.Visible;
+
+            // fills the selected and next images
+            SelectedImage.Source = null;
+            SelectedPoseTitleLabel.Content = null;
+            SelectedPoseDescLabel.Content = null;
+            NextImage.Source = null;
+            NextPoseTitleLabel.Content = null;
+            NextPoseDescLabel.Content = null;
+
+            // clears the HomeScreenPoseListView
+            HomeScreenPoseListView.Items.Clear();
         }
 
 
@@ -3364,11 +3412,9 @@ namespace WVU_Canon_Capture
             foreach (Collection col in CollectionList)
             {
                 // verifies whether user wants to replace an existing collection with the same collection number
-                int colNrInt;
-                int.TryParse(col.collectionNumber, out colNrInt);
-                if (colNrInt == newColNrInt)
+                if (col.name == collectionName)
                 {
-                    MessageBoxResult result = MessageBox.Show("A collection with this collection number already exists. Do you want to overwrite it?", "Warning!",
+                    MessageBoxResult result = MessageBox.Show("A collection with this name already exists. Do you want to overwrite it?", "Warning!",
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
