@@ -105,6 +105,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_223108067B444D158FEC118160587547"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_22E79E0B7F8D4E2C9A76BCB8A6B9088E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -123,6 +129,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_31C5CFC8FD6D4795A37D7C1CD4DE2261"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_329BE4FEAFAF49CBB1F5A04BCE444962"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -136,6 +148,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3566B9222D0343E1958E3793A17D67C6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_366EBF42601143C1833C1B3162627180"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -369,6 +387,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6DE2EF02CD2C4C96ACEB4605380A1101"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_74EA7112B2D34215B809EBCE308C5329"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -459,6 +483,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8CE24B63C9634691BAF5B1450606D8E0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8FF165B30C57456A88331388805AFFC0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -514,6 +544,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9B5B2EA384F347C1BA9AA1B191998E96"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B7A0117F0C44CBE932B9C7FFA871E1D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -933,6 +969,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F426694700964EB2A3B79264902968D7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F4BD9D3855DB4FA28FD22EF8CC477AE2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -970,12 +1012,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A7B37CDC3558942422F383673DDE96BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_97525BA10F4B45BFB4893B66165356B2"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -983,6 +1019,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_1473295A5FE27E61EA2CD9FC98CA01FC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A7B37CDC3558942422F383673DDE96BE"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -1003,6 +1045,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -1019,6 +1077,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -1359,6 +1425,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_223108067B444D158FEC118160587547"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\1.JPEG"
+            "TargetName" = "8:1.JPEG"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_22E79E0B7F8D4E2C9A76BCB8A6B9088E"
             {
             "SourcePath" = "8:..\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\650nm20\\22.5.png"
@@ -1419,6 +1505,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31C5CFC8FD6D4795A37D7C1CD4DE2261"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\Syihan.jpg"
+            "TargetName" = "8:Syihan.jpg"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_329BE4FEAFAF49CBB1F5A04BCE444962"
             {
             "SourcePath" = "8:..\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\570nm10\\0_L_RIGHT.png"
@@ -1465,6 +1571,26 @@
             "TargetName" = "8:App.config"
             "Tag" = "8:"
             "Folder" = "8:_41EA0FA1891E4133940E3D20C99762D0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_366EBF42601143C1833C1B3162627180"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\WV_Black.png"
+            "TargetName" = "8:WV_Black.png"
+            "Tag" = "8:"
+            "Folder" = "8:_BA61E18D07144BBE8C843D46D99FA453"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2239,6 +2365,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6DE2EF02CD2C4C96ACEB4605380A1101"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\5.JPEG"
+            "TargetName" = "8:5.JPEG"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74EA7112B2D34215B809EBCE308C5329"
             {
             "SourcePath" = "8:..\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\630nm10\\22.5.png"
@@ -2539,6 +2685,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8CE24B63C9634691BAF5B1450606D8E0"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\4.JPEG"
+            "TargetName" = "8:4.JPEG"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8FF165B30C57456A88331388805AFFC0"
             {
             "SourcePath" = "8:..\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\650nm10\\-45.png"
@@ -2705,6 +2871,26 @@
             "TargetName" = "8:45.png"
             "Tag" = "8:"
             "Folder" = "8:_8B36346061864B839A73B1DDD7569429"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B7A0117F0C44CBE932B9C7FFA871E1D"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\2.JPEG"
+            "TargetName" = "8:2.JPEG"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4110,6 +4296,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F426694700964EB2A3B79264902968D7"
+            {
+            "SourcePath" = "8:..\\WVU Canon Capture\\Resources\\EasterEgg\\3.JPEG"
+            "TargetName" = "8:3.JPEG"
+            "Tag" = "8:"
+            "Folder" = "8:_15665DA94DE34A0ABAF59CBE9B2938D2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F4BD9D3855DB4FA28FD22EF8CC477AE2"
             {
             "SourcePath" = "8:..\\WVU Canon Capture\\bin\\Debug\\Resources\\Thumbnails\\FACE\\570nm10\\-67.5.png"
@@ -4420,6 +4626,17 @@
                                     }
                                 }
                             }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_15665DA94DE34A0ABAF59CBE9B2938D2"
+                            {
+                            "Name" = "8:EasterEgg"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_5336AE2CF65845C5B4C6B93CDECFA4F3"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -4441,7 +4658,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WVU Canon Capture"
         "ProductCode" = "8:{9C9ECB11-AF73-488F-BC34-E36D4169BC47}"
-        "PackageCode" = "8:{5A6E02CE-56BC-4331-A7A6-6B52118AD388}"
+        "PackageCode" = "8:{89ED2849-D635-45B2-8550-B1AE55D8170A}"
         "UpgradeCode" = "8:{3E2B01EE-91A2-4911-AB3B-8D6651F21C17}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

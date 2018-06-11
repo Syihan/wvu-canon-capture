@@ -1991,6 +1991,31 @@ namespace WVU_Canon_Capture
 
 
         /// <summary>
+        /// Event handler to reveal Tutorial page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TutorialsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageGrid.Visibility = Visibility.Visible;
+            AboutProgramBox.Visibility = Visibility.Visible;
+            TutorialsBox.Visibility = Visibility.Visible;
+        }
+
+
+        /// <summary>
+        /// Navigates to a specified link
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+
+        /// <summary>
         /// Event handler to reveal About page
         /// </summary>
         /// <param name="sender"></param>
@@ -1999,6 +2024,7 @@ namespace WVU_Canon_Capture
         {
             MessageGrid.Visibility = Visibility.Visible;
             AboutProgramBox.Visibility = Visibility.Visible;
+            AboutProgramImage.Visibility = Visibility.Visible;
         }
 
 
@@ -2011,6 +2037,8 @@ namespace WVU_Canon_Capture
         {
             HideMessage();
             AboutProgramBox.Visibility = Visibility.Collapsed;
+            AboutProgramImage.Visibility = Visibility.Collapsed;
+            TutorialsBox.Visibility = Visibility.Collapsed;
         }
 
 

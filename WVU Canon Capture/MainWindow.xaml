@@ -1772,7 +1772,8 @@
 
                     <!--tutorials button-->
                     <MenuItem 
-                        x:Name="TutorialsMenuItem"   
+                        x:Name="TutorialsMenuItem"
+                        Click="TutorialsMenuItem_Click"
                         Header="Tutorials"
                         Foreground="#000000"
                         Cursor="Hand">
@@ -1858,9 +1859,62 @@
                 Visibility="Collapsed" 
                 VerticalAlignment="Center">
 
-                <Image 
-                    Height="500" 
-                    Source="Resources/about_page.png" />
+                <Grid>
+                    
+                    <!--about program-->
+                    <Image 
+                        x:Name="AboutProgramImage"
+                        Visibility="Collapsed"
+                        Height="500" 
+                        Source="Resources/about_page.png" />
+                    
+                    <!--tutorials box-->
+                    <StackPanel
+                        x:Name="TutorialsBox"
+                        Background="#F2F2F2"
+                        Visibility="Collapsed"
+                        Height="400"
+                        Width="500"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <Image
+                            Height="100"
+                            Source="Resources/WV_Black.png"
+                            Margin="0, 50, 0, 0"/>
+                        <Label
+                            Content="WVU Canon Capture Tutorials"
+                            HorizontalContentAlignment="Center"
+                            FontWeight="Bold"
+                            FontSize="20"
+                            Margin="0, 10, 0, 20"/>
+                        <TextBlock HorizontalAlignment="Center">           
+                            <Hyperlink 
+                                NavigateUri="https://youtu.be/LFlkMwXPtEU" 
+                                RequestNavigate="Hyperlink_RequestNavigate"
+                                FontSize="18">
+                                Creating a Camera Profile
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock 
+                            HorizontalAlignment="Center">           
+                            <Hyperlink 
+                                NavigateUri="https://youtu.be/LFlkMwXPtEU?t=3m1s" 
+                                RequestNavigate="Hyperlink_RequestNavigate"
+                                FontSize="18">
+                                Creating a Collection
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock 
+                            HorizontalAlignment="Center">           
+                            <Hyperlink 
+                                NavigateUri="https://youtu.be/LFlkMwXPtEU?t=6m48s" 
+                                RequestNavigate="Hyperlink_RequestNavigate"
+                                FontSize="18">
+                                Beginning a Session
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
 
                 <Button 
                     Content="Close" 

@@ -274,6 +274,9 @@
   <ItemGroup>
     <Resource Include="Resources\EasterEgg\Syihan.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WV_Black.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
